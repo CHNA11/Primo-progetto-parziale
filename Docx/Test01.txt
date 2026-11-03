@@ -1,0 +1,25 @@
+ID test:T01
+versione: 0.01
+Funzionalità testata: void avvio().
+Input fornito: int password, int scelta, int riprova.  Sono variabili locali dentro funzione
+Output atteso: printf("Nuova password salvato con successo\n");
+               printf("Avvio con successo, benvenuto al sistema di manager per teatro!\n");
+Output ottenuto :
+inserisci la password per entrare in accesso al sistema : 123456
+password non corrispondente, per riprovare inserisci 1, altrimenti qualsiasi numero : 1
+inserisci la password per entrare in accesso al sistema : 3491739357
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 1
+Inserisci la nuova password : 123456
+Nuova password salvato con successo
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 2
+Avvio con successo, benvenuto al sistema di manager per teatro!
+
+Esito : superato

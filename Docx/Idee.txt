@@ -1,0 +1,15 @@
+Registrazioni delle idee durante implementazione del codice:
+03/11/2026
+
+Posso separare funzioni in due categorie, quelli di visualizzazione possono essere accessi tranquillamente, mentre quelli di inserimento spettacolo dovrebbe essere richiesto un login amministrativo, altrimenti, un qualsiasi utente può inserire un spettacolo, che ha poco senso.
+
+A chi è rivolto questa programma, è il teatro comunale, quindi quelli che si operano sarà operaio del teatro, per utente normale, non dovrebbe essere possibile casualmente un prenotazione di qualsiasi persona, ma solo quello suo corrispondente.
+Posso scrivere un file che contiene account e password dell'amministratore, un'altra file che contiene informazioni del utente, anche con proprie password. Ovviamente devono poter cambiare password, e durante login controllare account o password se sono corretti.
+
+Per genere dello spettacolo, posso generare un struct che contiene nome e numero di spettacoli di questo tipo, ovviamente per requisiti non posso modificare struct già definito per spettacolo, ma posso usare per statistica, sarà una lista con inserimento in coda, oppure faccio una funzione che conta numero di genere specifico con variabili locali?, NO, perché genere sono inseriti in modo autonomo e non posso controllare quanti tipi esistono.
+
+i posti per uno spettacolo è definito solo come un numero intero, senza forma e ordine, neanche una matrice, quindi numeri di posti disponibili si richiede solo addizione o sottrazione, non è possibile collegare ogni ordine ad uno posto specifico, in effetti una volta si può prenotare al massimo 10 posti.
+
+Prenotazione: non si chiede di dare un numero massimo di biglietti che si può ordinare, infatti per visualizzazione ci possono essere più prenotazioni, ovviamente non si limita che utente ordina biglietti di diversi spettacoli dello stesso tempo, quindi in pratica escludendo numero di posti massimo dei spettacoli, un utente può prenotare infiniti posti con unica limite di dividere in piò ordine ogni volta con massimo 10 biglietti.
+
+Liste: posso fare una scelta durante prenotazione: se si apre un setting, quando ci sono spazi vuoti ma minore dal numero che desidera, intanto si ordina quelli disponibili, decrementare numero di posti richiesti e mantiene questa attesa con numero decrementato, ovviamente deve essere opzionale.
