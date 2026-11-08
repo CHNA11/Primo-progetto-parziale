@@ -2,3 +2,6 @@
 Questo repository contiene versioni di codice per primo progetto parziale, assegnato per gestione di un teatro, la richiesta è seguente:
 un sistema informatico per gestire la propria programmazione e le prenotazioni dei biglietti. Il sistema deve tenere traccia degli spettacoli
 in cartellone, dei clienti iscritti e delle prenotazioni effettuate.
+
+v0.01
+Funzione di inerimento e salvataggio password, allocazione dinamica all'avvio per teatro e clienti solo definiti
