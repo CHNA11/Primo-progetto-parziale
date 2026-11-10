@@ -13,3 +13,13 @@ i posti per uno spettacolo è definito solo come un numero intero, senza forma e
 Prenotazione: non si chiede di dare un numero massimo di biglietti che si può ordinare, infatti per visualizzazione ci possono essere più prenotazioni, ovviamente non si limita che utente ordina biglietti di diversi spettacoli dello stesso tempo, quindi in pratica escludendo numero di posti massimo dei spettacoli, un utente può prenotare infiniti posti con unica limite di dividere in piò ordine ogni volta con massimo 10 biglietti.
 
 Liste: posso fare una scelta durante prenotazione: se si apre un setting, quando ci sono spazi vuoti ma minore dal numero che desidera, intanto si ordina quelli disponibili, decrementare numero di posti richiesti e mantiene questa attesa con numero decrementato, ovviamente deve essere opzionale.
+
+10/11/2026
+
+Problema di validità per data ho risolto con una sorta di scansione e poi controlla, dovrei risolvere qualche problemino sul codice e stampa, scrivere il menu e finire tutte le funzioni di Gestione spettacoli.
+
+Il menu deve essere organizzato in modo che non si accumulano tutte le funzioni su una pagina, una scelta naturale è Distinguere per funzioni.
+
+Posso distinguere con ABCDE tutti questi funzioni.
+
+le date in forma intero mi serve per ordinamento, devo estrarre o in qualche modo modificare il funzione di confronto.
