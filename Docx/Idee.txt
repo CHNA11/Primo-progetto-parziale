@@ -23,3 +23,24 @@ Il menu deve essere organizzato in modo che non si accumulano tutte le funzioni 
 Posso distinguere con ABCDE tutti questi funzioni.
 
 le date in forma intero mi serve per ordinamento, devo estrarre o in qualche modo modificare il funzione di confronto.
+
+Siccome non sono riuscito a trovare problema sul codice ho chiesto a GEMINI, infatti l'errore sia nel dimenticato una & per scanf.
+
+HO scritto una funzione di pulizia per Errore di spazi possibili nel input.
+
+Ho fatto per momento il menu, con tutte le funzione solo in modo dichiarato e commentato nelle parte secondarie tranne quello di spettacolo, ovviamente neanche input ho corretto, sarà lavori per prossime volte.
+
+Posso aggiungere una richiesta di salvare database per caso quando utente non ha salvato e si esce.
+
+Inizio inserimento di clienti dopo versione 0.02.
+In teoria controllo di codice cliente posso riprendere quello di spettacolo, ma non è possibile in pratica, perché una chiede input di tipo Spettacolo* e l'altra tipo Cliente*, ameno che definisco un nuovo array contenente solo codici, ma così sarebbero un lavoro extra che chiede pure allocazione o liste.
+Analogamente controllo di email bisogna rifare.
+Non so se scansione di date richiedono rifare, perché come input ho messo Spettacolo.
+In effetti, quello del controllo per inserimento può essere ripreso, mentre quello usato per ordine non serve perché non c'è richiesta.
+In pratico, si può ricopiare codice per inserimento del cliente, con qualche piccole modifiche, bisogna ancora definire qualche funzione tipo confronto di codice cliente e riallocazione che possono anche essere riprese da codici vecchi e modificate
+
+11/11/2026
+Ho mandato versione 0.02 con parte di spettacoli
+una volta fatto parte sul inserimento cliente, mi dà errore su inserimento di email, con segmentation fault su un'altra funzione, non riesco a trovare il motivo
+chiedendo a Gemini, il problema si trova nel controllo di carattere, invece di c!='@' && c!=EOF && c!='\0' ho messo || che è sempre falso
+e in più se definisco c=0, non si entra nel ciclo perché 0=='\0'

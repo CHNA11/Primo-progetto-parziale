@@ -1,0 +1,18 @@
+ID test:T03
+versione: 0.02
+Funzionalità testata: void inserimentocliente(Cliente *Clienti).
+Input fornito: codice nome cognome email 
+Output atteso: printf("dati dello cliente salvato correttamente\n");
+Output ottenuto :
+
+Thread 1 received signal SIGSEGV, Segmentation fault.
+0x00007ff767712090 in controllaemail (email=0x5ffd70 "1") at C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.c:551
+551	        return 1;
+Execute debugger commands using "-exec <command>", for example "-exec info registers" will list registers in use (when GDB is the debugger)
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 18908) killed]
+The program 'C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.exe' has exited with code 0 (0x00000000).
+
+
+
+Esito : fallito

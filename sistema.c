@@ -69,22 +69,32 @@ int richiestaMaxclienti();
 Spettacolo *avviospettacoli(int Maxspettacoli);
 // funzione di allocazione dinamica per clienti
 Cliente *avvioclienti(int Maxclienti);
-// funzione di riallocazione per sapzio non sufficiente
-int riallocazione(Spettacolo *Spettacoli);
+// funzione di riallocazione per sapzio non sufficiente per spettacoli
+int riallocazioneSp(Spettacolo *Spettacoli);
+// funzione di riallocazione per sapzio non sufficiente per clienti
+int riallocazioneCl(Cliente *Clienti);
 
 // funzioni di controllo per validità dei dati
 
-// funzione che controlla codice sia univoco
-int controllacodice(int codice, Spettacolo *Spettacoli);
+// funzione che controlla codice sia univoco per spettacoli
+int controllacodiceSp(int codice, Spettacolo *Spettacoli);
+// funzione che controlla codice sia univoco per clienti
+int controllacodiceCl(int codice, Cliente *Clienti);
 // funzione che controlla data sia valida
-int controlladata(char *data);
+int controlladata(char data[]);
 // funzione che controlla numero di spettacoli non supera limite
-int controllonumerospettacolo();
+int controllospazio(int numero, int massimo);
+// funzione che controlla validità dell'email cercando @
+int controllaemail(char email[]);
 
 // funzioni di inserimento
 
 // funzione di inserimento per dati di uno spettacolo
 void inserimentospettacolo(Spettacolo *Spettacoli);
+// funzione di inserimento per dati cei clienti
+void inserimentoclienti(Cliente *Clienti);
+// funzione di inserimento prenotazione per liste
+NodoPrenotazione* registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti);
 
 // funzioni di stampa
 
@@ -104,8 +114,14 @@ void menufile(Spettacolo *Spettacoli, Cliente *Clienti);
 void stampaspettacolo(Spettacolo spettacolo);
 // funzione che stampa tutti i spettacoli presenti nell'array
 void visualizzaspettacoli(Spettacolo *Spettacoli);
+// funzione che stampa dati di uno cliente
+void stampacliente(Cliente cliente);
+// funzione che stampa tutti i clienti presenti nell'array
+void visualizzaclienti(Cliente *Clienti);
 // funzione che cerca per codice e stampa spettacolo trovato
 void cercacodicespettacolo(Spettacolo *Spettacoli);
+// funzione che cerca per codice e stampa cliente trovato
+void cercacodicecliente(Cliente *Clienti);
 // fuznione che cerca per genere e stampa spettacoli trovati
 void cercagenerespettacolo(Spettacolo *Spettacoli);
 // funzione che stampa spettacoli con posti disponibili >0 e ordinati in modo cronologico crescente.
@@ -114,7 +130,7 @@ void spettacolidisponibili(Spettacolo *Spettacoli);
 // funzioni sul input da tastiera
 
 // funzione che scansiona una stringa e trasforma in int, siccome per input di data chiede controllo, si riscrive da parte questa funzione
-int scanstring(char data[],int lung);
+int scanstring(char data[], int lung);
 // funzione che trasforma data da stringa a int
 int trasformadata(Spettacolo spettacolo);
 // funzione che ripulisce inserimento nella tastiera
@@ -127,11 +143,12 @@ void liberazione();
 int Maxspettacoli;      // dichiarare variabile per allocazione dinamica dei spettacoli
 int Maxclienti;         // dichiarare variabile per allocazione dinamica dei clienti
 int num_spettacoli = 0; // numero di spettacoli presenti nello spazio
+int num_clienti = 0;    // numero di cienti presenti nello spazio
 
 int main()
 {
     avvio(); // richiama funzione di avvio per chiedere password in entrata
-    menu(); //entra in menu di primo livello
+    menu();  // entra in menu di primo livello
 }
 
 void avvio()
@@ -276,7 +293,7 @@ Cliente *avvioclienti(int Maxclienti)
     return Clienti;
 }
 
-int riallocazione(Spettacolo *Spettacoli)
+int riallocazioneSp(Spettacolo *Spettacoli)
 {
     int flagra;
     printf("Se desideri riallocare spazio con spazio maggiore automaticamente inserisci 1.\n");
@@ -325,8 +342,57 @@ int riallocazione(Spettacolo *Spettacoli)
     }
 }
 
-// funzione che controlla codice sia univoco
-int controllacodice(int codice, Spettacolo *Spettacoli)
+int riallocazioneCl(Cliente *Clienti)
+{
+    int flagra;
+    printf("Se desideri riallocare spazio con spazio maggiore automaticamente inserisci 1.\n");
+    printf("Se desidere riallocare con uno spazio specifico desiderato inserisci 2.\n");
+    printf("Se desideri lasciare array come adesso inserisci qualsiasi altro numero.\n");
+    printf("Inserisci la tua scelta : ");
+    scanf("%d", &flagra); // leggere scelta per riallocazione
+    if (flagra == 1)
+    {
+        while (num_clienti > Maxclienti)
+        {
+            Maxclienti = Maxclienti * 2; // in automatico si raddopia dimensione finché sia sufficiente
+        }
+        Cliente *temp = (Cliente *)realloc(Clienti, Maxclienti * sizeof(Cliente)); // riallocazione con temp per evitare perdita di dati
+        if (temp == NULL)
+        { // infatti se uso direttamente Spettacoli si perde nel caso NULL
+            printf("riallocazione insuccesso\n");
+            return -1;
+        }
+        Clienti = temp; // caso successo, assegnare questo nuvo spazio
+        return 1;
+    }
+    else if (flagra == 2)
+    {
+        do
+        {
+            printf("Nello spazio contiene %d clienti, inserisci nuova capacità per clienti : ", num_clienti);
+            scanf("%d", &Maxclienti); // chiedere nuovospazio manualmente
+            if (num_clienti > Maxclienti)
+            { // ma deve essere comunque sufficiente
+                printf("Si chiede di inserire una capacità sufficiente per contenere clienti\n");
+            }
+        } while (num_clienti > Maxclienti);
+        Cliente *temp = (Cliente *)realloc(Clienti, Maxclienti * sizeof(Cliente)); // riallocazione con temp per evitare perdita di dati
+        if (temp == NULL)
+        { // come caso automatico
+            printf("riallocazione insuccesso\n");
+            return -1;
+        }
+        Clienti = temp;
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// funzione che controlla codice sia univoco per spettacoli
+int controllacodiceSp(int codice, Spettacolo *Spettacoli)
 {
     for (int i = 0; i < num_spettacoli; i++)
     {
@@ -338,6 +404,21 @@ int controllacodice(int codice, Spettacolo *Spettacoli)
     }
     return 1;
 }
+
+// funzione che controlla codice sia univoco per clienti
+int controllacodiceCl(int codice, Cliente *Clienti)
+{
+    for (int i = 0; i < num_clienti; i++)
+    {
+        // scorre tutti i spettacoli presenti e confronta
+        if (Clienti[i].codice_cliente == codice)
+        {
+            return -1;
+        }
+    }
+    return 1;
+}
+
 
 // funzione che controlla data sia valida
 int controlladata(char data[])
@@ -454,14 +535,14 @@ int controlladata(char data[])
     return 1; // se nessuno di questi errori sono presenti allora è una data valida
 }
 
-int controllonumerospettacolo()
+int controllospazio(int numero, int massimo)
 {
     // basta considerare vari casi
-    if (num_spettacoli > Maxspettacoli)
+    if (numero > massimo)
     {
         return -1;
     }
-    else if (num_spettacoli == Maxspettacoli)
+    else if (numero == massimo)
     {
         return 0; // in questo caso non si esce dallo spazio ma ha raggiunto al suo massimo
     }
@@ -471,14 +552,31 @@ int controllonumerospettacolo()
     }
 }
 
+int controllaemail(char email[]){
+    int i=0;
+    int c;
+    do{
+        c=email[i];
+        i++;
+    }while(c!='@' && c!=EOF && c!='\0');
+    if(c=='@'){
+        printf("Email valido.\n");
+        return 1;
+    }
+    else{
+        printf("Email non valido.\n");
+        return -1;
+    }
+}
+
 void inserimentospettacolo(Spettacolo *Spettacoli)
 {
     // dichiarare una variabile locale per comodità del codice
     int i = num_spettacoli;
-    if (controllonumerospettacolo() == -1)
+    if (controllospazio(num_spettacoli, Maxspettacoli) == -1)
     {
         printf("Non ci sono spazi disponibili per inserimento\n");
-        int flagra = riallocazione(Spettacoli);
+        int flagra = riallocazioneSp(Spettacoli);
         // vari casi di riallocazione
         if (flagra == 1)
         {
@@ -503,7 +601,7 @@ void inserimentospettacolo(Spettacolo *Spettacoli)
             printf("Inserisci codie spettacolo corrispondente : ");
             scanf("%d", &tempcodice);
             flagcodice = 1;
-            if (controllacodice(tempcodice, Spettacoli) == -1)
+            if (controllacodiceSp(tempcodice, Spettacoli) == -1)
             { // controlla che sia univoca
                 printf("codice già esistente e deve essere univoco, riprova.\n");
                 flagcodice = 0;
@@ -513,18 +611,19 @@ void inserimentospettacolo(Spettacolo *Spettacoli)
                 Spettacoli[i].codice_spettacolo = tempcodice;
             }
         } while (flagcodice != 1);
+        pulizia();
         printf("Inserisci titolo dello spettacolo con massimo 100 caratteri : ");
-        scanf("%100s", &Spettacoli[i].titolo); // un titolo può avere qualsiasi contenuto
+        scanf("%100s", Spettacoli[i].titolo); // un titolo può avere qualsiasi contenuto
         pulizia();
         printf("Inserisci genere dello spettacolo con massimo 30 caratteri : ");
-        scanf("%30s", &Spettacoli[i].genere); // analogamente per genere
+        scanf("%30s", Spettacoli[i].genere); // analogamente per genere
         pulizia();
         int flagdata = 0; // indicatore per validità di data
         do
         {
             printf("Inserisci data dello spettacolo con formato gg/mm/aaaa : ");
             char tempdata[11];        // dichiarare una variabile temporanea per data
-            scanf("%10s", &tempdata); // controllo di lunghezza, quelli oltre viene ignorata
+            scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
             pulizia();
             flagdata = 1;
             if (controlladata(tempdata) == -1)
@@ -581,25 +680,127 @@ void inserimentospettacolo(Spettacolo *Spettacoli)
     } while (flag != 1);
     printf("dati dello spettacolo salvato correttamente\n");
     num_spettacoli++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
-    if (controllonumerospettacolo() == 0)
+    if (controllospazio(num_spettacoli, Maxspettacoli) == 0)
     { // controlla spazio disponibile
         printf("Spazio allocato per spattacoli ha raggiunto la sua massima capacità\n");
-        riallocazione(Spettacoli);
+        riallocazioneSp(Spettacoli);
+    }
+    return;
+}
+
+void inserimentoclienti(Cliente *Clienti)
+{
+    int i = num_clienti;
+    if (controllospazio(num_clienti, Maxclienti) == -1)
+    {
+        printf("Non ci sono spazi disponibili per inserimento\n");
+        int flagra = riallocazioneCl(Clienti);
+        // vari casi di riallocazione
+        if (flagra == 1)
+        {
+            printf("Riallocazione con successo, adesso abbiamo nuova capacità %d\n", Maxclienti);
+        }
+        else if (flagra == -1)
+        {
+            printf("Riallocazione ha incontrato qualche problema, riprova più tardi\n");
+        }
+        else
+        {
+            return;
+        }
+    }; // controllo spazio siponibile
+    int flag = 0; // indicatore per conferma di inserimento dati
+    do
+    {
+        int flagcodice = 0; // indicatore per validità del codice
+        do
+        {
+            int tempcodice; // variabile temporanea per codice
+            printf("Inserisci codie cliente corrispondente : ");
+            scanf("%d", &tempcodice);
+            flagcodice = 1;
+            if (controllacodiceCl(tempcodice, Clienti) == -1)
+            { // controlla che sia univoca
+                printf("codice già esistente e deve essere univoco, riprova.\n");
+                flagcodice = 0;
+            }
+            else
+            { // assegnare se non ci sono problemi
+                Clienti[i].codice_cliente = tempcodice;
+            }
+        } while (flagcodice != 1);
+        pulizia();
+        printf("Inserisci nome del cliente con massimo 50 caratteri : ");
+        scanf("%50s", Clienti[i].nome); // un titolo può avere qualsiasi contenuto
+        pulizia();
+        printf("Inserisci cognome del cliente con massimo 50 caratteri : ");
+        scanf("%50s", Clienti[i].cognome); // analogamente per genere
+        pulizia();
+        int flagemail = 0;
+        char tempemail[81];
+        do
+        {
+            printf("Inserisci email del cliente con massimo 80 caratteri : ");
+            scanf("%80s", tempemail);
+            pulizia();
+            flagemail = 1;
+            if (controllaemail(tempemail) == -1)
+            { // controlla che data sia valido
+                printf("Si chiede di inserire un email valida contenente @\n");
+                flagemail = 0;
+            }
+            else
+            { // assegnazione nel caso corretto
+                printf("email valida e inserito correttamente\n");
+                strcpy(Clienti[i].email, tempemail);
+            }
+        } while (flagemail != 1);
+        int flagdata = 0; // indicatore per validità di data
+        do
+        {
+            printf("Inserisci data dello spettacolo con formato gg/mm/aaaa : ");
+            char tempdata[11];        // dichiarare una variabile temporanea per data
+            scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
+            pulizia();
+            flagdata = 1;
+            if (controlladata(tempdata) == -1)
+            { // controlla che data sia valido
+                printf("Si chiede di inserire una data valida con formato corrispondente segnato\n");
+                flagdata = 0;
+            }
+            else
+            { // assegnazione nel caso corretto
+                printf("Data valida e inserito correttamente\n");
+                strcpy(Clienti[i].data_iscrizione, tempdata);
+            }
+        } while (flagdata != 1);
+        printf("I dati del cliente che hai inserito sono le seguenti : \n");
+        printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "nome", "cognome", "email", "data iscrizione");
+        printf("%-20d %-20s %-20s %-40s %-20s\n", Clienti[i].codice_cliente, Clienti[i].nome, Clienti[i].cognome, Clienti[i].email, Clienti[i].data_iscrizione); // stampare dati inseriti
+        printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
+        scanf("%d", &flag); // in realtà vale per tutti diversi da 1 per riinserimento, sicuramente bene per 0
+    } while (flag != 1);
+    printf("dati dello cliente salvato correttamente\n");
+    num_clienti++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
+    if (controllospazio(num_clienti, Maxclienti) == 0)
+    { // controlla spazio disponibile
+        printf("Spazio allocato per clienti ha raggiunto la sua massima capacità\n");
+        riallocazioneCl(Clienti);
     }
     return;
 }
 
 void menu()
 {
-    //inzializzazione delle array per database
+    // inzializzazione delle array per database
     Maxspettacoli = richiestaMaxspettacoli();
     Maxclienti = richiestaMaxclienti();
     Spettacolo *Spettacoli = avviospettacoli(Maxspettacoli);
     Cliente *Clienti = avvioclienti(Maxclienti);
-    char primascelta='z'; //inzializzare prima scelta per menu primo livello, diverso da z per entrare in menu, posso fare anche con do while
+    char primascelta = 'z'; // inzializzare prima scelta per menu primo livello, diverso da z per entrare in menu, posso fare anche con do while
     while (primascelta != 'f' && primascelta != 'F')
     {
-        //stampa funzioni possibili per categorie
+        // stampa funzioni possibili per categorie
         printf("Le funzionalità disponibili divisi per categorie sono : \n");
         printf("A. Gestione Spettacoli.\n");
         printf("B. Gestione Clienti.\n");
@@ -608,13 +809,13 @@ void menu()
         printf("E. Gestioone File.\n");
         printf("F. Esci.\n");
         printf("Inserisci la tua scelta : ");
-        pulizia(); //pulizia per buffer con /n
+        pulizia(); // pulizia per buffer con /n
         scanf("%c", &primascelta);
         pulizia();
-        //distinguere casi di scelte, richiamando funzioni corrispondenti, per lettere si usa if, e si distingue casi maiuscola o minuscola
+        // distinguere casi di scelte, richiamando funzioni corrispondenti, per lettere si usa if, e si distingue casi maiuscola o minuscola
         if (primascelta == 'a' || primascelta == 'A')
         {
-            menuspettacoli(Spettacoli); 
+            menuspettacoli(Spettacoli);
         }
         else if (primascelta == 'b' || primascelta == 'B')
         {
@@ -633,12 +834,12 @@ void menu()
             menufile(Spettacoli, Clienti);
         }
         else if (primascelta != 'f' && primascelta != 'F')
-        { //considerare sali diversi da f o F per validità
+        { // considerare sali diversi da f o F per validità
             printf("Scelta non valida.\n");
         }
         else
         {
-            //liberazione();
+            // liberazione();
         }
     }
 }
@@ -646,10 +847,10 @@ void menu()
 // funzione di stampa menu secondaria per Gestione spettacoli
 void menuspettacoli(Spettacolo *Spettacoli)
 {
-    int secondascelta; //dichiarare variabile per scelta, questa volta intero
-    while (secondascelta != 6) //entra in menu per defaul
+    int secondascelta;         // dichiarare variabile per scelta, questa volta intero
+    while (secondascelta != 6) // entra in menu per defaul
     {
-        //stampare le funzioni disponibili
+        // stampare le funzioni disponibili
         printf("Le funzionalità per gestione dei spettacoli sono : \n");
         printf("1. Inserisci nuovo spettacolo.\n");
         printf("2. VIsualizza tutti gli spettacoli.\n");
@@ -659,7 +860,7 @@ void menuspettacoli(Spettacolo *Spettacoli)
         printf("6. Esci dal menu secondario.\n");
         printf("Inserisci la tua scelta : ");
         scanf("%d", &secondascelta);
-        switch (secondascelta) //switch case per scelte
+        switch (secondascelta) // switch case per scelte
         {
         case 1:
             inserimentospettacolo(Spettacoli);
@@ -677,9 +878,9 @@ void menuspettacoli(Spettacolo *Spettacoli)
             spettacolidisponibili(Spettacoli);
             break;
         case 6:
-            break; //per uscita non si fa alcun azione e si esce dal ciclo while
+            break; // per uscita non si fa alcun azione e si esce dal ciclo while
         default:
-            printf("scelta non valida.\n"); //avvisa la non validità della scelta e rientra in while
+            printf("scelta non valida.\n"); // avvisa la non validità della scelta e rientra in while
             break;
         }
     }
@@ -689,7 +890,7 @@ void menuclienti(Cliente *Clienti)
 {
     int secondascelta;
     while (secondascelta != 4)
-    {   //Analogamente si stampa funzioni dei clienti
+    { // Analogamente si stampa funzioni dei clienti
         printf("Le funzionalità per gestione dei clienti sono : \n");
         printf("1. Inserisci nuovo clientie.\n");
         printf("2. Visualizza tutti i clienti.\n");
@@ -700,13 +901,13 @@ void menuclienti(Cliente *Clienti)
         switch (secondascelta)
         {
         case 1:
-            // inserimentoclienti(Clienti);
+            inserimentoclienti(Clienti);
             break;
         case 2:
-            // visualizzaclienti(Clienti);
+            visualizzaclienti(Clienti);
             break;
         case 3:
-            // cercaclienti(Clienti);
+            cercacodicecliente(Clienti);
             break;
         case 4:
             break;
@@ -721,7 +922,7 @@ void menuprenotazioni(Spettacolo *Spettacoli, Cliente *Clienti)
 {
     int secondascelta;
     while (secondascelta != 7)
-    { //analogamente funzioni di prenotazioni
+    { // analogamente funzioni di prenotazioni
         printf("Le funzionalità per gestione dei prenotazioni sono : \n");
         printf("1. Registra nuova prenotazione.\n");
         printf("2. Annulla prenotazione.\n");
@@ -735,7 +936,7 @@ void menuprenotazioni(Spettacolo *Spettacoli, Cliente *Clienti)
         switch (secondascelta)
         {
         case 1:
-            // registraprenotazione(Spettacoli);
+            //registraprenotazione(Spettacoli);
             break;
         case 2:
             // annullaprenotazione(Spettacoli);
@@ -765,7 +966,7 @@ void menustat(Spettacolo *Spettacoli, Cliente *Clienti)
 {
     int secondascelta;
     while (secondascelta != 4)
-    { //analogamente funzioni di statistiche e report
+    { // analogamente funzioni di statistiche e report
         printf("Le funzionalità per statistiche e report sono : \n");
         printf("1. Statistiche generali.\n");
         printf("2. Spettacoli per genere.\n");
@@ -797,7 +998,7 @@ void menufile(Spettacolo *Spettacoli, Cliente *Clienti)
 {
     int secondascelta;
     while (secondascelta != 5)
-    {  //analogamente funzioni su file
+    { // analogamente funzioni su file
         printf("Le funzionalità per gestione dei file sono : \n");
         printf("1. Salva database su file binario.\n");
         printf("2. Carica database da file binario.\n");
@@ -835,30 +1036,47 @@ void stampaspettacolo(Spettacolo spettacolo)
     return;
 }
 
+void stampacliente(Cliente cliente)
+{ // stampa dati
+    printf("%-20d %-20s %-20s %-40s %-20s\n", cliente.codice_cliente, cliente.nome, cliente.cognome, cliente.email, cliente.data_iscrizione);
+    return;
+}
+
 void visualizzaspettacoli(Spettacolo *Spettacoli)
 {
     printf("Elenco completo dei spettacoli presenti sono : \n");
     printf("%-20s %-20s %-20s %-20s %-40s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti disponibili/posti totali", "Prezzo biglietto");
     for (int i = 0; i < num_spettacoli; i++)
-    { //usare ciclo per stampare  tutti i spettacoli presenti
+    { // usare ciclo per stampare  tutti i spettacoli presenti
         stampaspettacolo(Spettacoli[i]);
+    }
+    return;
+}
+
+void visualizzaclienti(Cliente *Clienti)
+{
+    printf("Elenco completo dei clienti presenti sono : \n");
+    printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "Nome", "Cognome", "Email", "Data iscrizione");
+    for (int i = 0; i < num_clienti; i++)
+    { // usare ciclo per stampare  tutti i clienti presenti
+        stampacliente(Clienti[i]);
     }
     return;
 }
 
 void cercacodicespettacolo(Spettacolo *Spettacoli)
 {
-    int codice; //dichiarare codice di ricerca
+    int codice; // dichiarare codice di ricerca
     printf("Insersci il codice dello spettacolo da cercare : ");
     scanf("%d", &codice);
     for (int i = 0; i < num_spettacoli; i++)
     {
-        if (Spettacoli[i].codice_spettacolo == codice) //fare confronto con tutti precedenti
+        if (Spettacoli[i].codice_spettacolo == codice) // fare confronto con tutti precedenti
         {
             printf("Lo spettacolo corrispondente al codice %d è : \n", codice);
             printf("%-20s %-20s %-20s %-20s %-40s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti disponibili/posti totali", "Prezzo biglietto");
             stampaspettacolo(Spettacoli[i]);
-            return; //basta un caso per uscire
+            return; // basta un caso per uscire, codice è univoco
         }
     }
     // siccome non ha uscito quando ha trovato qualche spettacolo corrispondente, si avvisa l'errore
@@ -866,20 +1084,39 @@ void cercacodicespettacolo(Spettacolo *Spettacoli)
     return;
 }
 
+void cercacodicecliente(Cliente *Clienti){
+    int codice; // dichiarare codice di ricerca
+    printf("Insersci il codice dello cliente da cercare : ");
+    scanf("%d", &codice);
+    for (int i = 0; i < num_clienti; i++)
+    {
+        if (Clienti[i].codice_cliente == codice) // fare confronto con tutti precedenti
+        {
+            printf("Lo cliente corrispondente al codice %d è : \n", codice);
+            printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "Nome", "Cognome", "Email", "Data iscrizione");
+            stampacliente(Clienti[i]);
+            return; // basta un caso per uscire, codice è univoco
+        }
+    }
+    // siccome non ha uscito quando ha trovato qualche cliente corrispondente, si avvisa l'errore
+    printf("il codice %d non corrisponde ad alcun cliente presenti.\n", codice);
+    return;
+}
+
 void cercagenerespettacolo(Spettacolo *Spettacoli)
 {
-    char genere[31]; //dichiarare una variabile per genere
-    int flag = 0; //indicatore per aver trovato o no
+    char genere[31]; // dichiarare una variabile per genere
+    int flag = 0;    // indicatore per aver trovato o no
     printf("Inserisci il genere degli spettacoli da cercare(attenzione a lettera maiuscola) : ");
     scanf("%30s", &genere);
-    pulizia(); //pulizia di buffer
+    pulizia(); // pulizia di buffer
     for (int i = 0; i < num_spettacoli; i++)
     {
         if (strcmp(Spettacoli[i].genere, genere) == 0)
-        { //fare comparison tra tutti vecchi, per richiesta si usa strcmp, altrimenti userò strcasecmp che evita errori per casesentity
+        { // fare comparison tra tutti vecchi, per richiesta si usa strcmp, altrimenti userò strcasecmp che evita errori per casesentity
             if (flag == 0)
-            { //solo per prima volta che si trova una di genere corrispondente
-                flag = 1; //segna di aver trovato per evitare stampo ripetuto
+            {             // solo per prima volta che si trova una di genere corrispondente
+                flag = 1; // segna di aver trovato per evitare stampo ripetuto
                 printf("I spettacoli corrispondenta a genere %s sono :\n", genere);
                 printf("%-20s %-20s %-20s %-20s %-40s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti disponibili/posti totali", "Prezzo biglietto");
             }
@@ -888,76 +1125,89 @@ void cercagenerespettacolo(Spettacolo *Spettacoli)
         }
     }
     if (flag == 0)
-    { //se non è mai entrato in if, allora non ho trovato
+    { // se non è mai entrato in if, allora non ho trovato
         printf("Non ci sono spettacoli corrispondente al genere %s.\n", genere);
     }
     return;
 }
 
-void spettacolidisponibili(Spettacolo *Spettacoli){
-    int * indici=(int *)malloc(num_spettacoli*(sizeof(int))); //alloco dinamicamente un array di indici per spettacoli con posti disponibili
-    int ind=0; //inzializzo un contatore per questi spettacoli
-    for(int i=0; i<num_spettacoli;i++){
-        if(Spettacoli[i].posti_disponibili>0)
-        { //per ogni spettacoli disponibili
-            indici[ind]=i; //segno l'indice corrispondente
-            ind++; //incremento contatore
+void spettacolidisponibili(Spettacolo *Spettacoli)
+{
+    int *indici = (int *)malloc(num_spettacoli * (sizeof(int))); // alloco dinamicamente un array di indici per spettacoli con posti disponibili
+    int ind = 0;                                                 // inzializzo un contatore per questi spettacoli
+    for (int i = 0; i < num_spettacoli; i++)
+    {
+        if (Spettacoli[i].posti_disponibili > 0)
+        {                    // per ogni spettacoli disponibili
+            indici[ind] = i; // segno l'indice corrispondente
+            ind++;           // incremento contatore
         }
     }
-    int temp; //dichiara variabile temporanea per scambio
-    for(int i=0; i<ind-1; i++){
-        for(int j=0; j<ind-1-i; j++){ //bubble sort
-            if(trasformadata(Spettacoli[indici[j]])>trasformadata(Spettacoli[indici[j+1]])){
-                temp=indici[j];
-                indici[j]=indici[j+1];
-                indici[j+1]=temp;
+    int temp; // dichiara variabile temporanea per scambio
+    for (int i = 0; i < ind - 1; i++)
+    {
+        for (int j = 0; j < ind - 1 - i; j++)
+        { // bubble sort
+            if (trasformadata(Spettacoli[indici[j]]) > trasformadata(Spettacoli[indici[j + 1]]))
+            {
+                temp = indici[j];
+                indici[j] = indici[j + 1];
+                indici[j + 1] = temp;
             }
         }
     }
-    //stampa risultati
+    // stampa risultati
     printf("Gli spettacoli con ancora posti disponibili, ordinati in data crescente sono : \n");
     printf("%-20s %-20s %-20s %-20s %-40s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti disponibili/posti totali", "Prezzo biglietto");
-    for(int i=0; i<ind; i++){
+    for (int i = 0; i < ind; i++)
+    {
         stampaspettacolo(Spettacoli[indici[i]]);
     }
     free(indici);
     return;
 }
 
-int scanstring(char data[],int lung){
-    int risultato=0;//inizializzare un risultato in int della data
-    char numeri[11]={"0123456789"}; //inzializzare una stringa con numeri 0-9 dove posizione i corrisponde a i
-    for(int j=0; j<lung; j++){ //considero ogni char nella posizione j fino ad lunghezza di char
-        for(int i=0; i<10; i++){ //confrontare con ogni numero naturale da 0 a 9
-            int esp=1; //inizializzare un esponenziale per posizione della cifra
-            for(int k=0; k<lung-j-1; k++){
-                esp=esp*10; //trasformare in esponente di 10, per mettere cifra i nella posizione giusta
+int scanstring(char data[], int lung)
+{
+    int risultato = 0;                // inizializzare un risultato in int della data
+    char numeri[11] = {"0123456789"}; // inzializzare una stringa con numeri 0-9 dove posizione i corrisponde a i
+    for (int j = 0; j < lung; j++)
+    { // considero ogni char nella posizione j fino ad lunghezza di char
+        for (int i = 0; i < 10; i++)
+        {                // confrontare con ogni numero naturale da 0 a 9
+            int esp = 1; // inizializzare un esponenziale per posizione della cifra
+            for (int k = 0; k < lung - j - 1; k++)
+            {
+                esp = esp * 10; // trasformare in esponente di 10, per mettere cifra i nella posizione giusta
             }
-            if(data[j]==numeri[i]){
-                risultato=risultato+esp*i; //porre cifra i nella posizione j del risultato
+            if (data[j] == numeri[i])
+            {
+                risultato = risultato + esp * i; // porre cifra i nella posizione j del risultato
             }
         }
     }
-    return risultato; //ritornare cifra di tipo int
+    return risultato; // ritornare cifra di tipo int
 }
 
-int trasformadata(Spettacolo spettacolo){
-    //estraggo dati dalla data
-    char giornot[3]={spettacolo.data_spettacolo[0],spettacolo.data_spettacolo[1]};
-    char meset[3]={spettacolo.data_spettacolo[3],spettacolo.data_spettacolo[4]};
-    char annot[5]={spettacolo.data_spettacolo[6],spettacolo.data_spettacolo[7],spettacolo.data_spettacolo[8],spettacolo.data_spettacolo[9]};
-    //inizializzare variabili richiamando funzione di scansione
-    int giorno=scanstring(giornot,2); 
-    int mese=scanstring(meset,2);
-    int anno=scanstring(annot,4);
-    //trasformo di data di forma aaaammgg
-    int data=anno*10000+mese*100+giorno;
+int trasformadata(Spettacolo spettacolo)
+{
+    // estraggo dati dalla data
+    char giornot[3] = {spettacolo.data_spettacolo[0], spettacolo.data_spettacolo[1]};
+    char meset[3] = {spettacolo.data_spettacolo[3], spettacolo.data_spettacolo[4]};
+    char annot[5] = {spettacolo.data_spettacolo[6], spettacolo.data_spettacolo[7], spettacolo.data_spettacolo[8], spettacolo.data_spettacolo[9]};
+    // inizializzare variabili richiamando funzione di scansione
+    int giorno = scanstring(giornot, 2);
+    int mese = scanstring(meset, 2);
+    int anno = scanstring(annot, 4);
+    // trasformo di data di forma aaaammgg
+    int data = anno * 10000 + mese * 100 + giorno;
     return data;
 }
 
 void pulizia()
 {
     int c;
-    while((c = getchar()) != '\n' && c != EOF); //pulire tutti le input rimasti nel terminal
+    while ((c = getchar()) != '\n' && c != EOF)
+        ; // pulire tutti le input rimasti nel terminal
     return;
 }
