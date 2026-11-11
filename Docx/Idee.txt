@@ -44,3 +44,9 @@ Ho mandato versione 0.02 con parte di spettacoli
 una volta fatto parte sul inserimento cliente, mi dà errore su inserimento di email, con segmentation fault su un'altra funzione, non riesco a trovare il motivo
 chiedendo a Gemini, il problema si trova nel controllo di carattere, invece di c!='@' && c!=EOF && c!='\0' ho messo || che è sempre falso
 e in più se definisco c=0, non si entra nel ciclo perché 0=='\0'
+
+Osservazione importante, funzione di controllo codice, invece di ritornare -1 se ho trovato, 1 se ho trovato, faccio un cambiamento, se ho trovato nella posizione i, faccio ritornare i, altrimenti -1, così uso questo indice per prenotazione e decremento posti disponibile
+
+Una problema è nel fatto che avendo bisogno di operare sia Lista attesa che lista di prenotazioni, ho chiesto al prof e mi ha consigliato di usare doppio puntatore.
+Dopo le correzioni ho scritto tutte le funzioni sulle liste, ma non funzionano per qualche motivo, risolverò domani visto che oggi non c'è più altri tempi.
+
