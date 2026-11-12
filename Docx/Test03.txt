@@ -1,5 +1,5 @@
 ID test:T03
-versione: 0.02
+versione: 0.03(versione non pubblicato)
 Funzionalità testata: void inserimentocliente(Cliente *Clienti).
 Input fornito: codice nome cognome email 
 Output atteso: printf("dati dello cliente salvato correttamente\n");
@@ -16,3 +16,5 @@ The program 'C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.exe' has ex
 
 
 Esito : fallito
+
+Motivo : errore logico nel ciclo while con || invece di &&, loop infinito

@@ -1,0 +1,54 @@
+ID test:T02
+versione: 0.02
+Funzionalità testata: int controlladata(char data[]);
+Input fornito: stringa di data con lunghezza 11
+Output atteso: Avviso per forma sbagliato in corrispondenza all'errore, -1 per errore,  1 per corretto
+Output ottenuto :
+inserisci la password per entrare in accesso al sistema : 123456
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 2
+Avvio con successo, benvenuto al sistema di manager per teatro!
+inserisci numero massimo di spettacoli da gestire : 12
+inserisci numero massimo di clienti da gestire : 12
+Le funzionalità disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : a
+Le funzionalità per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+Inserisci codie spettacolo corrispondente : 12
+Inserisci titolo dello spettacolo con massimo 100 caratteri : 12
+Inserisci genere dello spettacolo con massimo 30 caratteri : 12
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12
+Inserisci una data con formato gg/mm/aaaa
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12/13/2004
+Inserisci un mese compreso tra 1 e 12
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 31/11/2004
+Nel mese 11 non ha 31 giorni, inserisci una data valida
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 29/02/2003
+Nel febbraio del 2003 non ha 29 giorni
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12 / 12 / 2014
+Inserisci una data con formato gg/mm/aaaa
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12/12/2014
+Data valida e inserito correttamente
+Inserisci posti totali dello spettacolo : 
+
+
+Esito : superato

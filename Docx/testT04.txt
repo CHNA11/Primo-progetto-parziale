@@ -1,0 +1,18 @@
+ID test:T04
+versione: 0.04(versione non pubblicato)
+Funzionalità testata: menuprenotazione();
+Input fornito: dati di un spettacolo
+               dati di un cliente
+               una prenotazione con posti sufficienti
+               una prenotazione con posti insufficienti e convertita il lista di attesa
+
+Output atteso: dati della lista attesa e lista prenotazioni
+Output ottenuto :
+
+per lista prenotazione non si stampa
+per lista attessa segmental fault
+per prenotazioni di un cliente o di un spettacolo funziona regolarmente
+
+Esito : fallito
+
+Motivo : errore logico nel ciclo while con || invece di &&, loop infinito, errore del tipo di dato nel printf con %s invece di %d.

@@ -50,3 +50,11 @@ Osservazione importante, funzione di controllo codice, invece di ritornare -1 se
 Una problema è nel fatto che avendo bisogno di operare sia Lista attesa che lista di prenotazioni, ho chiesto al prof e mi ha consigliato di usare doppio puntatore.
 Dopo le correzioni ho scritto tutte le funzioni sulle liste, ma non funzionano per qualche motivo, risolverò domani visto che oggi non c'è più altri tempi.
 
+12/11/2026 
+Perché si succede che una funzione aggiunta condizioni di if funziona, mentre se tolgo, una va a segmental fault, una non si stampa?(testT04)
+
+Il motivo è che ho usato = invece di == per controllo, mentre per attessa ho usato %s invece di %d per dati, perché ho ricopiati da altre righe, è talmente sciocco, essattamente anche nel inserimento di spettacoli non funzionano controlli, perché ho sbagliato usando = invece di ==.
+
+Ho dimenticato di fare screenshot, Test T04 non metterò su Report.
+
+
