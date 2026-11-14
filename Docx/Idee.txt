@@ -57,4 +57,10 @@ Il motivo è che ho usato = invece di == per controllo, mentre per attessa ho us
 
 Ho dimenticato di fare screenshot, Test T04 non metterò su Report.
 
+Funzioni di statistiche ho fatto, non  ho testato, lascio per dopo quando ho anche file, così evito di inserire dati in modo ripetente.
+
+Ma non riesco a compilare, senza ancora usando funzioni nuovi, darò a gemini per analizzare solo su questa problematica.
+Il problema è che nel fatto funzione prototipo dichiarato all'inizio, quando definisco dopo, ho scritto un c in più sul nome, e compilatore non mi dice dove si trova errore.
+
+
 
