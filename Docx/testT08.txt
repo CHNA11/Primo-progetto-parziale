@@ -1,0 +1,13 @@
+ID test:T08
+versione: 0.04(non pubblicato)
+Funzionalità testata: caricadatabese().
+Input fornito: file
+Output atteso: file caricato correttamente
+Output ottenuto :
+
+Richiesta di riallocazione per spazio ancora sufficienti.
+
+Esito : fallito
+
+Motivo :Nella riga if (controllospazio(*num_clienti, Maxclienti == -1))
+Ho sbagliato a mettere parentesi, siccome Maxclienti ho messo come variabile globale in questa versione, Non dà errore su compilazione.

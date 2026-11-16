@@ -1,0 +1,16 @@
+ID test:T07
+versione: 0.04(non pubblicato)
+Funzionalità testata: caricadatabese().
+Input fornito: file
+Output atteso: file caricato correttamente
+Output ottenuto :
+
+Segmental fault per riga : flag = fread(Spettacoli, sizeof(Spettacolo), *num_spettacoli, fp);
+
+Unknown fault per riga : *generi = valutagenere(Spettacoli[i]->genere, *generi);
+
+Esito : fallito
+
+Motivo : Siccome Spettacoli in questa funzione ho passato con Spettacolo **, 
+per fread bisogna sostituire con *Spettacoli.
+per valutagenere bisogna sostituire con (*Spettacoli)[i].genere.

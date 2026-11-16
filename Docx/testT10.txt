@@ -1,0 +1,20 @@
+ID test:T10
+versione: 0.04(non pubblicato)
+Funzionalità testata: caricadatabese().
+Input fornito: file
+Output atteso: file caricato correttamente
+Output ottenuto :
+
+Le funzionalità per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+File spettacoli.dat caricato correttamente
+File clienti.dat caricato correttamente
+File prenotazioni.dat caricato correttamente
+File attesa.dat caricato correttamente
+
+Esito : superato

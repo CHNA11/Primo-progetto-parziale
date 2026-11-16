@@ -1,0 +1,2 @@
+Codice prenotazione : 0                    | Codice spettacolo : 0                    | Codice Cliente : 0                    Nome : 0                    Cognome : 0                    | Numero posti : 1                    | Importo totale 1.00                 | Data prenotazione : 12/12/2004          
+In tutto contiene un 1 prenotazioni con l'incasso totale 1.00      

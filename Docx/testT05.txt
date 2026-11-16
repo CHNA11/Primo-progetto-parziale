@@ -1,0 +1,58 @@
+ID test:T05
+versione: 0.04(non pubblicato)
+Funzionalità testata: statistica e report
+Input fornito: Dati dei spettacoli, Dati dei clienti, Dati delle prenotazione, Dati delle Attese
+Output atteso: dati statistici in formato corretto
+Output ottenuto :
+Le funzionalità disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : d
+Le funzionalità per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+In cartellone contiene 4 spettacoli
+In tutto rimane ancora 198 posti disponibili
+In cartellone contiene 2 clienti registrati
+In cartellone contiene 3 prenotazione attiva
+In cartellone contiene 1 richieste in attesa
+Incasso totale è : 160.00 
+Lo spettacolo 01 ha più posti prenotati
+La media di occupazione è : 18 %
+Le funzionalità per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Numero di spettacoli presenti divise per genere sono :
+Opera                          : 1   spettacoli
+Teatro                         : 1   spettacoli
+Film                           : 2   spettacoli
+
+Dopo altri inserimento
+
+Le funzionalità per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Gli top 5 spettacoli con maggiore incasso sono :
+Posizione  Titolo               Genere               Incasso             
+0          01                   Opera                              120.00
+3          04                   Film                                30.00
+1          02                   Teatro                              10.00
+2          03                   Film                                 0.00
+4          05                   Articolo                             0.00
+
+Esito : superato
+
+Note: Dopo test ho abbreviato spazio lasciato su nome del genere, per essere tabulato meglio, e Su parte di incasso aggiunto - sul "Incasso per addrizzare da destra

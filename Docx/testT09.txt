@@ -1,0 +1,14 @@
+ID test:T09
+versione: 0.04(non pubblicato)
+Funzionalità testata: caricadatabese().
+Input fornito: file
+Output atteso: file caricato correttamente
+Output ottenuto :
+
+Errore operazione sul file
+
+Esito : fallito
+
+Motivo :Nella riga flag = fread(Clienti, sizeof(Spettacolo), *num_spettacoli, fp);
+Ho sbagliato a mettere argomenti, siccome ho ricopiato da riga di spettacoli, ho dimenticato di modificare size e quantità, in più serve anche *Clienti.
+E anche su prossima riga per controllofunzione
