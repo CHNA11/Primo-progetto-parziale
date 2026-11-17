@@ -100,11 +100,11 @@ NodoPrenotazione *Eliminaprenotazione(int codice_prenotazione, NodoPrenotazione 
 // funzione che converte tutte le attese possibilmente in prenotazione
 NodoPrenotazione *converteprenotazione(Spettacolo *Spettacoli, NodoAttesa **Attese, NodoPrenotazione *Prenotazioni, Prenotazione Nodo, int num_spettacoli);
 // funzione che libera lista di prenotazioni
-void liberaprenotazioni(NodoPrenotazione *Prenotazioni);
+int liberaprenotazioni(NodoPrenotazione *Prenotazioni);
 // funzione che libera lista di attesa
-void liberaattesa(NodoAttesa *Attese);
+int liberaattesa(NodoAttesa *Attese);
 // funzione che libera lista di generi
-void liberageneri(Nodogenere *generi);
+int liberageneri(Nodogenere *generi);
 
 // funzioni di controllo per validità dei dati
 
@@ -121,16 +121,16 @@ int controllaemail(char email[]);
 // funzione che controlla prenotazione
 int controllaprenotazione(int codice_annullazione, NodoPrenotazione *Prenotazioni);
 // funzione che controlla apertura del file
-void controllaapertura(FILE *fp);
+int controllaapertura(FILE *fp);
 // funzione che controlla numero di operazione file
-void controllaoperazioe(size_t flag, int n, FILE *fp);
+int controllaoperazioe(size_t flag, int n, FILE *fp);
 
 // funzioni di inserimento
 
 // funzione di inserimento per dati di uno spettacolo
-void inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli);
+int inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli);
 // funzione di inserimento per dati cei clienti
-void inserimentoclienti(Cliente *Clienti, int *ns, int *Maxspettacoli);
+int inserimentoclienti(Cliente *Clienti, int *ns, int *Maxspettacoli);
 // funzione di inserimento prenotazione per liste
 NodoPrenotazione *registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa **Attese, int num_spettacoli, int num_clienti);
 
@@ -162,11 +162,11 @@ void stampacliente(Cliente cliente);
 // funzione che stampa tutti i clienti presenti nell'array
 void visualizzaclienti(Cliente *Clienti, int num_clienti);
 // funzione che cerca per codice e stampa spettacolo trovato
-void cercacodicespettacolo(Spettacolo *Spettacoli, int num_spettacoli);
+int cercacodicespettacolo(Spettacolo *Spettacoli, int num_spettacoli);
 // funzione che cerca per codice e stampa cliente trovato
-void cercacodicecliente(Cliente *Clienti, int num_clienti);
+int cercacodicecliente(Cliente *Clienti, int num_clienti);
 // fuznione che cerca per genere e stampa spettacoli trovati
-void cercagenerespettacolo(Spettacolo *Spettacoli, int num_spettacoli);
+int cercagenerespettacolo(Spettacolo *Spettacoli, int num_spettacoli);
 // funzione che stampa spettacoli con posti disponibili >0 e ordinati in modo cronologico crescente.
 void spettacolidisponibili(Spettacolo *Spettacoli, int num_spettacoli);
 // funzione che stampa una prenotazione;
@@ -189,13 +189,13 @@ void stampatop(int num_spettacoli, Spettacolo *Spettacoli);
 // funzioni di operazioni su file
 
 // funzione che salva dati sul file
-void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese);
+int salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese);
 // funzione che carica dati dal file
-void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti);
+int caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti);
 // funzione che esporta catalogo in formato testo
-void esportacatalogo(int num_spettacoli, Spettacolo *Spettacoli);
+int esportacatalogo(int num_spettacoli, Spettacolo *Spettacoli);
 // funzione che esporta report prenotazione
-void esportaprenotazione(NodoPrenotazione *Prenotazioni, Cliente *Clienti, int num_clienti);
+int esportaprenotazione(NodoPrenotazione *Prenotazioni, Cliente *Clienti, int num_clienti);
 
 // funzioni sul input da tastiera
 
@@ -213,7 +213,7 @@ int trasformadata(Spettacolo spettacolo);
 void pulizia();
 
 // funzione di liberazione memoria allocata
-void liberazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese, Nodogenere *generi);
+int liberazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese, Nodogenere *generi);
 
 int main()
 {
@@ -668,7 +668,7 @@ NodoPrenotazione *converteprenotazione(Spettacolo *Spettacoli, NodoAttesa **Atte
 }
 
 // funzione che libera lista di prenotazioni
-void liberaprenotazioni(NodoPrenotazione *Prenotazioni)
+int liberaprenotazioni(NodoPrenotazione *Prenotazioni)
 {
     NodoPrenotazione *temp = Prenotazioni;
     while (Prenotazioni != NULL)
@@ -677,10 +677,10 @@ void liberaprenotazioni(NodoPrenotazione *Prenotazioni)
         free(temp);
         temp = Prenotazioni;
     }
-    return;
+    return 1;
 }
 // funzione che libera lista di attesa
-void liberaattesa(NodoAttesa *Attese)
+int liberaattesa(NodoAttesa *Attese)
 {
     NodoAttesa *temp = Attese;
     while (Attese != NULL)
@@ -689,10 +689,10 @@ void liberaattesa(NodoAttesa *Attese)
         free(temp);
         temp = Attese;
     }
-    return;
+    return 1;
 }
 // funzione che libera lista di generi
-void liberageneri(Nodogenere *generi)
+int liberageneri(Nodogenere *generi)
 {
     Nodogenere *temp = generi;
     while (generi != NULL)
@@ -701,7 +701,7 @@ void liberageneri(Nodogenere *generi)
         free(temp);
         temp = generi;
     }
-    return;
+    return 1;
 }
 
 // funzione che controlla codice sia univoco per spettacoli
@@ -905,29 +905,31 @@ int controllaprenotazione(int codice_annullazione, NodoPrenotazione *Prenotazion
 }
 
 // funzione che controlla apertura del file
-void controllaapertura(FILE *fp)
+int controllaapertura(FILE *fp)
 {
     if (fp == NULL)
     {
-        printf("Errore apertura file\n");
-        exit(1);
+        return -1;
     }
-    return;
+    else
+    {
+        return 1;
+    }
 }
 // funzione che controlla numero di operazione file
-void controllaoperazioe(size_t flag, int n, FILE *fp)
+int controllaoperazioe(size_t flag, int n, FILE *fp)
 {
     if (flag != n)
     {
-        printf("Errore operazione sul file\n");
+        return -1;
         fclose(fp);
-        exit(1);
     }
-    return;
+    return 1;
 }
 
-void inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli)
+int inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli)
 {
+    int flag = 0;
     // dichiarare una variabile locale per comodità del codice
     int num_spettacoli = *ns;
     int i = num_spettacoli;
@@ -943,110 +945,98 @@ void inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns,
         else
         {
             printf("Riallocazione ha incontrato qualche problema, riprova più tardi\n");
-            return;
+            return 0;
         }
     }; // controllo spazio siponibile
-    int flag = 0; // indicatore per conferma di inserimento dati
+    int flagcodice = 0; // indicatore per validità del codice
     do
     {
-        int flagcodice = 0; // indicatore per validità del codice
-        do
-        {
-            int tempcodice; // variabile temporanea per codice
-            printf("Inserisci codice spettacolo corrispondente : ");
-            scanf("%d", &tempcodice);
-            flagcodice = 1;
-            if (controllacodiceSp(tempcodice, Spettacoli, num_spettacoli) != -1)
-            { // controlla che sia univoca
-                printf("codice già esistente e deve essere univoco, riprova.\n");
-                flagcodice = 0;
-            }
-            else
-            { // assegnare se non ci sono problemi
-                Spettacoli[i].codice_spettacolo = tempcodice;
-            }
-        } while (flagcodice != 1);
+        int tempcodice; // variabile temporanea per codice
+        printf("Inserisci codice spettacolo corrispondente : ");
+        scanf("%d", &tempcodice);
+        flagcodice = 1;
+        if (controllacodiceSp(tempcodice, Spettacoli, num_spettacoli) != -1)
+        { // controlla che sia univoca
+            printf("codice già esistente e deve essere univoco, riprova.\n");
+            flagcodice = 0;
+        }
+        else
+        { // assegnare se non ci sono problemi
+            Spettacoli[i].codice_spettacolo = tempcodice;
+        }
+    } while (flagcodice != 1);
+    pulizia();
+    printf("Inserisci titolo dello spettacolo con massimo 100 caratteri : ");
+    scanf("%100s", Spettacoli[i].titolo); // un titolo può avere qualsiasi contenuto
+    pulizia();
+    printf("Inserisci genere dello spettacolo con massimo 30 caratteri : ");
+    scanf("%30s", Spettacoli[i].genere); // analogamente per genere
+    pulizia();
+    int flagdata = 0; // indicatore per validità di data
+    do
+    {
+        printf("Inserisci data dello spettacolo con formato gg/mm/aaaa : ");
+        char tempdata[11];       // dichiarare una variabile temporanea per data
+        scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
         pulizia();
-        printf("Inserisci titolo dello spettacolo con massimo 100 caratteri : ");
-        scanf("%100s", Spettacoli[i].titolo); // un titolo può avere qualsiasi contenuto
-        pulizia();
-        printf("Inserisci genere dello spettacolo con massimo 30 caratteri : ");
-        scanf("%30s", Spettacoli[i].genere); // analogamente per genere
-        pulizia();
-        int flagdata = 0; // indicatore per validità di data
-        do
+        flagdata = 1;
+        if (controlladata(tempdata) == -1)
+        { // controlla che data sia valido
+            printf("Si chiede di inserire una data valida con formato corrispondente segnato\n");
+            flagdata = 0;
+        }
+        else
+        { // assegnazione nel caso corretto
+            printf("Data valida e inserito correttamente\n");
+            strcpy(Spettacoli[i].data_spettacolo, tempdata);
+        }
+    } while (flagdata != 1);
+    int flagposti = 0; // indicatore per numero di posti
+    do
+    {
+        int temppos;
+        printf("Inserisci posti totali dello spettacolo : ");
+        scanf("%d", &temppos);
+        flagposti = 1;
+        if (temppos < 1)
+        { // basta che sia maggiore di 0
+            printf("Il numero di posti totali deve essere un numero intero strettamente maggiore di 0\n");
+            flagposti = 0;
+        }
+        else
         {
-            printf("Inserisci data dello spettacolo con formato gg/mm/aaaa : ");
-            char tempdata[11];       // dichiarare una variabile temporanea per data
-            scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
-            pulizia();
-            flagdata = 1;
-            if (controlladata(tempdata) == -1)
-            { // controlla che data sia valido
-                printf("Si chiede di inserire una data valida con formato corrispondente segnato\n");
-                flagdata = 0;
-            }
-            else
-            { // assegnazione nel caso corretto
-                printf("Data valida e inserito correttamente\n");
-                strcpy(Spettacoli[i].data_spettacolo, tempdata);
-            }
-        } while (flagdata != 1);
-        int flagposti = 0; // indicatore per numero di posti
-        do
+            Spettacoli[i].posti_totali = temppos;
+        }
+    } while (flagposti != 1);
+    Spettacoli[i].posti_disponibili = Spettacoli[i].posti_totali;
+    int flagprezzo = 0; // indicatore per prezzo
+    do
+    {
+        float tempprezzo;
+        printf("Inserisci prezzo di un singolo biglietto dello spettacolo : ");
+        scanf("%f", &tempprezzo);
+        flagprezzo = 1;
+        if (tempprezzo <= 0) // basta che sia positivo e non zero
         {
-            int temppos;
-            printf("Inserisci posti totali dello spettacolo : ");
-            scanf("%d", &temppos);
-            flagposti = 1;
-            if (temppos < 1)
-            { // basta che sia maggiore di 0
-                printf("Il numero di posti totali deve essere un numero intero strettamente maggiore di 0\n");
-                flagposti = 0;
-            }
-            else
-            {
-                Spettacoli[i].posti_totali = temppos;
-            }
-        } while (flagposti != 1);
-        Spettacoli[i].posti_disponibili = Spettacoli[i].posti_totali;
-        int flagprezzo = 0; // indicatore per prezzo
-        do
+            printf("Prezzo di un singolo biglietto deve essere strettamente maggiore di 0\n");
+            flagprezzo = 0;
+        }
+        else
         {
-            float tempprezzo;
-            printf("Inserisci prezzo di un singolo biglietto dello spettacolo : ");
-            scanf("%f", &tempprezzo);
-            flagprezzo = 1;
-            if (tempprezzo <= 0) // basta che sia positivo e non zero
-            {
-                printf("Prezzo di un singolo biglietto deve essere strettamente maggiore di 0\n");
-                flagprezzo = 0;
-            }
-            else
-            {
-                Spettacoli[i].prezzo_biglietto = tempprezzo;
-            }
-        } while (flagprezzo != 1);
-        printf("I dati dello spettacolo che hai inserito sono le seguenti : \n");
-        printf("%-20s %-20s %-20s %-20s %-20s %-20s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti totali", "posti disponibili", "Prezzo biglietto");
-        printf("%-20d %-20s %-20s %-20s %-20d %-20d %-20.2f\n", Spettacoli[i].codice_spettacolo, Spettacoli[i].titolo, Spettacoli[i].genere, Spettacoli[i].data_spettacolo, Spettacoli[i].posti_totali, Spettacoli[i].posti_disponibili, Spettacoli[i].prezzo_biglietto); // stampare dati inseriti
-        printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
-        scanf("%d", &flag); // in realtà vale per tutti diversi da 1 per riinserimento, sicuramente bene per 0
-    } while (flag != 1);
-    printf("dati dello spettacolo salvato correttamente\n");
-    // valutare genere inserito
-    *generi = valutagenere(Spettacoli[i].genere, *generi);
-    (*ns)++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
-    if (controllospazio(num_spettacoli, *Maxspettacoli) == 0)
-    { // controlla spazio disponibile
-        printf("Spazio allocato per spattacoli ha raggiunto la sua massima capacità\n");
-        riallocazioneSp(Spettacoli, *ns, Maxspettacoli);
-    }
-    return;
+            Spettacoli[i].prezzo_biglietto = tempprezzo;
+        }
+    } while (flagprezzo != 1);
+    printf("I dati dello spettacolo che hai inserito sono le seguenti : \n");
+    printf("%-20s %-20s %-20s %-20s %-20s %-20s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti totali", "posti disponibili", "Prezzo biglietto");
+    printf("%-20d %-20s %-20s %-20s %-20d %-20d %-20.2f\n", Spettacoli[i].codice_spettacolo, Spettacoli[i].titolo, Spettacoli[i].genere, Spettacoli[i].data_spettacolo, Spettacoli[i].posti_totali, Spettacoli[i].posti_disponibili, Spettacoli[i].prezzo_biglietto); // stampare dati inseriti
+    printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
+    scanf("%d", &flag); // in realtà vale per tutti diversi da 1 per riinserimento, sicuramente bene per 0
+    return flag;
 }
 
-void inserimentoclienti(Cliente *Clienti, int *nc, int *Maxclienti)
+int inserimentoclienti(Cliente *Clienti, int *nc, int *Maxclienti)
 {
+    int flag = 0; // indicatore per conferma di inserimento dati
     int num_clienti = *nc;
     int i = num_clienti;
     if (controllospazio(num_clienti, *Maxclienti) == -1)
@@ -1061,89 +1051,78 @@ void inserimentoclienti(Cliente *Clienti, int *nc, int *Maxclienti)
         else
         {
             printf("Riallocazione ha incontrato qualche problema, riprova più tardi\n");
-            return;
+            return -1;
         }
     }; // controllo spazio siponibile
-    int flag = 0; // indicatore per conferma di inserimento dati
+    int flagcodice = 0; // indicatore per validità del codice
     do
     {
-        int flagcodice = 0; // indicatore per validità del codice
-        do
-        {
-            int tempcodice; // variabile temporanea per codice
-            printf("Inserisci codice cliente corrispondente : ");
-            scanf("%d", &tempcodice);
-            flagcodice = 1;
-            if (controllacodiceCl(tempcodice, Clienti, num_clienti) != -1)
-            { // controlla che sia univoca
-                printf("codice già esistente e deve essere univoco, riprova.\n");
-                flagcodice = 0;
-            }
-            else
-            { // assegnare se non ci sono problemi
-                Clienti[i].codice_cliente = tempcodice;
-            }
-        } while (flagcodice != 1);
+        int tempcodice; // variabile temporanea per codice
+        printf("Inserisci codice cliente corrispondente : ");
+        scanf("%d", &tempcodice);
+        flagcodice = 1;
+        if (controllacodiceCl(tempcodice, Clienti, num_clienti) != -1)
+        { // controlla che sia univoca
+            printf("codice già esistente e deve essere univoco, riprova.\n");
+            flagcodice = 0;
+        }
+        else
+        { // assegnare se non ci sono problemi
+            Clienti[i].codice_cliente = tempcodice;
+        }
+    } while (flagcodice != 1);
+    pulizia();
+    printf("Inserisci nome del cliente con massimo 50 caratteri : ");
+    scanf("%50s", Clienti[i].nome); // registra nome
+    pulizia();
+    printf("Inserisci cognome del cliente con massimo 50 caratteri : ");
+    scanf("%50s", Clienti[i].cognome); // registra cognome
+    pulizia();
+    int flagemail = 0;
+    char tempemail[81];
+    do
+    {
+        printf("Inserisci email del cliente con massimo 80 caratteri : ");
+        scanf("%80s", tempemail);
         pulizia();
-        printf("Inserisci nome del cliente con massimo 50 caratteri : ");
-        scanf("%50s", Clienti[i].nome); // registra nome
+        flagemail = 1;
+        if (controllaemail(tempemail) == -1)
+        { // controlla che email sia valido
+            printf("Si chiede di inserire un email valida contenente @\n");
+            flagemail = 0;
+        }
+        else
+        { // assegnazione nel caso corretto
+            printf("email valida e inserito correttamente\n");
+            strcpy(Clienti[i].email, tempemail);
+        }
+    } while (flagemail != 1);
+    int flagdata = 0; // indicatore per validità di data
+    do
+    {
+        printf("Inserisci data del iscrizione con formato gg/mm/aaaa : ");
+        char tempdata[11];       // dichiarare una variabile temporanea per data
+        scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
         pulizia();
-        printf("Inserisci cognome del cliente con massimo 50 caratteri : ");
-        scanf("%50s", Clienti[i].cognome); // registra cognome
-        pulizia();
-        int flagemail = 0;
-        char tempemail[81];
-        do
-        {
-            printf("Inserisci email del cliente con massimo 80 caratteri : ");
-            scanf("%80s", tempemail);
-            pulizia();
-            flagemail = 1;
-            if (controllaemail(tempemail) == -1)
-            { // controlla che email sia valido
-                printf("Si chiede di inserire un email valida contenente @\n");
-                flagemail = 0;
-            }
-            else
-            { // assegnazione nel caso corretto
-                printf("email valida e inserito correttamente\n");
-                strcpy(Clienti[i].email, tempemail);
-            }
-        } while (flagemail != 1);
-        int flagdata = 0; // indicatore per validità di data
-        do
-        {
-            printf("Inserisci data del iscrizione con formato gg/mm/aaaa : ");
-            char tempdata[11];       // dichiarare una variabile temporanea per data
-            scanf("%10s", tempdata); // controllo di lunghezza, quelli oltre viene ignorata
-            pulizia();
-            flagdata = 1;
-            if (controlladata(tempdata) == -1)
-            { // controlla che data sia valido
-                printf("Si chiede di inserire una data valida con formato corrispondente segnato\n");
-                flagdata = 0;
-            }
-            else
-            { // assegnazione nel caso corretto
-                printf("Data valida e inserito correttamente\n");
-                strcpy(Clienti[i].data_iscrizione, tempdata);
-            }
-        } while (flagdata != 1);
-        // chiedere conferma per dati inseriti
-        printf("I dati del cliente che hai inserito sono le seguenti : \n");
-        printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "nome", "cognome", "email", "data iscrizione");
-        printf("%-20d %-20s %-20s %-40s %-20s\n", Clienti[i].codice_cliente, Clienti[i].nome, Clienti[i].cognome, Clienti[i].email, Clienti[i].data_iscrizione); // stampare dati inseriti
-        printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
-        scanf("%d", &flag); // in realtà vale per tutti diversi da 1 per riinserimento, sicuramente bene per 0
-    } while (flag != 1);
-    printf("dati dello cliente salvato correttamente\n");
-    (*nc)++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
-    if (controllospazio(num_clienti, *Maxclienti) == 0)
-    { // controlla spazio disponibile
-        printf("Spazio allocato per clienti ha raggiunto la sua massima capacità\n");
-        riallocazioneCl(Clienti, *nc, Maxclienti);
-    }
-    return;
+        flagdata = 1;
+        if (controlladata(tempdata) == -1)
+        { // controlla che data sia valido
+            printf("Si chiede di inserire una data valida con formato corrispondente segnato\n");
+            flagdata = 0;
+        }
+        else
+        { // assegnazione nel caso corretto
+            printf("Data valida e inserito correttamente\n");
+            strcpy(Clienti[i].data_iscrizione, tempdata);
+        }
+    } while (flagdata != 1);
+    // chiedere conferma per dati inseriti
+    printf("I dati del cliente che hai inserito sono le seguenti : \n");
+    printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "nome", "cognome", "email", "data iscrizione");
+    printf("%-20d %-20s %-20s %-40s %-20s\n", Clienti[i].codice_cliente, Clienti[i].nome, Clienti[i].cognome, Clienti[i].email, Clienti[i].data_iscrizione); // stampare dati inseriti
+    printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
+    scanf("%d", &flag); // in realtà vale per tutti diversi da 1 per riinserimento, sicuramente bene per 0
+    return flag;
 }
 
 NodoPrenotazione *registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa **Attese, int num_spettacoli, int num_clienti)
@@ -1330,7 +1309,10 @@ void menu()
             printf("Scelta non valida.\n");
         };
     } while (primascelta != 'f' && primascelta != 'F');
-    liberazione(Spettacoli, Clienti, Prenotazioni, Attese, generi);
+    if (liberazione(Spettacoli, Clienti, Prenotazioni, Attese, generi) != 1)
+    {
+        printf("Si esce dal programma con liberazione insuccesso\n");
+    };
 }
 
 // funzione di stampa menu secondaria per Gestione spettacoli
@@ -1353,16 +1335,40 @@ void menuspettacoli(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *M
         switch (secondascelta) // switch case per scelte
         {
         case 1:
-            inserimentospettacolo(Spettacoli, generi, ns, Maxspettacoli);
-            break;
+        {
+            int flag;
+            do
+            {
+                flag = inserimentospettacolo(Spettacoli, generi, ns, Maxspettacoli);
+                printf("dati dello spettacolo salvato correttamente\n");
+                // valutare genere inserito
+                *generi = valutagenere(Spettacoli[*ns].genere, *generi);
+                (*ns)++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
+                if (controllospazio(num_spettacoli, *Maxspettacoli) == 0)
+                { // controlla spazio disponibile
+                    printf("Spazio allocato per spattacoli ha raggiunto la sua massima capacità\n");
+                    riallocazioneSp(Spettacoli, *ns, Maxspettacoli);
+                }
+            } while (flag != 1);
+        }
+        break;
         case 2:
             visualizzaspettacoli(Spettacoli, num_spettacoli);
             break;
         case 3:
-            cercacodicespettacolo(Spettacoli, num_spettacoli);
-            break;
+        {
+            int codice = cercacodicespettacolo(Spettacoli, num_spettacoli);
+            if (codice != -1)
+            {
+                printf("il codice %d non corrisponde ad alcun spettacolo presenti.\n", codice);
+            }
+        }
+        break;
         case 4:
-            cercagenerespettacolo(Spettacoli, num_spettacoli);
+            if (cercagenerespettacolo(Spettacoli, num_spettacoli) == 0)
+            { // se non è mai entrato in if, allora non ho trovato
+                printf("Non ci sono spettacoli corrispondente al genere inserito.\n");
+            }
             break;
         case 5:
             spettacolidisponibili(Spettacoli, num_spettacoli);
@@ -1392,14 +1398,33 @@ void menuclienti(Cliente *Clienti, int *nc, int *Maxclienti)
         switch (secondascelta)
         {
         case 1:
-            inserimentoclienti(Clienti, nc, Maxclienti);
-            break;
+        {
+            int flag;
+            do
+            {
+                flag = inserimentoclienti(Clienti, nc, Maxclienti);
+            } while (flag != 1);
+            printf("dati dello cliente salvato correttamente\n");
+            (*nc)++; // incrementare solo quando tutti i dati sono registrati correttamente in modo valido
+            if (controllospazio(num_clienti, *Maxclienti) == 0)
+            { // controlla spazio disponibile
+                printf("Spazio allocato per clienti ha raggiunto la sua massima capacità\n");
+                riallocazioneCl(Clienti, *nc, Maxclienti);
+            }
+        }
+        break;
         case 2:
             visualizzaclienti(Clienti, num_clienti);
             break;
         case 3:
-            cercacodicecliente(Clienti, num_clienti);
-            break;
+        {
+            int codice = cercacodicecliente(Clienti, num_clienti);
+            if (codice != -1)
+            {
+                printf("il codice %d non corrisponde ad alcun cliente presenti.\n", codice);
+            };
+        }
+        break;
         case 4:
             break;
         default:
@@ -1503,19 +1528,31 @@ void menufile(int *num_spettacoli, Spettacolo *Spettacoli, int *num_clienti, Cli
         {
         case 1:
             // funzione che salva dati sul file
-            salvadatabase(*num_spettacoli, Spettacoli, *num_clienti, Clienti, *Prenotazioni, *Attese);
+            if (salvadatabase(*num_spettacoli, Spettacoli, *num_clienti, Clienti, *Prenotazioni, *Attese) == -1)
+            {
+                printf("Si è verificato un errore per salvataggio di database\n");
+            };
             break;
         case 2:
             // funzione che carica dati dal file
-            caricadatabase(num_spettacoli, &Spettacoli, num_clienti, &Clienti, Prenotazioni, Attese, generi, Maxspettacoli, Maxclienti);
+            if (caricadatabase(num_spettacoli, &Spettacoli, num_clienti, &Clienti, Prenotazioni, Attese, generi, Maxspettacoli, Maxclienti) == -1)
+            {
+                printf("Si è verificato un errore per caricare dati dal file\n");
+            };
             break;
         case 3:
             // funzione che esporta catalogo in formato testo
-            esportacatalogo(*num_spettacoli, Spettacoli);
+            if (esportacatalogo(*num_spettacoli, Spettacoli) == -1)
+            {
+                printf("Si è verificato un errore per esportazione catalogo.txt\n");
+            };
             break;
         case 4:
             // funzione che esporta report prenotazione
-            esportaprenotazione(*Prenotazioni, Clienti, *num_clienti);
+            if (esportaprenotazione(*Prenotazioni, Clienti, *num_clienti) == -1)
+            {
+                printf("Si è verificato un errore per esportazione prenotazioni\n");
+            };
             break;
         case 5:
             break;
@@ -1821,12 +1858,16 @@ void stampatop(int num_spettacoli, Spettacolo *Spettacoli)
     return;
 }
 
-void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese)
+int salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese)
 {
     // Apertura file binario in scrittura
     FILE *fp = fopen("spettacoli.dat", "wb");
-    controllaapertura(fp); // controllo
-    size_t flag;           // dichiarare indicatore per corettezza di scrittura
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file spettacoli.dat\n");
+        return -1;
+    } // controllo
+    size_t flag; // dichiarare indicatore per corettezza di scrittura
     if (num_spettacoli == 0)
     { // evita azione per array vuoto
         printf("Non ci sono spettacoli presenti, file spettacoli.dat salvato come vuoto\n");
@@ -1834,16 +1875,28 @@ void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, 
     }
     else
     {
-        flag = fwrite(&num_spettacoli, sizeof(int), 1, fp);                           // scrive prima numero di spettacolio
-        controllaoperazioe(flag, 1, fp);                                              // controllo
-        flag = fwrite(Spettacoli, sizeof(Spettacolo), num_spettacoli, fp);            // poi scrivere dati presenti
-        controllaoperazioe(flag, num_spettacoli, fp);                                 // controllo
+        flag = fwrite(&num_spettacoli, sizeof(int), 1, fp); // scrive prima numero di spettacolio
+        if (controllaoperazioe(flag, 1, fp) != 1)
+        {
+            printf("Errore scrittura file spettacoli.dat\n");
+            return -1;
+        } // controllo
+        flag = fwrite(Spettacoli, sizeof(Spettacolo), num_spettacoli, fp); // poi scrivere dati presenti
+        if (controllaoperazioe(flag, num_spettacoli, fp) != 1)
+        {
+            printf("Errore scrittura file spettacoli.dat");
+            return -1;
+        } // controllo
         fclose(fp);                                                                   // chiusura file
         printf("Dati di spettacoli salvati correttamente nel file spettacoli.dat\n"); // stampa risultato
     }
     // Analogo a spettacoli
     fp = fopen("clienti.dat", "wb");
-    controllaapertura(fp);
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file clienti.dat\n");
+        return -1;
+    } // controllo
     if (num_clienti == 0)
     {
         printf("Non ci sono clienti presenti, file clienti.dat salvato come vuoto\n");
@@ -1852,15 +1905,27 @@ void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, 
     else
     {
         flag = fwrite(&num_clienti, sizeof(int), 1, fp);
-        controllaoperazioe(flag, 1, fp);
+        if (controllaoperazioe(flag, 1, fp) != 1)
+        {
+            printf("Errore scrittura file clienti.dat");
+            return -1;
+        }
         flag = fwrite(Clienti, sizeof(Cliente), num_clienti, fp);
-        controllaoperazioe(flag, num_clienti, fp);
+        if (controllaoperazioe(flag, num_clienti, fp) != 1)
+        {
+            printf("Errore scrittura file clienti.dat\n");
+            return -1;
+        }
         fclose(fp);
         printf("Dati di Clienti salvati correttamente nel file clienti.dat\n");
     }
     // Apertura file per Prenotazioni in scrittura binario
     fp = fopen("prenotazioni.dat", "wb");
-    controllaapertura(fp);              // controllo apertura
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file prenotazioni.dat\n");
+        return -1;
+    } // controllo            // controllo apertura
     NodoPrenotazione *p = Prenotazioni; // inzializzare puntatore per scorrimento
     if (p == NULL)
     { // caso lista vuota
@@ -1872,15 +1937,23 @@ void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, 
         while (p != NULL)
         {
             flag = fwrite(&(p->dati), sizeof(Prenotazione), 1, fp); // scrive solo dati del nodo, una per volta
-            controllaoperazioe(flag, 1, fp);                        // controllo
-            p = p->next;                                            // scorrimento
+            if (controllaoperazioe(flag, 1, fp) != 1)
+            {
+                printf("Errore scrittura file prenotazioni.dat\n");
+                return -1;
+            } // controllo
+            p = p->next; // scorrimento
         }
         printf("Dati nella lista di prenotazioni salvati correttamente nel file prenotazioni.dat\n"); // stampa risultato
         fclose(fp);                                                                                   // in qualsiasi caso, chiude file
     }
     // Analogo a Prenotazioni
     fp = fopen("attesa.dat", "wb");
-    controllaapertura(fp);
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file attesa.dat\n");
+        return -1;
+    } // controllo
     NodoAttesa *q = Attese;
     if (q == NULL)
     {
@@ -1892,21 +1965,33 @@ void salvadatabase(int num_spettacoli, Spettacolo *Spettacoli, int num_clienti, 
         while (q != NULL)
         {
             flag = fwrite(&(q->dati), sizeof(RichiestaAttesa), 1, fp);
-            controllaoperazioe(flag, 1, fp);
+            if (controllaoperazioe(flag, 1, fp) != 1)
+            {
+                printf("Errore scrittura file attesa.dat\n");
+                return -1;
+            };
             q = q->next;
         }
         printf("Dati nella lista di attesa salvati correttamente nel file attesa.dat\n");
         fclose(fp);
     }
-    return;
+    return 1;
 }
 
-void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti)
+int caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti)
 { // apertura file
     FILE *fp = fopen("spettacoli.dat", "rb");
-    controllaapertura(fp);                                   // controllo
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file spettacoli.dat\n");
+        return -1;
+    } // controllo                                  // controllo
     size_t flag = fread(num_spettacoli, sizeof(int), 1, fp); // leggere numero di spettacoli
-    controllaoperazioe(flag, 1, fp);                         // controlla lettura
+    if (controllaoperazioe(flag, 1, fp) != 1)
+    {
+        printf("Errore lettura file spettacoli.dat\n");
+        return -1;
+    } // controlla lettura
     // vari casi per disponibilità dello spazio allocato
     if (controllospazio(*num_spettacoli, *Maxspettacoli) == -1)
     {
@@ -1920,7 +2005,7 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
         else
         {
             printf("Riallocazione ha incontrato qualche problema, riprova più tardi\n");
-            return;
+            return -1;
         }
     } // controllo spazio siponibile
     else if (controllospazio(*num_spettacoli, *Maxspettacoli) == 0)
@@ -1930,8 +2015,12 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
     };
     // controllato che spazio siano sufficienti si legge dati dal file
     flag = fread(*Spettacoli, sizeof(Spettacolo), *num_spettacoli, fp);
-    controllaoperazioe(flag, *num_spettacoli, fp); // controllo lettura
-    fclose(fp);                                    // chiusura file
+    if (controllaoperazioe(flag, *num_spettacoli, fp) != 1)
+    {
+        printf("Errore lettura file spettacoli.dat\n");
+        return -1;
+    }; // controllo lettura
+    fclose(fp); // chiusura file
     for (int i = 0; i < *num_spettacoli; i++)
     { // ciclo per generare lista di generi corrispondenti a nuovi spettacoli
         *generi = valutagenere((*Spettacoli)[i].genere, *generi);
@@ -1939,9 +2028,17 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
     printf("File spettacoli.dat caricato correttamente\n");
     // Analogamente a Spettacoli
     fp = fopen("clienti.dat", "rb");
-    controllaapertura(fp);
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file clienti.dat\n");
+        return -1;
+    } // controllo
     flag = fread(num_clienti, sizeof(int), 1, fp);
-    controllaoperazioe(flag, 1, fp);
+    if (controllaoperazioe(flag, 1, fp) != 1)
+    {
+        printf("Errore lettura file clienti.dat\n");
+        return -1;
+    }
     if (controllospazio(*num_clienti, *Maxclienti) == -1)
     {
         printf("Non ci sono spazi disponibili per inserimento\n");
@@ -1954,7 +2051,7 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
         else // Non si può leggere se non ha spazio disponibile
         {
             printf("Riallocazione ha incontrato qualche problema, riprova più tardi\n");
-            return;
+            return -1;
         }
     } // controllo spazio siponibile
     else if (controllospazio(*num_clienti, *Maxclienti) == 0)
@@ -1964,13 +2061,21 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
     };
     // dopo aver controllato che spazio siano sufficienti leggere dati dal file
     flag = fread(*Clienti, sizeof(Cliente), *num_clienti, fp);
-    controllaoperazioe(flag, *num_clienti, fp); // controlla lettura dati
-    fclose(fp);                                 // chiusura file
+    if (controllaoperazioe(flag, *num_clienti, fp) != 1)
+    {
+        printf("Errore lettura file clienti.dat\n");
+        return -1;
+    }; // controlla lettura dati
+    fclose(fp); // chiusura file
     // stampa risultato
     printf("File clienti.dat caricato correttamente\n");
     // Analoga a prima
     fp = fopen("prenotazioni.dat", "rb");
-    controllaapertura(fp);
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file prenotazioni.dat\n");
+        return -1;
+    } // controllo
     Prenotazione tempprenotazione;                                                    // dichiarare una variabile per appoggiare temporaneramente dati letti dal file
     while (fread(&tempprenotazione, sizeof(Prenotazione), 1, fp) == 1)                // finché si legge
     {                                                                                 // legge un dato di un nodo
@@ -1980,7 +2085,11 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
     printf("File prenotazioni.dat caricato correttamente\n");
     // Analogamente a prenotazioni
     fp = fopen("attesa.dat", "rb");
-    controllaapertura(fp);
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file attesa.dat\n");
+        return -1;
+    } // controllo
     RichiestaAttesa tempattesa;
     while (fread(&tempattesa, sizeof(RichiestaAttesa), 1, fp) == 1)
     {
@@ -1988,34 +2097,42 @@ void caricadatabase(int *num_spettacoli, Spettacolo **Spettacoli, int *num_clien
     }
     fclose(fp);
     printf("File attesa.dat caricato correttamente\n");
-    return;
+    return 1;
 }
 
 // funzione che esporta catalogo in formato testo
-void esportacatalogo(int num_spettacoli, Spettacolo *Spettacoli)
+int esportacatalogo(int num_spettacoli, Spettacolo *Spettacoli)
 {
     FILE *fp = fopen("catalogo.txt", "w"); // apertura file txt in scrittura
-    controllaapertura(fp);                 // controllo
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file catalogo.txt\n");
+        return -1;
+    } // controllo            // controllo
     for (int i = 0; i < num_spettacoli; i++)
     { // usare un ciclo per scrivere dati per riga
         fprintf(fp, "Codice: %-10d | Titolo: %-20s | Genere: %-20s | Data: %-20s | Posti %17d/%-20d | Prezzo: %-20.2f\n", Spettacoli[i].codice_spettacolo, Spettacoli[i].titolo, Spettacoli[i].genere, Spettacoli[i].data_spettacolo, Spettacoli[i].posti_disponibili, Spettacoli[i].posti_totali, Spettacoli[i].prezzo_biglietto);
     }
     fclose(fp);                                                            // chiusura file alla fine
     printf("Dati dei spettacoli scritti correttamente in catalogo.txt\n"); // stampa risultato di scrittura
-    return;
+    return 1;
 }
 
-void esportaprenotazione(NodoPrenotazione *Prenotazioni, Cliente *Clienti, int num_clienti)
+int esportaprenotazione(NodoPrenotazione *Prenotazioni, Cliente *Clienti, int num_clienti)
 {
     // apertura file
     FILE *fp = fopen("report_prenotazioni.txt", "w");
-    controllaapertura(fp);              // controlla
+    if (controllaapertura(fp) != 1)
+    {
+        printf("Errore apertura file report_prenotazioni.txt\n");
+        return -1;
+    } // controllo
     NodoPrenotazione *p = Prenotazioni; // Inizializzare variabile per scorrimento
     if (p == NULL)
     {
         printf("Non ci sono prenotazioni presenti, file salvato come vuoto\n");
         fclose(fp);
-        return;
+        return 1;
     }
     int cont = 0;      // Inizializzare contatore per numero di prenotazione
     float incasso = 0; // Inizializzare incasso totale
@@ -2033,10 +2150,10 @@ void esportaprenotazione(NodoPrenotazione *Prenotazioni, Cliente *Clienti, int n
     fprintf(fp, "In tutto contiene un %d prenotazioni con l'incasso totale %-10.2f\n", cont, incasso);
     fclose(fp);                                                                          // chiusura file
     printf("Dati delle prenotazione scritte correttamene in report_prenotazioni.txt\n"); // stampa risultato
-    return;
+    return 1;
 }
 
-void cercacodicespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
+int cercacodicespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
 {
     int codice; // dichiarare codice di ricerca
     printf("Insersci il codice dello spettacolo da cercare : ");
@@ -2048,15 +2165,14 @@ void cercacodicespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
             printf("Lo spettacolo corrispondente al codice %d è : \n", codice);
             printf("%-20s %-20s %-20s %-20s %-40s %-20s\n", "Codice", "Titolo", "Genere", "data", "posti disponibili/posti totali", "Prezzo biglietto");
             stampaspettacolo(Spettacoli[i]);
-            return; // basta un caso per uscire, codice è univoco
+            return -1; // basta un caso per uscire, codice è univoco
         }
     }
     // siccome non ha uscito quando ha trovato qualche spettacolo corrispondente, si avvisa l'errore
-    printf("il codice %d non corrisponde ad alcun spettacolo presenti.\n", codice);
-    return;
+    return codice;
 }
 
-void cercacodicecliente(Cliente *Clienti, int num_clienti)
+int cercacodicecliente(Cliente *Clienti, int num_clienti)
 {
     int codice; // dichiarare codice di ricerca
     printf("Insersci il codice dello cliente da cercare : ");
@@ -2068,15 +2184,14 @@ void cercacodicecliente(Cliente *Clienti, int num_clienti)
             printf("Lo cliente corrispondente al codice %d è : \n", codice);
             printf("%-20s %-20s %-20s %-40s %-20s\n", "Codice", "Nome", "Cognome", "Email", "Data iscrizione");
             stampacliente(Clienti[i]);
-            return; // basta un caso per uscire, codice è univoco
+            return -1; // basta un caso per uscire, codice è univoco
         }
     }
     // siccome non ha uscito quando ha trovato qualche cliente corrispondente, si avvisa l'errore
-    printf("il codice %d non corrisponde ad alcun cliente presenti.\n", codice);
-    return;
+    return codice;
 }
 
-void cercagenerespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
+int cercagenerespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
 {
     char genere[31]; // dichiarare una variabile per genere
     int flag = 0;    // indicatore per aver trovato o no
@@ -2097,11 +2212,7 @@ void cercagenerespettacolo(Spettacolo *Spettacoli, int num_spettacoli)
             stampaspettacolo(Spettacoli[i]);
         }
     }
-    if (flag == 0)
-    { // se non è mai entrato in if, allora non ho trovato
-        printf("Non ci sono spettacoli corrispondente al genere %s.\n", genere);
-    }
-    return;
+    return flag;
 }
 
 void spettacolidisponibili(Spettacolo *Spettacoli, int num_spettacoli)
@@ -2249,16 +2360,38 @@ void pulizia()
 }
 
 // funzione di liberazione memoria allocata
-void liberazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese, Nodogenere *generi)
+int liberazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa *Attese, Nodogenere *generi)
 {
     // liberazione allocazione dinamica
     free(Spettacoli);
     free(Clienti);
     // liberazione liste con i nodi
-    liberaprenotazioni(Prenotazioni);
-    liberaattesa(Attese);
-    liberageneri(generi);
-    // stampa messaggio di liberazione
-    printf("Spazi liberati correttamente\n");
-    return;
+    if (liberaprenotazioni(Prenotazioni) == 1)
+    {
+        printf("Lista di prenotazioni liberata correttamente\n");
+    }
+    else
+    {
+        printf("Errore liberazione lista di prenotazioni\n");
+        return -1;
+    }
+    if (liberaattesa(Attese) == 1)
+    {
+        printf("Lista di attesa liberata correttamente\n");
+    }
+    else
+    {
+        printf("Errore liberazione lista di attesa\n");
+        return -1;
+    }
+    if (liberageneri(generi) == 1)
+    {
+        printf("Lista di generi liberata correttamente\n");
+    }
+    else
+    {
+        printf("Errore liberazione lista di generi\n");
+        return -1;
+    }
+    return 1;
 }
