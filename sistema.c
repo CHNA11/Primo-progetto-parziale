@@ -221,6 +221,7 @@ int main()
 {
     avvio(); // richiama funzione di avvio per chiedere password in entrata
     menu();  // entra in menu di primo livello
+    return 0;
 }
 
 void avvio()
@@ -1284,6 +1285,8 @@ void menu()
     int *nc = &num_clienti;
     Spettacolo *Spettacoli = avviospettacoli(Maxspettacoli);
     Cliente *Clienti = avvioclienti(Maxclienti);
+    printf("Database inzializzato con Massima capacità di spettacoli : %d\n",Maxspettacoli);
+    printf("Database inzializzato con Massima capacità di clienti : %d\n",Maxclienti);
     NodoPrenotazione *Prenotazioni = NULL;
     NodoAttesa *Attese = NULL;
     Nodogenere *generi = NULL;
