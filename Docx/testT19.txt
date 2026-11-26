@@ -1,0 +1,16 @@
+ID test:T19
+versione: 1.2
+Funzionalità testata: Esportazione dei file di testo
+Input fornito: Spettacoli già esistenti
+Output atteso: Dati scritti correttamente
+Output ottenuto :
+Le funzionalità per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Dati dei spettacoli scritti correttamente in catalogo.txt
+
+Esito : superato

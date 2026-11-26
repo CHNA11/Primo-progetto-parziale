@@ -1,0 +1,23 @@
+ID test:T14
+versione: 1.1
+Funzionalità testata: Prenotazione con posti disponibili sufficienti
+Input fornito: codice di spettacolo, codice di cliente, un data valida, un numero di posto valido
+Output atteso: Dati di prenotazione con successo assegnato un codice di prenotazione
+Output ottenuto :
+Inserisci la tua scelta : 1
+Inserisci codice spettacole della prenotazione corrispondente : 1
+codice inserito corrisponde allo spettaco 12 nella data 12/12/2004 con 17 posti disponibili.
+Inserisci codice cliente della prenotazione corrispondente : 0
+codice cliente corrisponde al cliente 0 0.
+Inserisci numero di posti desiderati : 9
+Inserisci data della prenotazione in formato gg/mm/aaaa : 12/12/2004
+Data valida e inserito correttamente
+I costi totali della prenotazione è : 18.00.
+Per confermare prenotazione inserisci 1, altrimenti 0 : 1
+Prenotazione effettuato correttamente.
+Ecco gli dati della prenotazione : 
+codice prenotazione  codice spettacolo    codice cliente       numero posti         importo totale       data prenotazione   
+1                    1                    0                    9                    18.00                12/12/2004          
+Le funzionalità per gestione dei prenotazioni sono : 
+
+Esito : superato

@@ -62,5 +62,8 @@ Funzioni di statistiche ho fatto, non  ho testato, lascio per dopo quando ho anc
 Ma non riesco a compilare, senza ancora usando funzioni nuovi, darò a gemini per analizzare solo su questa problematica.
 Il problema è che nel fatto funzione prototipo dichiarato all'inizio, quando definisco dopo, ho scritto un c in più sul nome, e compilatore non mi dice dove si trova errore.
 
+16/11/2026
 
-
+Quando trasforma variabili globali in locali è veramente un casino.
+Però in effetti ho trovato un errore che per variabili globali non si accorge.
+Prossima volta faccio trasformazione da void a int, per richiesta, e poi comincio con report.

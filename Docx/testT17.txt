@@ -1,0 +1,41 @@
+ID test:T17
+versione: 1.2
+Funzionalità testata: Verifica intergrità caricamento dati
+Input fornito: File
+Output atteso: Dati letti in ordine giusto
+Output ottenuto :
+File spettacoli.dat caricato correttamente
+File clienti.dat caricato correttamente
+File prenotazioni.dat caricato correttamente
+File attesa.dat caricato correttamente
+Le funzionalità per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 5
+Le funzionalità disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : c
+Le funzionalità per gestione dei prenotazioni sono : 
+1. Registra nuova prenotazione.
+2. Annulla prenotazione.
+3. Visualizza tutte le prenotazioni.
+4. Visualizza prenotazioni di un cliente.
+5. Visualizza prenotazioni di uno spettacolo.
+6. Visualizza lista d'attesa.
+7. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Tutte le prenotazione registrate sono :
+codice prenotazione  codice spettacolo    codice cliente       numero posti         importo totale       data prenotazione   
+0                    0                    0                    1                    1.00                 12/12/2004          
+2                    1                    1                    8                    16.00                12/12/2004          
+3                    1                    2                    6                    12.00                12/12/2004      
+
+Esito : superato

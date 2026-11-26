@@ -77,7 +77,8 @@
 \begin{flushleft}
 \footnotesize
 Documento scritto in \LaTeX.\\
-Si fà riferimento per programma sistema.c pacchettato insieme. Per versione diverse guardare repository github.
+Si fà riferimento per programma$ Chen_130368.c $pacchettato insieme. Per versione diverse guardare repository github.
+
 \end{flushleft}
 \end{titlepage}
 
@@ -393,7 +394,7 @@ Il Codice è strutturato in modo seguente:
 \end{listacomp}
 
 \subsection{Elenco delle funzioni principali con breve descrizione}
-Le funzioni principali implementate in \texttt{sistema.c} sono:
+Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
 \begin{listacomp}
     \item \textbf{\texttt{avvio ()}:} gestisce l'accesso al sistema richiedendo la password salvata in \texttt{password.dat} (impostata a \texttt{123456} come valore predefinito) e consentendo eventualmente di modificarla prima di entrare nel menu.
     \item \textbf{\texttt{menu ()}:} inizializza gli array dinamici e le liste concatenate, gestisce il ciclo principale di smistamento verso i sottomenu e, in fase di uscita, richiama \texttt{liberazione()} per deallocare tutta la memoria dinamica.
@@ -1242,4 +1243,765 @@ while (fread(&tempprenotazione, sizeof(Prenotazione), 1, fp) == 1)
     \item \textbf{Prevenzione dei \emph{memory leak}:} le liste concatenate già presenti in memoria vengono deallocate e azzerate solo dopo aver accertato che i file di archivio siano leggibili.
     \item \textbf{Ricostruzione in tempo lineare:} mantenendo il puntatore di coda \texttt{p} durante il ciclo di \texttt{fread()}, ogni nuovo nodo viene agganciato direttamente in fondo senza dover ripercorrere la lista dall'inizio.
 \end{listacomp}
+
+\chapter{TESTING}
+\section{Casi di Test}
+\subsection{TEST T01}
+\begin{listacomp}
+    \item \textbf{ID test:} T01
+    \item \textbf{Versione:} 0.01
+    \item \textbf{Funzionalità testata:} \texttt{void avvio()}
+    \item \textbf{Input fornito:} \texttt{int password}, \texttt{int scelta}, \texttt{int riprova} (variabili locali interne alla funzione).
+    \item \textbf{Output atteso:} messaggi di conferma dell'aggiornamento della password (\texttt{"Nuova password salvato con successo"}) e dell'accesso al sistema (\texttt{"Avvio con successo, benvenuto al sistema di manager per teatro!"}).
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T01}]
+inserisci la password per entrare in accesso al sistema : 123456
+password non corrispondente, per riprovare inserisci 1, altrimenti qualsiasi numero : 1
+inserisci la password per entrare in accesso al sistema : 3491739357
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 1
+Inserisci la nuova password : 123456
+Nuova password salvato con successo
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 2
+Avvio con successo, benvenuto al sistema di manager per teatro!
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test01.png}
+    \caption{Schermata di esecuzione del Test T01.}
+    \label{fig:test01}
+\end{figure}
+
+\subsection{TEST T02}
+\begin{listacomp}
+    \item \textbf{ID test:} T02
+    \item \textbf{Versione:} 0.02
+    \item \textbf{Funzionalità testata:} \texttt{int controlladata(char data[])}
+    \item \textbf{Input fornito:} stringa di data di lunghezza 11 (nel formato \texttt{gg/mm/aaaa}).
+    \item \textbf{Output atteso:} avviso specifico in corrispondenza di ciascun errore di formato o di calendario; valore di ritorno \texttt{-1} in caso di data non valida e \texttt{1} per data corretta.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T02}]
+inserisci la password per entrare in accesso al sistema : 123456
+Le possibile funzioni sono : 
+1. Cambiare password.
+2. Entrare in menu.
+3. Uscire dal sistema.
+Inserisci la tua scelta : 2
+Avvio con successo, benvenuto al sistema di manager per teatro!
+inserisci numero massimo di spettacoli da gestire : 12
+inserisci numero massimo di clienti da gestire : 12
+Le funzionalita' disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : a
+Le funzionalita' per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+Inserisci codie spettacolo corrispondente : 12
+Inserisci titolo dello spettacolo con massimo 100 caratteri : 12
+Inserisci genere dello spettacolo con massimo 30 caratteri : 12
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12
+Inserisci una data con formato gg/mm/aaaa
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12/13/2004
+Inserisci un mese compreso tra 1 e 12
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 31/11/2004
+Nel mese 11 non ha 31 giorni, inserisci una data valida
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 29/02/2003
+Nel febbraio del 2003 non ha 29 giorni
+Si chiede di inserire una data valida con formato corrispondente segnato
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12 / 12 / 2014
+Inserisci una data con formato gg/mm/aaaa
+Inserisci data dello spettacolo con formato gg/mm/aaaa : 12/12/2014
+Data valida e inserito correttamente
+Inserisci posti totali dello spettacolo : 
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test02.png}
+    \caption{Schermata di esecuzione del Test T02.}
+    \label{fig:test02}
+\end{figure}
+
+\subsection{TEST T03}
+\begin{listacomp}
+    \item \textbf{ID test:} T03
+    \item \textbf{Versione:} 0.03 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{void inserimentocliente(Cliente *Clienti)}
+    \item \textbf{Input fornito:} codice, nome, cognome ed email del cliente.
+    \item \textbf{Output atteso:} messaggio di conferma del salvataggio (\texttt{"dati dello cliente salvato correttamente"}).
+    \item \textbf{Esito:} Fallito.
+    \item \textbf{Motivo:} errore logico nella condizione del ciclo \texttt{while} di verifica dell'email, in cui l'uso dell'operatore \texttt{||} al posto di \texttt{\&\&} ha generato un ciclo infinito con conseguente lettura fuori dai limiti e \emph{Segmentation fault} (\texttt{SIGSEGV}).
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Traccia di errore rilevata dal debugger nel Test T03}]
+Thread 1 received signal SIGSEGV, Segmentation fault.
+0x00007ff767712090 in controllaemail (email=0x5ffd70 "1") at C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.c:551
+551	        return 1;
+Execute debugger commands using "-exec <command>", for example "-exec info registers" will list registers in use (when GDB is the debugger)
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+[Inferior 1 (process 18908) killed]
+The program 'C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.exe' has exited with code 0 (0x00000000).
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test03.png}
+    \caption{Schermata di debug relativa al Test T03.}
+    \label{fig:test03}
+\end{figure}
+
+\subsection{TEST T05}
+\begin{listacomp}
+    \item \textbf{ID test:} T05
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} Statistiche e report (\texttt{menustat()}).
+    \item \textbf{Input fornito:} dati di spettacoli, clienti, prenotazioni e richieste in attesa.
+    \item \textbf{Output atteso:} calcolo e visualizzazione dei dati statistici nel formato tabellare previsto.
+    \item \textbf{Esito:} Superato.
+    \item \textbf{Note:} a seguito del test è stata ridotta la larghezza della colonna dedicata al nome del genere per migliorare l'incolonnamento, ed è stato aggiunto il modificatore di allineamento \texttt{-} sull'intestazione \texttt{Incasso}.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T05}]
+Le funzionalita' disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : d
+Le funzionalita' per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+In cartellone contiene 4 spettacoli
+In tutto rimane ancora 198 posti disponibili
+In cartellone contiene 2 clienti registrati
+In cartellone contiene 3 prenotazione attiva
+In cartellone contiene 1 richieste in attesa
+Incasso totale e' : 160.00 
+Lo spettacolo 01 ha piu' posti prenotati
+La media di occupazione e' : 18 %
+Le funzionalita' per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Numero di spettacoli presenti divise per genere sono :
+Opera                          : 1   spettacoli
+Teatro                         : 1   spettacoli
+Film                           : 2   spettacoli
+
+/* Dopo ulteriori inserimenti */
+
+Le funzionalita' per statistiche e report sono : 
+1. Statistiche generali.
+2. Spettacoli per genere.
+3. Top 5 spettacoli per incasso.
+4. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Gli top 5 spettacoli con maggiore incasso sono :
+Posizione  Titolo               Genere               Incasso             
+0          01                   Opera                            120.00
+3          04                   Film                              30.00
+1          02                   Teatro                            10.00
+2          03                   Film                               0.00
+4          05                   Articolo                           0.00
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Test05_1.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Test05_2.png}
+    \end{minipage}
+    \caption{Schermate di esecuzione del Test T05.}
+    \label{fig:test05}
+\end{figure}
+
+\subsection{TEST T11}
+\begin{listacomp}
+    \item \textbf{ID test:} T11
+    \item \textbf{Versione:} 1.1
+    \item \textbf{Funzionalità testata:} inserimento spettacolo con codice duplicato (\texttt{inserimentospettacolo()} / \texttt{controllacodiceSp()}).
+    \item \textbf{Input fornito:} dati di uno spettacolo con codice già presente in archivio.
+    \item \textbf{Output atteso:} avviso di duplicazione del codice e ritorno alla richiesta di inserimento di un nuovo codice univoco.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T11}]
+inserisci la password per entrare in accesso al sistema : 123456
+Le funzionalita' per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Elenco completo dei spettacoli presenti sono : 
+Codice               Titolo               Genere               data                 posti disponibili/posti totali                Prezzo biglietto
+0                    0                    0                    12/12/2004                           0/1                                    1.00
+Le funzionalita' per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+Inserisci codice spettacolo corrispondente : 0
+codice gia' esistente e deve essere univoco, riprova.
+Inserisci codice spettacolo corrispondente : 
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test11.png}
+    \caption{Schermata di esecuzione del Test T11.}
+    \label{fig:test11}
+\end{figure}
+
+\subsection{TEST T12}
+\begin{listacomp}
+    \item \textbf{ID test:} T12
+    \item \textbf{Versione:} 1.1
+    \item \textbf{Funzionalità testata:} ricerca spettacolo esistente (\texttt{cercacodicespettacolo()}).
+    \item \textbf{Input fornito:} codice di uno spettacolo presente in archivio.
+    \item \textbf{Output atteso:} stampa tabellare dei dati dello spettacolo corrispondente al codice inserito.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T12}]
+Le funzionalita' per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Insersci il codice dello spettacolo da cercare : 3
+Lo spettacolo corrispondente al codice 3 e' : 
+Codice               Titolo               Genere               data                 posti disponibili/posti totali           Prezzo biglietto    
+3                    12                   12                   12/12/2004                          19/19                                   2.00
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test12.png}
+    \caption{Schermata di esecuzione del Test T12.}
+    \label{fig:test12}
+\end{figure}
+
+\subsection{TEST T13}
+\begin{listacomp}
+    \item \textbf{ID test:} T13
+    \item \textbf{Versione:} 1.1
+    \item \textbf{Funzionalità testata:} ricerca spettacolo non esistente (\texttt{cercacodicespettacolo()}).
+    \item \textbf{Input fornito:} codice di uno spettacolo non presente in archivio.
+    \item \textbf{Output atteso:} avviso che nessun spettacolo corrisponde al codice inserito.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T13}]
+Le funzionalita' per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Insersci il codice dello spettacolo da cercare : 2
+il codice inserito non corrisponde ad alcun spettacolo presenti.
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test13.png}
+    \caption{Schermata di esecuzione del Test T13.}
+    \label{fig:test13}
+\end{figure}
+
+\subsection{TEST T14}
+\begin{listacomp}
+    \item \textbf{ID test:} T14
+    \item \textbf{Versione:} 1.1
+    \item \textbf{Funzionalità testata:} prenotazione con posti disponibili sufficienti (\texttt{registraprenotazione()}).
+    \item \textbf{Input fornito:} codice spettacolo, codice cliente, una data valida e un numero di posti valido rientrante nella disponibilità residua.
+    \item \textbf{Output atteso:} registrazione della prenotazione con assegnazione automatica del codice univoco e calcolo dell'importo totale.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T14}]
+Inserisci la tua scelta : 1
+Inserisci codice spettacole della prenotazione corrispondente : 1
+codice inserito corrisponde allo spettaco 12 nella data 12/12/2004 con 17 posti disponibili.
+Inserisci codice cliente della prenotazione corrispondente : 0
+codice cliente corrisponde al cliente 0 0.
+Inserisci numero di posti desiderati : 9
+Inserisci data della prenotazione in formato gg/mm/aaaa : 12/12/2004
+Data valida e inserito correttamente
+I costi totali della prenotazione e' : 18.00.
+Per confermare prenotazione inserisci 1, altrimenti 0 : 1
+Prenotazione effettuato correttamente.
+Ecco gli dati della prenotazione : 
+codice prenotazione  codice spettacolo    codice cliente       numero posti         importo totale       data prenotazione   
+1                    1                    0                    9                    18.00                12/12/2004          
+Le funzionalita' per gestione dei prenotazioni sono : 
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test14.png}
+    \caption{Schermata di esecuzione del Test T14.}
+    \label{fig:test14}
+\end{figure}
+
+\subsection{TEST T15}
+\begin{listacomp}
+    \item \textbf{ID test:} T15
+    \item \textbf{Versione:} 1.1
+    \item \textbf{Funzionalità testata:} prenotazione con posti disponibili insufficienti e inserimento in lista d'attesa (\texttt{registraprenotazione()}).
+    \item \textbf{Input fornito:} codice spettacolo, codice cliente, una data valida e un numero di posti valido ma superiore ai posti disponibili.
+    \item \textbf{Output atteso:} segnalazione di posti insufficienti e accodamento della richiesta nella lista d'attesa previa conferma.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T15}]
+Inserisci la tua scelta : 1
+Inserisci codice spettacole della prenotazione corrispondente : 1
+codice inserito corrisponde allo spettaco 12 nella data 12/12/2004 con 8 posti disponibili.
+Inserisci codice cliente della prenotazione corrispondente : 1
+codice cliente corrisponde al cliente Mario Rossi.
+Inserisci numero di posti desiderati : 9
+Inserisci data della prenotazione in formato gg/mm/aaaa : 12/12/2004
+Data valida e inserito correttamente
+I costi totali della prenotazione e' : 18.00.
+Nello spettacolo 12 non ci sono posti sufficienti.
+Se desideri aggiungere nella lista d'attesa inserisci 1, altrimenti 0 : 1
+dati salvati nella lista di attesa.
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test15.png}
+    \caption{Schermata di esecuzione del Test T15.}
+    \label{fig:test15}
+\end{figure}
+
+\subsection{TEST T16}
+\begin{listacomp}
+    \item \textbf{ID test:} T16
+    \item \textbf{Versione:} 1.2
+    \item \textbf{Funzionalità testata:} annullamento prenotazione in coda e promozione automatica (\texttt{annullaprenotazione()} / \texttt{converteprenotazione()}).
+    \item \textbf{Input fornito:} codice di una prenotazione attiva da annullare.
+    \item \textbf{Output atteso:} annullamento della prenotazione e promozione automatica in prenotazione attiva della richiesta compatibile in lista d'attesa.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T16}]
+Le funzionalita' per gestione dei prenotazioni sono : 
+1. Registra nuova prenotazione.
+2. Annulla prenotazione.
+3. Visualizza tutte le prenotazioni.
+4. Visualizza prenotazioni di un cliente.
+5. Visualizza prenotazioni di uno spettacolo.
+6. Visualizza lista d'attesa.
+7. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Insersci codice di prenotazione per annullazione : 1
+Promozione attesa del spettacolo con codice 1 del cliente con codice 2 ad 6 posti
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test16.png}
+    \caption{Schermata di esecuzione del Test T16.}
+    \label{fig:test16}
+\end{figure}
+
+\section{Test su File}
+
+\subsection{TEST T06}
+\begin{listacomp}
+    \item \textbf{ID test:} T06
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{salvadatabase()}
+    \item \textbf{Input fornito:} dati di spettacoli, clienti, prenotazioni e richieste in attesa.
+    \item \textbf{Output atteso:} salvataggio corretto degli archivi nei rispettivi file binari (\texttt{.dat}).
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T06}]
+Inserisci la tua scelta : e
+Le funzionalita' per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+Dati di spettacoli salvati correttamente nel file spettacoli.dat
+Dati di Clienti salvati correttamente nel file clienti.dat
+Dati nella lista di prenotazioni salvati correttamente nel file prenotazioni.dat
+Dati nella lista di attesa salvati correttamente nel file attesa.dat
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test06.png}
+    \caption{Schermata di esecuzione del Test T06.}
+    \label{fig:test06}
+\end{figure}
+
+\subsection{TEST T07}
+\begin{listacomp}
+    \item \textbf{ID test:} T07
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{caricadatabase()}
+    \item \textbf{Input fornito:} file binari di archivio (\texttt{.dat}).
+    \item \textbf{Output atteso:} caricamento corretto di tutti i file in memoria.
+    \item \textbf{Esito:} Fallito.
+    \item \textbf{Motivo:} poiché \texttt{Spettacoli} è passato alla funzione come doppio puntatore (\texttt{Spettacolo **}), nella chiamata a \texttt{fread()} è necessario passare \texttt{*Spettacoli} anziché \texttt{Spettacoli}, mentre nella chiamata a \texttt{valutagenere()} occorre dereferenziare correttamente l'elemento tramite \texttt{(*Spettacoli)[i].genere}.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Errori riscontrati durante l'esecuzione del Test T07}]
+Segmentation fault per riga : flag = fread(Spettacoli, sizeof(Spettacolo), *num_spettacoli, fp);
+
+Unknown fault per riga : *generi = valutagenere(Spettacoli[i]->genere, *generi);
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Test07_1.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Test07_2.png}
+    \end{minipage}
+    \caption{Schermate di errore relative al Test T07.}
+    \label{fig:test07}
+\end{figure}
+
+\subsection{TEST T08}
+\begin{listacomp}
+    \item \textbf{ID test:} T08
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{caricadatabase()}
+    \item \textbf{Input fornito:} file binari di archivio (\texttt{.dat}).
+    \item \textbf{Output atteso:} caricamento corretto di tutti i file in memoria.
+    \item \textbf{Esito:} Fallito.
+    \item \textbf{Motivo:} errato posizionamento delle parentesi nella condizione \texttt{if (controllospazio(*num\_clienti, Maxclienti == -1))}, che confrontava \texttt{Maxclienti} con \texttt{-1} prima di passare il valore alla funzione; inoltre, essendo \texttt{Maxclienti} ancora dichiarato come variabile globale in questa versione, il compilatore non ha segnalato l'anomalia.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Comportamento anomalo rilevato nel Test T08}]
+Richiesta di riallocazione per spazio ancora sufficienti.
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test08.png}
+    \caption{Schermata di esecuzione del Test T08.}
+    \label{fig:test08}
+\end{figure}
+
+\subsection{TEST T09}
+\begin{listacomp}
+    \item \textbf{ID test:} T09
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{caricadatabase()}
+    \item \textbf{Input fornito:} file binari di archivio (\texttt{.dat}).
+    \item \textbf{Output atteso:} caricamento corretto di tutti i file in memoria.
+    \item \textbf{Esito:} Fallito.
+    \item \textbf{Motivo:} nella riga \texttt{flag = fread(Clienti, sizeof(Spettacolo), *num\_spettacoli, fp);}, copiata dalla sezione degli spettacoli, non erano stati aggiornati né la dimensione del record (\texttt{sizeof(Cliente)}), né il contatore (\texttt{*num\_clienti}), né la dereferenziazione \texttt{*Clienti}, causando il fallimento del successivo controllo di lettura.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T09}]
+Errore operazione sul file
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test09.png}
+    \caption{Schermata di esecuzione del Test T09.}
+    \label{fig:test09}
+\end{figure}
+
+\subsection{TEST T10}
+\begin{listacomp}
+    \item \textbf{ID test:} T10
+    \item \textbf{Versione:} 0.04 (versione non pubblicata)
+    \item \textbf{Funzionalità testata:} \texttt{caricadatabase()}
+    \item \textbf{Input fornito:} file binari di archivio (\texttt{.dat}).
+    \item \textbf{Output atteso:} caricamento corretto di tutti i file in memoria.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T10}]
+Le funzionalita' per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+File spettacoli.dat caricato correttamente
+File clienti.dat caricato correttamente
+File prenotazioni.dat caricato correttamente
+File attesa.dat caricato correttamente
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test10.png}
+    \caption{Schermata di esecuzione del Test T10.}
+    \label{fig:test10}
+\end{figure}
+
+\subsection{TEST T17}
+\begin{listacomp}
+    \item \textbf{ID test:} T17
+    \item \textbf{Versione:} 1.2
+    \item \textbf{Funzionalità testata:} verifica integrità del caricamento dati (\texttt{caricadatabase()}).
+    \item \textbf{Input fornito:} file binari di archivio (\texttt{.dat}) precedentemente salvati.
+    \item \textbf{Output atteso:} caricamento completo degli archivi e ricostruzione delle liste nell'ordine cronologico corretto.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T17}]
+File spettacoli.dat caricato correttamente
+File clienti.dat caricato correttamente
+File prenotazioni.dat caricato correttamente
+File attesa.dat caricato correttamente
+Le funzionalita' per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 5
+Le funzionalita' disponibili divisi per categorie sono : 
+A. Gestione Spettacoli.
+B. Gestione Clienti.
+C. Gestione Prenotazioni.
+D. Statistiche e Report.
+E. Gestioone File.
+F. Esci.
+Inserisci la tua scelta : c
+Le funzionalita' per gestione dei prenotazioni sono : 
+1. Registra nuova prenotazione.
+2. Annulla prenotazione.
+3. Visualizza tutte le prenotazioni.
+4. Visualizza prenotazioni di un cliente.
+5. Visualizza prenotazioni di uno spettacolo.
+6. Visualizza lista d'attesa.
+7. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Tutte le prenotazione registrate sono :
+codice prenotazione  codice spettacolo    codice cliente       numero posti         importo totale       data prenotazione   
+0                    0                    0                    1                    1.00                 12/12/2004          
+2                    1                    1                    8                    16.00                12/12/2004          
+3                    1                    2                    6                    12.00                12/12/2004      
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test17.png}
+    \caption{Schermata di esecuzione del Test T17.}
+    \label{fig:test17}
+\end{figure}
+
+\subsection{TEST T18}
+\begin{listacomp}
+    \item \textbf{ID test:} T18
+    \item \textbf{Versione:} 1.2
+    \item \textbf{Funzionalità testata:} caricamento con file inesistente (\texttt{caricadatabase()}).
+    \item \textbf{Input fornito:} selezione dell'opzione di caricamento da file in assenza dei file binari nella cartella di lavoro.
+    \item \textbf{Output atteso:} segnalazione controllata dell'errore di apertura del file senza arresto anomalo del programma.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T18}]
+Inserisci la tua scelta : 2
+Caricando dati dal file, si perde tutti i dati presenti nell'array, sei sicura di continuare?
+Per conferma inserisci 1, altrimenti un qualsiasi altro numero intero : 1
+Errore apertura file spettacoli.dat
+Si e' verificato un errore per caricare dati dal file
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test18.png}
+    \caption{Schermata di esecuzione del Test T18.}
+    \label{fig:test18}
+\end{figure}
+
+\subsection{TEST T19}
+\begin{listacomp}
+    \item \textbf{ID test:} T19
+    \item \textbf{Versione:} 1.2
+    \item \textbf{Funzionalità testata:} esportazione dei file di testo (\texttt{esportacatalogo()}).
+    \item \textbf{Input fornito:} elenco degli spettacoli presenti in memoria.
+    \item \textbf{Output atteso:} scrittura corretta dei dati formattati nel file testuale \texttt{catalogo.txt}.
+    \item \textbf{Esito:} Superato.
+\end{listacomp}
+
+\begin{lstlisting}[language={}, caption={Output ottenuto durante l'esecuzione del Test T19}]
+Le funzionalita' per gestione dei file sono : 
+1. Salva database su file binario.
+2. Carica database da file binario.
+3. Esporta catalogo in formato testo.
+4. Esporta report prenotazioni in formato testo.
+5. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Dati dei spettacoli scritti correttamente in catalogo.txt
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Test19.png}
+    \caption{Schermata di esecuzione del Test T19.}
+    \label{fig:test19}
+\end{figure}
+
+\chapter{Manuale Utente}
+
+Il presente manuale illustra le procedure operative per l'utilizzo del sistema gestionale per il teatro, guidando l'utente dall'autenticazione iniziale fino alla gestione degli archivi e alla generazione dei report.
+
+\section{Accesso al sistema e inizializzazione}
+All'avvio dell'applicazione viene eseguita la procedura di autenticazione per consentire l'accesso esclusivamente al personale autorizzato:
+\begin{listacomp}
+    \item \textbf{Inserimento della password:} digitare la password numerica richiesta a schermo e premere \texttt{Invio}. Al primo avvio del programma (in assenza del file \texttt{password.dat}), la password predefinita è \texttt{123456}.
+    \item \textbf{Gestione dell'errore di accesso:} qualora la password inserita non sia corretta, il sistema consente di ripetere il tentativo digitando \texttt{1}, oppure di chiudere immediatamente il programma inserendo qualsiasi altro numero intero.
+    \item \textbf{Menu preliminare di accesso:} superata la verifica, vengono proposte tre opzioni:
+    \begin{listacomp}
+        \item \texttt{1. Cambiare password:} permette di impostare una nuova password numerica (diversa da quella precedente), che viene salvata in formato codificato nel file \texttt{password.dat} per gli accessi successivi.
+        \item \texttt{2. Entrare in menu:} avvia la sessione operativa vera e propria.
+        \item \texttt{3. Uscire dal sistema:} termina l'esecuzione del programma.
+    \end{listacomp}
+    \item \textbf{Configurazione delle capacità iniziali:} subito dopo aver selezionato l'opzione \texttt{2}, il sistema richiede di inserire due numeri interi strettamente positivi per definire la capacità iniziale degli archivi in memoria dedicati agli spettacoli e ai clienti. Tale limite può comunque essere ampliato dinamicamente durante l'utilizzo qualora si superi la capienza impostata.
+\end{listacomp}
+
+\section{Struttura del menu principale e delle opzioni}
+Terminata la fase iniziale, l'utente accede al menu principale, organizzato in sei categorie selezionabili digitando la lettera corrispondente (maiuscola o minuscola):
+\begin{listacomp}
+    \item \textbf{\texttt{A} -- Gestione Spettacoli:} consente di inserire nuovi spettacoli in cartellone (\texttt{1}), visualizzare l'elenco completo (\texttt{2}), ricercare uno spettacolo per codice (\texttt{3}) o per genere (\texttt{4}), visualizzare gli spettacoli con posti ancora disponibili ordinati cronologicamente (\texttt{5}) e tornare al menu principale (\texttt{6}).
+    \item \textbf{\texttt{B} -- Gestione Clienti:} permette di registrare un nuovo cliente (\texttt{1}), visualizzare l'anagrafica completa (\texttt{2}), cercare un cliente tramite codice identificativo (\texttt{3}) e tornare al menu principale (\texttt{4}).
+    \item \textbf{\texttt{C} -- Gestione Prenotazioni:} raccoglie le funzioni per registrare una nuova prenotazione (\texttt{1}), annullare una prenotazione esistente (\texttt{2}), visualizzare tutte le prenotazioni (\texttt{3}), filtrarle per singolo cliente (\texttt{4}) o per singolo spettacolo (\texttt{5}), consultare la lista d'attesa (\texttt{6}) e uscire dal sottomenu (\texttt{7}).
+    \item \textbf{\texttt{D} -- Statistiche e Report:} fornisce il riepilogo delle statistiche generali (\texttt{1}), la distribuzione degli spettacoli per genere (\texttt{2}), la classifica dei primi 5 spettacoli per incasso (\texttt{3}) e il ritorno al menu principale (\texttt{4}).
+    \item \textbf{\texttt{E} -- Gestione File:} permette di salvare il database su file binari (\texttt{1}), caricare un database precedentemente salvato (\texttt{2}), esportare il catalogo spettacoli in formato testo (\texttt{3}), esportare il report delle prenotazioni in formato testo (\texttt{4}) e tornare al menu principale (\texttt{5}).
+    \item \textbf{\texttt{F} -- Esci:} avvia la procedura di chiusura controllata, avvisando che i dati non salvati andranno perduti e chiedendo se uscire direttamente (\texttt{1}), uscire salvando automaticamente i dati su file binari (\texttt{2}) oppure annullare e tornare al menu principale (\texttt{3}).
+\end{listacomp}
+
+\section{Come aggiungere uno spettacolo}
+Per inserire un nuovo spettacolo in cartellone, selezionare l'opzione \texttt{A} dal menu principale e successivamente l'opzione \texttt{1}:
+\begin{listacomp}
+    \item \textbf{Eventuale espansione dello spazio:} se l'array degli spettacoli ha raggiunto la capienza massima, il sistema propone di raddoppiare automaticamente lo spazio (\texttt{1}) o di indicare manualmente una nuova capacità (\texttt{2}).
+    \item \textbf{Compilazione dei campi richiesti:} inserire in sequenza:
+    \begin{listacomp}
+        \item \emph{Codice spettacolo:} un numero intero univoco non ancora assegnato ad altri spettacoli.
+        \item \emph{Titolo e Genere:} stringhe di testo (rispettivamente fino a 100 e 30 caratteri).
+        \item \emph{Data dello spettacolo:} nel formato tassativo \texttt{gg/mm/aaaa} (con anno compreso tra \texttt{2000} e \texttt{2100} e controllo sulla validità dei giorni del mese).
+        \item \emph{Posti totali e Prezzo biglietto:} un numero intero strettamente positivo per la capienza della sala (i posti disponibili vengono inizializzati automaticamente allo stesso valore) e un numero positivo per il costo del singolo biglietto.
+    \end{listacomp}
+    \item \textbf{Conferma finale:} il programma mostra una tabella riepilogativa con i dati appena digitati; inserire \texttt{1} per confermare e salvare lo spettacolo in memoria, oppure \texttt{0} per ripetere l'inserimento.
+\end{listacomp}
+
+\section{Come registrare una prenotazione}
+Prima di effettuare una prenotazione è necessario che lo spettacolo e il cliente siano già presenti nei rispettivi archivi. Dal menu principale, selezionare \texttt{C} e poi \texttt{1}:
+\begin{listacomp}
+    \item \textbf{Identificazione di spettacolo e cliente:} digitare il codice dello spettacolo e il codice del cliente. Il sistema verifica l'esistenza di entrambi e mostra a schermo il titolo dello spettacolo con i posti attualmente disponibili e il nominativo del cliente.
+    \item \textbf{Quantità e data:} inserire il numero di posti desiderati (compreso tra \texttt{1} e \texttt{10}) e la data della prenotazione nel formato \texttt{gg/mm/aaaa}. Il programma calcola e visualizza automaticamente l'importo totale da pagare.
+    \item \textbf{Esito in base alla disponibilità:}
+    \begin{listacomp}
+        \item \emph{Posti disponibili sufficienti:} digitare \texttt{1} per confermare la prenotazione (purché il cliente non sia già in lista d'attesa per lo stesso spettacolo). Il sistema assegna un codice prenotazione univoco, scala i posti disponibili dello spettacolo e mostra il riepilogo dell'operazione.
+        \item \emph{Posti disponibili insufficienti:} il sistema avvisa che la capienza residua non soddisfa la richiesta e chiede se inserire il cliente nella lista d'attesa (\texttt{1} per accodare la richiesta in ordine cronologico, \texttt{0} per annullare).
+    \end{listacomp}
+\end{listacomp}
+
+\section{Come annullare una prenotazione}
+Per cancellare una prenotazione attiva e liberare i relativi biglietti, accedere al menu prenotazioni (\texttt{C}) e selezionare l'opzione \texttt{2}:
+\begin{listacomp}
+    \item \textbf{Inserimento del codice:} digitare il \texttt{codice prenotazione} da annullare (consultabile preventivamente tramite l'opzione \texttt{3}, \texttt{4} o \texttt{5} dello stesso menu).
+    \item \textbf{Aggiornamento dei posti e promozione dalla lista d'attesa:} se il codice corrisponde a una prenotazione esistente, questa viene eliminata e i relativi posti vengono riaccreditati allo spettacolo. Contestualmente, il sistema scorre automaticamente la lista d'attesa in ordine di arrivo (FIFO): se trova richieste per lo stesso spettacolo compatibili con i nuovi posti disponibili, le converte in prenotazioni confermate assegnando loro un nuovo codice univoco.
+\end{listacomp}
+
+\section{Come generare statistiche e report}
+Per consultare gli indicatori sull'andamento del teatro, selezionare l'opzione \texttt{D} dal menu principale e scegliere una delle tre visualizzazioni disponibili:
+\begin{listacomp}
+    \item \textbf{\texttt{1. Statistiche generali}:} mostra in un unico prospetto il numero totale di spettacoli in cartellone, i posti ancora disponibili complessivi, il totale dei clienti registrati, il numero di prenotazioni attive e di richieste in attesa, l'incasso totale accumulato, il titolo dello spettacolo con il maggior numero di biglietti venduti e la percentuale media di occupazione delle sale.
+    \item \textbf{\texttt{2. Spettacoli per genere}:} elenca tutti i generi teatrali inseriti accompagnati dal numero di spettacoli appartenenti a ciascuna categoria.
+    \item \textbf{\texttt{3. Top 5 spettacoli per incasso}:} visualizza una classifica tabellare dei primi 5 spettacoli ordinati in modo decrescente in base all'incasso generato.
+\end{listacomp}
+
+\section{Come salvare e caricare i file}
+Poiché i dati gestiti durante la sessione risiedono nella memoria centrale volatile, è fondamentale salvarli su disco prima di chiudere il programma. Dal menu principale, selezionare \texttt{E}:
+\begin{listacomp}
+    \item \textbf{Salvataggio del database (\texttt{1. Salva database su file binario}):} esporta lo stato corrente di tutti gli archivi in quattro file binari nella cartella del programma (\texttt{spettacoli.dat}, \texttt{clienti.dat}, \texttt{prenotazioni.dat} e \texttt{attesa.dat}). La stessa operazione può essere eseguita automaticamente in chiusura scegliendo \texttt{F} e poi \texttt{2}.
+    \item \textbf{Caricamento del database (\texttt{2. Carica database da file binario}):} ripristina in memoria i dati salvati nei quattro file \texttt{.dat}. Poiché l'operazione sovrascrive completamente i dati attualmente presenti in memoria, il sistema richiede una conferma esplicita digitando \texttt{1} prima di procedere.
+    \item \textbf{Esportazione in formato testo (\texttt{3} e \texttt{4}):} per consultare o stampare i dati al di fuori del programma, l'opzione \texttt{3} genera il file \texttt{catalogo.txt} con l'elenco formattato di tutti gli spettacoli, mentre l'opzione \texttt{4} crea il file \texttt{report\_prenotazioni.txt} contenente il dettaglio di tutte le prenotazioni attive abbinate ai nominativi dei clienti e al riepilogo dell'incasso complessivo.
+\end{listacomp}
+
+\chapter{Conclusione}
+
+\section{Obiettivi raggiunti}
+Lo sviluppo di questo progetto ha permesso di consolidare in modo approfondito gli argomenti affrontati durante il corso. A differenza dei brevi esercizi svolti a lezione, la realizzazione di un sistema gestionale completo fa emergere numerose problematiche pratiche e casi limite che si manifestano soltanto integrando tra loro strutture dati composte (\texttt{struct}), allocazione dinamica della memoria, gestione dei puntatori sulle liste concatenate e operazioni di lettura e scrittura su file.
+
+\section{Difficoltà incontrate}
+Durante la progettazione e l'implementazione del codice sono emerse diverse criticità tecniche, risolte progressivamente attraverso scelte mirate:
+\begin{listacomp}
+    \item \textbf{Validazione delle date:} inizialmente si era tentato di verificare la correttezza delle date confrontando direttamente i singoli caratteri (\texttt{char}), finendo però per trascurare casistiche fondamentali come gli anni bisestili o la distinzione tra mesi di 30 e 31 giorni. In fase di sviluppo si è quindi compreso che, analizzando la stringa cifra per cifra, è possibile ricostruire i corrispondenti valori interi (tramite \texttt{scanstring()}), rendendo i controlli di calendario e i confronti cronologici molto più semplici e affidabili.
+    \item \textbf{Gestione dinamica dei generi:} non potendo conoscere a priori quali generi teatrali verranno inseriti dall'utente, non è possibile predisporre confronti fissi per ciascuna categoria. Per questo motivo, già in fase di progettazione, si è scelto di introdurre una lista concatenata dedicata (\texttt{Nodogenere}): in questo modo i generi vengono censiti e conteggiati dinamicamente a ogni inserimento di uno spettacolo, riducendo il calcolo delle statistiche a un semplice scorrimento della lista.
+    \item \textbf{Sostituzione delle variabili globali con puntatori e doppi puntatori:} la necessità di aggiornare in più funzioni i contatori degli elementi presenti (come \texttt{num\_spettacoli}) e le capacità massime modificate durante la \texttt{realloc()} (come \texttt{Maxclienti}) aveva inizialmente portato a dichiarare tali contatori come variabili globali nelle prime versioni del programma. Un problema analogo si è presentato sulle liste concatenate: durante l'annullamento di una prenotazione occorre aggiornare contemporaneamente sia la lista delle prenotazioni sia la lista d'attesa, ma l'istruzione \texttt{return} consente di restituire un solo puntatore, facendo perdere le modifiche apportate alla seconda lista. Seguendo il suggerimento del docente di adottare i doppi puntatori (\texttt{**}) per le liste, è stato revisionato anche il resto del codice eliminando le variabili globali e passando i contatori per indirizzo. Sebbene ciò abbia reso le firme delle funzioni più articolate per l'elevato numero di parametri, questa scelta ha permesso di individuare un bug logico legato a \texttt{Maxclienti} che prima sfuggiva sia al compilatore sia all'esecuzione proprio a causa della visibilità globale della variabile.
+\end{listacomp}
+
+\section{Possibili miglioramenti futuri}
+Nonostante il sistema soddisfi tutti i requisiti richiesti, si individuano alcuni possibili margini di miglioramento:
+\begin{listacomp}
+    \item \textbf{Ricerca per genere insensibile alle maiuscole:} nella funzione di ricerca degli spettacoli per genere viene impiegata \texttt{strcmp()} per rispettare le specifiche assegnate, rendendo però il confronto \emph{case-sensitive}. Sostituendola con \texttt{strcasecmp()} (già utilizzata nella gestione della lista statistica \texttt{Nodogenere}), la ricerca risulterebbe più flessibile per l'utente.
+    \item \textbf{Uscita anticipata dai cicli di inserimento:} attualmente, una volta avviato un inserimento (ad esempio di un nuovo spettacolo), il programma rimane nei cicli di validazione finché non vengono forniti tutti i dati corretti, senza possibilità di annullare l'operazione a metà. L'aggiunta di una richiesta di uscita a ogni passaggio di errore risolverebbe il limite, ma è stata evitata poiché avrebbe appesantito eccessivamente la struttura del codice in tutte le funzionalità.
+    \item \textbf{Salvataggio e caricamento separati per singolo file:} l'implementazione attuale gestisce i quattro file binari in modo unitario. Sebbene sia ipotizzabile suddividere la persistenza in quattro funzioni indipendenti per operare su un singolo archivio alla volta, si è preferito mantenere la gestione sincronizzata poiché i dati sono strettamente interdipendenti: una prenotazione richiede infatti che i codici di spettacolo e cliente esistano negli array in memoria, mentre il caricamento isolato della lista d'attesa potrebbe lasciare richieste non promosse in presenza di posti liberi se non interviene un annullamento a sbloccarle.
+\end{listacomp}
+
+\section{Considerazioni personali sull'esperienza}
+Lo sviluppo del progetto ha evidenziato quanto sia importante attenersi rigorosamente ai vincoli progettuali fissati: tali specifiche rispondono a obiettivi didattici precisi, anche quando alcune funzionalità potrebbero essere implementate più rapidamente con soluzioni alternative (ad esempio aggiungendo un campo dedicato all'incasso direttamente nella struttura \texttt{Spettacolo} per semplificare l'ordinamento). È inoltre emerso come la parte realmente centrale dello sviluppo risieda nella progettazione logica e nella scelta delle strutture dati: una volta delineata con chiarezza l'architettura, la stesura del codice diventa un'attività prevalentemente meccanica.
+
+Sul fronte del \emph{debugging}, l'aspetto più complesso si è rivelato l'individuazione della causa degli errori: come riscontrato durante i test, un semplice refuso di una lettera tra il prototipo e l'implementazione di una funzione impedisce la compilazione senza che l'editor segnali immediatamente il punto esatto all'interno di oltre 2.000 righe di codice. In questo contesto l'utilizzo di un repository su GitHub si è dimostrato fondamentale, consentendo di confrontare le modifiche rispetto alle versioni precedenti e di sviluppare nuove funzionalità su \emph{branch} separati prima di integrarle nella versione principale. Infine, per quanto riguarda la stesura della relazione tecnica, la sezione di progettazione è risultata particolarmente estesa poiché richiede di richiamare in dettaglio numerosi concetti teorici già trattati nelle dispense del corso.
+
 \end{document}

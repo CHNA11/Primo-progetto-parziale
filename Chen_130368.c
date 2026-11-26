@@ -658,6 +658,8 @@ NodoPrenotazione *converteprenotazione(Spettacolo *Spettacoli, NodoAttesa **Atte
                 prec->next = q->next;
                 q = q->next; 
             }
+            //stampa dati di promozione attesa
+            printf("Promozione attesa del spettacolo con codice %d del cliente con codice %d ad %d posti\n",da_annulare->dati.codice_spettacolo,da_annulare->dati.codice_cliente,da_annulare->dati.numero_posti);
             free(da_annulare);
         }
         else
@@ -1148,7 +1150,7 @@ NodoPrenotazione *registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti,
             }
             else
             {
-                printf("codice inserito corrisponde allo spettaco %s nella data %s con %d posti disponibili.\n", Spettacoli[indicesp].titolo, Spettacoli[indicesp].data_spettacolo, Spettacoli[indicesp].posti_disponibili);
+                printf("codice inserito corrisponde allo spettacolo %s nella data %s con %d posti disponibili.\n", Spettacoli[indicesp].titolo, Spettacoli[indicesp].data_spettacolo, Spettacoli[indicesp].posti_disponibili);
             }
         } while (flagcodicesp == 0);
         int flagcodicecl = 0;
@@ -1335,7 +1337,7 @@ void menu()
             do
             {
                 printf("Se si esce dal programma, tutti i dati non salvati sul file vengono perduti\n");
-                printf("Sei sicuro di uscire? Opzioni possibili sono : ");
+                printf("Sei sicuro di uscire? Opzioni possibili sono : \n");
                 printf("1. Uscire direttamente.\n");
                 printf("2. Uscire con salvataggio automatico sui file\n");
                 printf("3. ritornare al menu principale\n");
@@ -1415,7 +1417,7 @@ void menuspettacoli(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *M
             int codice = cercacodicespettacolo(Spettacoli, num_spettacoli);
             if (codice == -1)
             {
-                printf("il codice %d non corrisponde ad alcun spettacolo presenti.\n", codice);
+                printf("il codice inserito non corrisponde ad alcun spettacolo presenti.\n", codice);
             }
         }
         break;
@@ -1476,7 +1478,7 @@ void menuclienti(Cliente *Clienti, int *nc, int *Maxclienti)
             int codice = cercacodicecliente(Clienti, num_clienti);
             if (codice == -1)
             {
-                printf("il codice %d non corrisponde ad alcun cliente presenti.\n", codice);
+                printf("il codice inserito non corrisponde ad alcun cliente presenti.\n", codice);
             };
         }
         break;

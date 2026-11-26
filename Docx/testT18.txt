@@ -1,0 +1,13 @@
+ID test:T18
+versione: 1.2
+Funzionalità testata: caricamento con file inesesistente
+Input fornito: solo scelta di caricare file
+Output atteso: Avviso di errore
+Output ottenuto :
+Inserisci la tua scelta : 2
+Caricando dati dal file, si perde tutti i dati presenti nell'array, sei sicura di continuare?
+Per conferma inserisci 1, altrimenti un qualsiasi altro numero intero : 1
+Errore apertura file spettacoli.dat
+Si è verificato un errore per caricare dati dal file
+
+Esito : superato

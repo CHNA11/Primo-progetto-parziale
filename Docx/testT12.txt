@@ -1,0 +1,20 @@
+ID test:T12
+versione: 1.1
+Funzionalità testata: Ricerca spettacolo esistente
+Input fornito: codice di spettacolo
+Output atteso: dati dello spettacolo presente
+Output ottenuto :
+Le funzionalità per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 3
+Insersci il codice dello spettacolo da cercare : 3
+Lo spettacolo corrispondente al codice 3 è : 
+Codice               Titolo               Genere               data                 posti disponibili/posti totali           Prezzo biglietto    
+3                    12                   12                   12/12/2004                          19/19                                   2.00
+
+Esito : superato

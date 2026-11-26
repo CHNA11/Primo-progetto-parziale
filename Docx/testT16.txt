@@ -1,0 +1,19 @@
+ID test:T16
+versione: 1.2
+Funzionalità testata: annullamento prenotazione in coda e promozione automatica
+Input fornito: codice di prenotazione
+Output atteso: Prenotazione annullata e nuova prenotazione inserita come promozione da lista d'attesa
+Output ottenuto :
+Le funzionalità per gestione dei prenotazioni sono : 
+1. Registra nuova prenotazione.
+2. Annulla prenotazione.
+3. Visualizza tutte le prenotazioni.
+4. Visualizza prenotazioni di un cliente.
+5. Visualizza prenotazioni di uno spettacolo.
+6. Visualizza lista d'attesa.
+7. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Insersci codice di prenotazione per annullazione : 1
+Promozione attesa del spettacolo con codice 1 del cliente con codice 2 ad 6 posti
+
+Esito : superato

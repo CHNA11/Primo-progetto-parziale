@@ -1,0 +1,20 @@
+ID test:T15
+versione: 1.1
+Funzionalità testata: Prenotazione con posti disponibili insufficienti e inserimento in lista d'attesa
+Input fornito: codice di spettacolo, codice di cliente, un data valida, un numero di posto valido ma non sufficiente
+Output atteso: prenotazione trasformata in attesa
+Output ottenuto :
+Inserisci la tua scelta : 1
+Inserisci codice spettacole della prenotazione corrispondente : 1
+codice inserito corrisponde allo spettaco 12 nella data 12/12/2004 con 8 posti disponibili.
+Inserisci codice cliente della prenotazione corrispondente : 1
+codice cliente corrisponde al cliente Mario Rossi.
+Inserisci numero di posti desiderati : 9
+Inserisci data della prenotazione in formato gg/mm/aaaa : 12/12/2004
+Data valida e inserito correttamente
+I costi totali della prenotazione è : 18.00.
+Nello spettacolo 12 non ci sono posti sufficienti.
+Se desideri aggiungere nella lista d'attesa inserisci 1, altrimenti 0 : 1
+dati salvati nella lista di attesa.
+
+Esito : superato

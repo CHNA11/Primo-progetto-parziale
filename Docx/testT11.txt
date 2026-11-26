@@ -1,0 +1,32 @@
+ID test:T11
+versione: 1.1
+Funzionalità testata: inserimento spettacolo con codice duplicato
+Input fornito: dati di spettacolo già presente
+Output atteso: Avviso di duplicazione codice e ritorno all'inserimento del codice
+Output ottenuto :
+inserisci la password per entrare in accesso al sistema : 123456
+Le funzionalità per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 2
+Elenco completo dei spettacoli presenti sono : 
+Codice               Titolo               Genere               data                 posti disponibili/posti totali                Prezzo biglietto
+0                    0                    0                    12/12/2004                           0/1                                    1.00
+Le funzionalità per gestione dei spettacoli sono : 
+1. Inserisci nuovo spettacolo.
+2. VIsualizza tutti gli spettacoli.
+3. Cerca spettacolo per codice.
+4. Cerca spettacoli per genere.
+5. Spettacoli con posti disponibili.
+6. Esci dal menu secondario.
+Inserisci la tua scelta : 1
+Inserisci codice spettacolo corrispondente : 0
+codice già esistente e deve essere univoco, riprova.
+Inserisci codice spettacolo corrispondente : 
+
+
+Esito : superato
