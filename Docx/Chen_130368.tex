@@ -1,17 +1,32 @@
 \documentclass[11pt,a4paper,oneside,openany]{book}
 
-\usepackage[T1]{fontenc}
-\usepackage[italian]{babel}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage[italian]{babel}
+\else
+    \usepackage{fontspec}
+    \usepackage[english, italian, bidi=basic, provide=*]{babel}
+    \babelprovide[import, onchar=ids fonts]{italian}
+    \babelfont{rm}{Noto Sans}
+\fi
+
 \usepackage{amsmath,amssymb}
-\usepackage[margin=2.5cm]{geometry}
 \usepackage{graphicx}
-\usepackage[ruled, lined, linesnumbered, algochapter]{algorithm2e}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage[section]{placeins}
+\usepackage{needspace}
+\usepackage{xcolor}
 \usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric}
-\renewcommand{\lstlistingname}{Struttura}
+\usepackage[colorlinks=true, urlcolor=blue!65!black, linkcolor=blue!55!black, citecolor=black, linktoc=all]{hyperref}
 
-\renewcommand{\algorithmcfname}{Algoritmo}
+\renewcommand{\lstlistingname}{Struttura}
 
 \lstset{
     language=C,
@@ -26,8 +41,17 @@
     abovecaptionskip=4pt,
     belowcaptionskip=4pt,
     breaklines=true,
-    showstringspaces=false
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    tabsize=4
 }
+\ifPDFTeX
+\lstset{
+    literate={à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+             {À}{{\`A}}1 {È}{{\`E}}1 {É}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+}
+\fi
 
 \newenvironment{listacomp}{%
     \small
@@ -43,100 +67,140 @@
 }
 
 \begin{document}
+\raggedbottom
 
 \begin{titlepage}
-\vspace*{1cm}
+\vspace*{1.2cm}
 \begin{center}
-{\LARGE\bfseries Report sistema di gestione Teatro \par}
+    {\large\bfseries UNIVERSITÀ DI CAMERINO\par}
+    \vspace{0.25cm}
+    {\normalsize Scuola di Scienze e Tecnologie -- Corso di Programmazione in Linguaggio C\par}
+    \vspace{2.6cm}
+    {\fontsize{28}{34}\selectfont\bfseries Report Sistema di Gestione\\Teatro Comunale\par}
+    \vspace{0.5cm}
+    {\large\textit{Progettazione, Implementazione, Testing e Manuale Utente}\par}
 \end{center}
-\vspace*{10cm}
+
+\vspace*{4.5cm}
 
 \noindent
-\begin{minipage}[t]{0.65\textwidth}
+\begin{minipage}[t]{0.68\textwidth}
 \vspace{0pt}
-{ \textbf{Nome e Cognome studente: } Renhao Chen \par}
-\vspace*{0.2cm}
-{ \textbf{Numero di matricola: } 130368 \par}
-\vspace*{0.2cm}
-{ \textbf{Anno accademico: } 2026/2027 \par}
-\vspace*{0.2cm}
-{ \textbf{Data di consegna: } \today \par}
-\vspace*{0.2cm}
-{ \textbf{Indirizzo github: } \par}
+{\textbf{Nome e Cognome studente:} Renhao Chen\par}
+\vspace*{0.25cm}
+{\textbf{Numero di matricola:} 130368\par}
+\vspace*{0.25cm}
+{\textbf{Anno accademico:} 2026/2027\par}
+\vspace*{0.25cm}
+{\textbf{Data di consegna:} 26 novembre 2026\par}
+\vspace*{0.25cm}
+{\textbf{Indirizzo GitHub:} \href{https://github.com/CHNA11/Primo-progetto-parziale}{\texttt{https://github.com/CHNA11/Primo-progetto-parziale}}\par}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.3\textwidth}
+\begin{minipage}[t]{0.28\textwidth}
     \vspace{0pt}
     \raggedleft
-    \includegraphics[width=3.5cm]{logo_unicam.png}
+    \IfFileExists{logo_unicam.png}{\includegraphics[width=3.5cm]{logo_unicam.png}}{}
 \end{minipage}
-
 
 \vfill
 
 \begin{flushleft}
 \footnotesize
-Documento scritto in \LaTeX.\\
-Si fà riferimento per programma$ Chen_130368.c $pacchettato insieme. Per versione diverse guardare repository github.
-
+Documento scritto in \LaTeX{}.\\
+Si fa riferimento al programma \texttt{Chen\_130368.c} allegato. Per le versioni intermedie e la cronologia di sviluppo consultare il repository GitHub: \href{https://github.com/CHNA11/Primo-progetto-parziale}{\texttt{https://github.com/CHNA11/Primo-progetto-parziale}}.
 \end{flushleft}
 \end{titlepage}
 
 \tableofcontents
+\clearpage
 
 \chapter{Introduzione}
+
+\needspace{8\baselineskip}
 \section{Problema da risolvere}
-Il sistema è riferito per gestione di programmazione e prenotazioni dei biglietti di un Teatro Comunale.
-Richiede di tenere traccia degli spettacoli in cartellone, dei clienti iscritti e delle prenotazioni effettuate.
+Il sistema realizzato è dedicato alla gestione della programmazione e delle prenotazioni dei biglietti di un Teatro Comunale. L'applicazione consente all'operatore di amministrare in modo integrato gli spettacoli in cartellone, l'anagrafica dei clienti iscritti, le prenotazioni attive e le richieste in lista d'attesa.
 
+\needspace{12\baselineskip}
 \section{Obiettivi del progetto}
-L'obiettivi del progetto sono:
-- Verificare conoscenze sulle strutture di dati.
-- Gestione della memoria e allocazione dinamica.
-- Provare utilizzo dei nodi delle liste.
-- Gestione File Binari / di Testo.
-- Implementazione del codice in funzioni modularizzati.
-- Passagio di parametri nelle funzioni in modalità sicure ed efficienti
-- Gestione degli Errori.
-- Interpretazione del Codice con commenti e Report.
+Gli obiettivi principali del progetto sono:
+\begin{listacomp}
+    \item verificare le conoscenze sulle strutture dati composte (\texttt{struct}) e sulla loro organizzazione relazionale;
+    \item gestire in modo sicuro la memoria dinamica tramite \texttt{malloc()}, \texttt{realloc()} e \texttt{free()};
+    \item implementare e manipolare liste concatenate dinamiche per prenotazioni e lista d'attesa;
+    \item gestire la persistenza su file binari (\texttt{.dat}) e l'esportazione su file di testo (\texttt{.txt});
+    \item strutturare il codice in funzioni modularizzate con passaggio dei parametri sicuro ed efficiente;
+    \item gestire in modo robusto gli errori di input/output e documentare il codice tramite commenti e relazione tecnica.
+\end{listacomp}
 
-\section{Tecnologie utilizzati}
-
-Per lo sviluppo e la verifica del programma sono utilizatti i seguenti strumenti:
-\begin{itemize}
-
-\item \textbf{Linguaggio:} C (standard C11).
-\item \textbf{Compilatore:} GCC (versione 16.1.0)
-\item \textbf{Sistema operativo:}  Windows 10 (64-bit), Windows 11 Pro (64-bit)
-\item \textbf{Ambiente di sviluppo:} Visual Studio Code.
-\item \textbf{Controllo di versione:} Git e GitHub.
-\end{itemize}
+\needspace{10\baselineskip}
+\section{Tecnologie utilizzate}
+Per lo sviluppo e la verifica del programma sono stati utilizzati i seguenti strumenti:
+\begin{listacomp}
+    \item \textbf{Linguaggio:} C (standard C11).
+    \item \textbf{Compilatore:} GCC (versione 16.1.0).
+    \item \textbf{Sistema operativo:} Windows 10 (64-bit), Windows 11 Pro (64-bit).
+    \item \textbf{Ambiente di sviluppo:} Visual Studio Code.
+    \item \textbf{Controllo di versione:} Git e GitHub (\href{https://github.com/CHNA11/Primo-progetto-parziale}{\texttt{CHNA11/Primo-progetto-parziale}}).
+\end{listacomp}
 
 \chapter{Analisi del Problema}
-\section{caso di studio}
-Il programma deve essere comprensibile per operatore nella gestione degli atti, in due entità principali: Spettacoli (caraterizzati da codice spettacolo) in cartellone, Prenotazioni (caraterizzati da codice prenotazione) nelle liste effettuate dagli utenti
 
+\needspace{8\baselineskip}
+\section{Caso di studio}
+Il programma deve offrire a un operatore teatrale un'interfaccia chiara e comprensibile per amministrare le entità principali del sistema: gli \textbf{Spettacoli} in cartellone (identificati da \texttt{codice\_spettacolo}), i \textbf{Clienti} registrati (identificati da \texttt{codice\_cliente}) e le \textbf{Prenotazioni} effettuate dagli utenti (identificate da \texttt{codice\_prenotazione}), gestendo automaticamente l'eventuale esaurimento dei posti tramite una lista d'attesa.
+
+\needspace{12\baselineskip}
 \section{Requisiti funzionali}
-Il programma contiene seguenti funzionalità:
-\begin{itemize}
+Il programma implementa le seguenti funzionalità:
+\begin{listacomp}
+    \item \textbf{Gestione del cartellone e dell'anagrafica:} inserimento di nuovi spettacoli e clienti, ricerca tramite codice identificativo o genere e visualizzazione dettagliata dei dati secondo l'ordine richiesto.
+    \item \textbf{Prenotazioni e lista d'attesa:} registrazione delle prenotazioni fino all'esaurimento dei posti disponibili; in caso di disponibilità insufficiente, inserimento in lista d'attesa FIFO e promozione automatica in caso di annullamento di una prenotazione precedente.
+    \item \textbf{Scrittura e lettura dei dati:} salvataggio e caricamento completo degli archivi su file binari (\texttt{.dat}) ed esportazione in formato testuale (\texttt{.txt}).
+    \item \textbf{Calcoli statistici:} elaborazione di indicatori generali sull'occupazione delle sale e sugli incassi, distribuzione per genere e classifica dei primi 5 spettacoli per incasso.
+\end{listacomp}
 
-    \item \textbf{Gestione del cartellone:} inserimento di nuovi spettacoli e clienti, ricerca con codice corrispondenti e visione in modo dettagliato dati inseriti ad ordine scelto.
-    \item \textbf{Prenotazione e lista d'attesa:} registrazione delle prenotazioni fino ad esaurimento degli posti; in caso insuffuciente lasciare in lista d'attesa, e nel caso di annulazione prenotazione gestire correttamente lista d'attesa.
-    \item \textbf{Scrittura e lettura dei dati presenti:} capacità di leggere dati già esistente nel file corrispondete, e nel caso contrario salvare dati presenti nel programma in file con formattazione giusto.
-    \item \textbf{Calcoli statistici:} funzionalità di riassumere dati presenti in modo da comprendere situazione presenti e accomodare gestione in attesa.
-\end{itemize}
-
+\needspace{10\baselineskip}
 \section{Requisiti non funzionali}
-Oltre alle funzionalità principali, il sistema è stato progettato per rispettare i seguenti requisiti di non funzionali:
-\begin{itemize}
-\item \textbf{Performance:} utilizzo ottimizzato della memoria tramite allocazione dinamica e riallocazione neccessaria per garantire efficienza del programma.
-\item \textbf{Usabilità:} interfaccia a riga di comando chiara e strutturata tramite in menu principali e vari menu secondarie distinti per funzionalità, con la richiesta di conferma per dati inseriti e messaggi di feedback espliciti.
-\item \textbf{Robustezza:} controllo delle validità nel input, evitazione di blocchi infiniti, pulizia di buffer per utilizzo alternato di scanf e fgets.
-\end{itemize}
+Oltre alle funzionalità principali, il sistema è stato progettato per rispettare i seguenti requisiti non funzionali:
+\begin{listacomp}
+    \item \textbf{Performance:} utilizzo ottimizzato della memoria tramite allocazione dinamica e riallocazione su necessità per garantire l'efficienza del programma.
+    \item \textbf{Usabilità:} interfaccia a riga di comando chiara e strutturata su un menu principale e cinque sottomenu tematici, con richiesta di conferma dei dati inseriti e messaggi di riscontro espliciti.
+    \item \textbf{Robustezza:} controllo della validità degli input, prevenzione di cicli infiniti su inserimenti errati e pulizia del buffer di ingresso per l'utilizzo alternato di \texttt{scanf()} e \texttt{fgets()}.
+\end{listacomp}
 
 \chapter{Progettazione}
-\section{Struttre Dati}
-\subsection{Struct utilizzati}
+
+\section{Strutture Dati}
+
+\needspace{6\baselineskip}
+\subsection{Tipi di dato di base e puntatori}
+La Tabella~\ref{tab:tipi_base} riassume i tipi primitivi, i tipi di libreria e i puntatori impiegati in \texttt{Chen\_130368.c}:
+
+\begin{table}[H]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\ttfamily\bfseries}l c >{\ttfamily}X}
+\toprule
+\textrm{\textbf{Tipo}} & \textbf{Dim.\ (byte)} & \textrm{\textbf{Variabili rappresentative}} \\
+\midrule
+int & 4 & codice\_spettacolo, posti\_totali, num\_spettacoli, flag \\
+float & 4 & prezzo\_biglietto, importo\_totale, incassi[] \\
+char / char[] & 1 / N & primascelta, titolo[101], genere[31], data\_spettacolo[11] \\
+size\_t & 8 & flag = fread(\ldots), fwrite(\ldots) \\
+FILE * & 8 & FILE *fp = fopen(\ldots) \\
+Tipo * & 8 & Spettacolo *Spettacoli, Cliente *Clienti, int *ns \\
+Tipo ** & 8 & Spettacolo **Spettacoli, NodoAttesa **Attese \\
+\bottomrule
+\end{tabularx}
+\caption{Tipi di dato di base, di libreria e puntatori utilizzati nel programma.}\label{tab:tipi_base}
+\end{table}
+
+\needspace{6\baselineskip}
+\subsection{Struct utilizzate}
+
+\needspace{12\baselineskip}
 \begin{lstlisting}[caption={Definizione della struttura Spettacolo}]
 typedef struct
 {
@@ -160,13 +224,15 @@ Questa struttura di \texttt{Spettacolo} contiene:
     \item \textbf{Prezzo biglietto:} numero di tipo \texttt{float} strettamente positivo.
 \end{listacomp}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura Cliente}]
 typedef struct
 {
     int codice_cliente;
     char nome[51];
     char cognome[51];
-    char email[80];
+    char email[81];
     char data_iscrizione[11];
 } Cliente;
 \end{lstlisting}
@@ -175,10 +241,13 @@ Questa struttura di \texttt{Cliente} contiene:
     \item \textbf{Codice cliente:} codice univoco corrispondente al cliente, inserito dall'utente e accettato solo previa verifica di univocità.
     \item \textbf{Nome:} stringa di lunghezza 51 considerando anche il carattere di fine stringa, permettendo all'utente di inserire fino a 50 caratteri.
     \item \textbf{Cognome:} stringa di lunghezza 51 considerando anche il carattere di fine stringa, permettendo all'utente di inserire fino a 50 caratteri.
-    \item \textbf{Email:} stringa di lunghezza 80 considerando anche il carattere di fine stringa (fino a 79 caratteri utili), validata tramite apposita funzione di controllo formale.
+    \item \textbf{Email:} stringa di lunghezza 81 considerando anche il carattere di fine stringa (fino a 80 caratteri utili), validata tramite apposita funzione di controllo formale.
     \item \textbf{Data iscrizione:} stringa di lunghezza 11 nel formato \texttt{gg/mm/aaaa}, validata dalle funzioni implementate.
 \end{listacomp}
+\end{samepage}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura Prenotazione}]
 typedef struct
 {
@@ -199,7 +268,10 @@ Questa struttura di \texttt{Prenotazione} contiene:
     \item \textbf{Importo totale:} numero di tipo \texttt{float} calcolato automaticamente moltiplicando il numero di posti prenotati per il prezzo unitario del biglietto dello spettacolo.
     \item \textbf{Data prenotazione:} stringa di lunghezza 11 nel formato \texttt{gg/mm/aaaa}, validata dalle funzioni implementate.
 \end{listacomp}
+\end{samepage}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura RichiestaAttesa}]
 typedef struct
 {
@@ -216,7 +288,10 @@ Questa struttura di \texttt{RichiestaAttesa} contiene:
     \item \textbf{Numero posti:} numero di tipo \texttt{int} che indica i biglietti richiesti, con limite massimo predefinito pari a 10.
     \item \textbf{Data richiesta:} stringa di lunghezza 11 nel formato \texttt{gg/mm/aaaa} che registra la data di inserimento in coda.
 \end{listacomp}
+\end{samepage}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura NodoPrenotazione}]
 typedef struct NodoPrenotazione
 {
@@ -229,7 +304,10 @@ Questa struttura di \texttt{NodoPrenotazione} rappresenta il singolo elemento de
     \item \textbf{Dati:} struttura di tipo \texttt{Prenotazione} contenente tutte le informazioni relative alla singola prenotazione.
     \item \textbf{Next:} puntatore al nodo successivo della lista concatenata (oppure \texttt{NULL} se il nodo è l'ultimo della lista).
 \end{listacomp}
+\end{samepage}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura NodoAttesa}]
 typedef struct NodoAttesa
 {
@@ -242,7 +320,10 @@ Questa struttura di \texttt{NodoAttesa} rappresenta il singolo elemento della li
     \item \textbf{Dati:} struttura di tipo \texttt{RichiestaAttesa} contenente i dettagli della richiesta in coda.
     \item \textbf{Next:} puntatore al nodo successivo nella coda d'attesa (oppure \texttt{NULL} in corrispondenza dell'ultimo elemento).
 \end{listacomp}
+\end{samepage}
 
+\vspace{0.2cm}
+\begin{samepage}
 \begin{lstlisting}[caption={Definizione della struttura Nodogenere}]
 typedef struct Nodogenere
 {
@@ -254,13 +335,14 @@ typedef struct Nodogenere
 Questa struttura di \texttt{Nodogenere} costituisce il nodo di una lista dinamica di appoggio utilizzata per il calcolo delle statistiche per genere e contiene:
 \begin{listacomp}
     \item \textbf{Genere:} stringa di lunghezza 51 considerando anche il carattere di fine stringa (fino a 50 caratteri utili), che memorizza il nome del genere teatrale analizzato.
-    \item \textbf{Numero:} contatore di tipo \texttt{int} che accumula il totale delle occorrenze o delle prenotazioni associate a quel determinato genere.
+    \item \textbf{Numero:} contatore di tipo \texttt{int} che accumula il totale delle occorrenze associate a quel determinato genere.
     \item \textbf{Next:} puntatore al nodo successivo della lista statistica.
 \end{listacomp}
+\end{samepage}
 
+\needspace{6\baselineskip}
 \subsection{Motivazione delle scelte progettuali}
 L'architettura del programma è stata progettata bilanciando efficienza nell'accesso ai dati, flessibilità nella gestione della memoria dinamica e modularità del codice. Le principali scelte implementative sono le seguenti:
-
 \begin{listacomp}
     \item \textbf{Uso combinato di array dinamici e liste concatenate:} per le entità \texttt{Spettacolo} e \texttt{Cliente} sono stati adottati array allocati dinamicamente (ridimensionati tramite \texttt{realloc}), poiché tali strutture richiedono frequenti operazioni di ricerca e ordinamento (come l'ordinamento degli spettacoli per posti disponibili). Al contrario, per \texttt{NodoPrenotazione} e \texttt{NodoAttesa} si è optato per liste concatenate, così da gestire inserimenti e cancellazioni frequenti senza il costo computazionale dello scorrimento degli elementi in memoria.
     \item \textbf{Gestione FIFO della lista d'attesa:} la lista d'attesa è stata implementata secondo una politica \emph{First-In, First-Out} (inserimento in coda ed estrazione in testa). Questa scelta garantisce l'assegnazione equa e cronologica dei biglietti nel momento in cui una prenotazione precedente viene annullata.
@@ -269,9 +351,10 @@ L'architettura del programma è stata progettata bilanciando efficienza nell'acc
     \item \textbf{Modularizzazione e validazione centralizzata:} le verifiche su formato delle date (\texttt{gg/mm/aaaa}), validità degli indirizzi email, univocità dei codici identificativi e pulizia del buffer di input sono state isolate in funzioni ausiliarie riutilizzabili, evitando duplicazioni di codice e garantendo l'integrità dei dati in memoria.
 \end{listacomp}
 
-\subsection{{Diagramma}}
+\needspace{6\baselineskip}
+\subsection{Diagramma}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     font=\footnotesize,
@@ -294,7 +377,7 @@ L'architettura del programma è stata progettata bilanciando efficienza nell'acc
     freccia/.style={-{Stealth[length=2.2mm]}, thick, draw=black!85}
 ]
 
-% FASCIA 1 (Alto): Strutture principali (Array Dinamici)
+
 \node[struttura, text width=5.0cm] (spettacolo) at (-4.2, 0) {
     \centering\textbf{\small Spettacolo} \scriptsize(Array Dinamico)\par\vspace{2pt}\hrule\vspace{3pt}
     \raggedright
@@ -313,12 +396,10 @@ L'architettura del programma è stata progettata bilanciando efficienza nell'acc
     data\_iscrizione
 };
 
-% Raccordo superiore (tra Fascia 1 e Fascia 2)
 \draw[thick] (spettacolo.south) -- (-4.2, -1.95);
 \draw[thick] (cliente.south) -- (4.2, -1.95);
 \draw[thick] (-5.3, -1.95) -- (5.3, -1.95);
 
-% FASCIA 2 (Centro): Funzioni di collegamento e controllo
 \node[funzione, text width=3.5cm, minimum height=1.35cm] (fn_sp) at (-5.3, -3.65) {
     \textbf{Ricerca Spettacolo}\\
     \scriptsize\texttt{controllacodiceSp()}
@@ -341,13 +422,11 @@ L'architettura del programma è stata progettata bilanciando efficienza nell'acc
 \draw[freccia] (0, -1.95) -- (fn_mid.north);
 \draw[freccia] (5.3, -1.95) -- (fn_cl.north);
 
-% Raccordo inferiore (tra Fascia 2 e Fascia 3)
 \draw[thick] (fn_sp.south) -- (-5.3, -5.45);
 \draw[thick] (fn_mid.south) -- (0, -5.45);
 \draw[thick] (fn_cl.south) -- (5.3, -5.45);
 \draw[thick] (-5.3, -5.45) -- (5.3, -5.45);
 
-% FASCIA 3 (Basso): Strutture associative (Liste Concatenate)
 \node[struttura, text width=5.2cm] (prenotazione) at (-4.2, -7.2) {
     \centering\textbf{\small Prenotazione} \scriptsize(Lista Concatenata)\par\vspace{2pt}\hrule\vspace{3pt}
     \raggedright
@@ -383,30 +462,36 @@ Come illustrato in Figura~\ref{fig:relazioni_funzioni_tikz}, l'organizzazione de
 \end{listacomp}
 
 \section{Architettura del sistema}
+
+\needspace{6\baselineskip}
 \subsection{Descrizione dell'organizzazione del codice}
-Il Codice è strutturato in modo seguente:
+Il sorgente \texttt{Chen\_130368.c} è strutturato nel modo seguente:
 \begin{listacomp}
-\item \textbf{Inclusione di libreria neccessaria:} includo librerie come <stdio.h> come base, <stdlib.h> per allocazione dinamica, <string.h> per gestione di stringhe
-\item \textbf{definizione di strutture:} Inizio a definire tutte le strutture che viene richiesto contenente pure i nodi delle liste.
-\item \textbf{dichiarazione di funzioni prototipo:} tutte le funzione utilizzate vengono dichiarati in quasta parte in maniera prototipo, con specificazioni commentati e raggrupate in base alle funzionalità svolte e caratteristiche.
-\item \textbf{main:} parte minimizzata, richiama prima funzione avvio(), in richiesta di inserire password con defaul 123456 per entrare in programma, tutte le operazione vengono effettuati dentro funzione menu, e utlima riga il return 0.
-\item \textbf{implementazione delle funzioni:} tutte le funzioni vengono scritti secondo ordine di dichiarazione, ovvero tutti ordinati e distinti in base alla funzionalità.
+    \item \textbf{Inclusione delle librerie necessarie:} vengono incluse librerie standard come \texttt{<stdio.h>} per l'I/O di base, \texttt{<stdlib.h>} per l'allocazione dinamica e \texttt{<string.h>} per la gestione delle stringhe.
+    \item \textbf{Definizione delle strutture:} dichiarazione di tutte le strutture richieste, inclusi i nodi delle liste concatenate.
+    \item \textbf{Dichiarazione dei prototipi delle funzioni:} tutte le funzioni utilizzate vengono dichiarate anticipatamente, commentate e raggruppate per area funzionale.
+    \item \textbf{\texttt{main()}:} parte minimalista che richiama prima \texttt{avvio()} per la verifica della password (default \texttt{123456}) e quindi \texttt{menu()}, terminando con \texttt{return 0}.
+    \item \textbf{Implementazione delle funzioni:} tutte le funzioni sono definite nello stesso ordine dei prototipi, suddivise per funzionalità.
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Elenco delle funzioni principali con breve descrizione}
-Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
+Le funzioni principali implementate in \texttt{Chen\_130368.c} (selezionabili per raggiungere direttamente la relativa scheda nel Capitolo~\ref{cap:implementazioni}) sono:
 \begin{listacomp}
-    \item \textbf{\texttt{avvio ()}:} gestisce l'accesso al sistema richiedendo la password salvata in \texttt{password.dat} (impostata a \texttt{123456} come valore predefinito) e consentendo eventualmente di modificarla prima di entrare nel menu.
-    \item \textbf{\texttt{menu ()}:} inizializza gli array dinamici e le liste concatenate, gestisce il ciclo principale di smistamento verso i sottomenu e, in fase di uscita, richiama \texttt{liberazione()} per deallocare tutta la memoria dinamica.
-    \item \textbf{\texttt{inserimentospettacolo ()}:} acquisisce da tastiera i dati di un nuovo spettacolo, ne verifica l'univocità del codice e la validità formale, e richiede conferma finale prima della registrazione nell'array.
-    \item \textbf{\texttt{riallocazioneSp ()}:} confronta il numero di spettacoli inseriti con la capacità massima allocata e ridimensiona dinamicamente l'array tramite \texttt{realloc} (in modo automatico o su dimensione specificata dall'utente).
-    \item \textbf{\texttt{converteprenotazione ()}:} ripristina i posti liberati dopo l'annullamento di una prenotazione e scorre la lista d'attesa convertendo automaticamente in prenotazioni attive le richieste compatibili con i posti disponibili.
-    \item \textbf{\texttt{caricadatabase ()}:} legge gli archivi binari (\texttt{.dat}), adegua la capacità degli array dinamici, libera le liste preesistenti e carica in memoria i dati aggiornati ricostruendo anche la lista dei generi.
+    \item \textbf{\hyperref[sec:avvio]{\texttt{avvio()}}:} gestisce l'accesso al sistema richiedendo la password salvata in \texttt{password.dat} (impostata a \texttt{123456} come valore predefinito) e consentendo eventualmente di modificarla prima di entrare nel menu.
+    \item \textbf{\hyperref[sec:menu]{\texttt{menu()}}:} inizializza gli array dinamici e le liste concatenate, gestisce il ciclo principale di smistamento verso i sottomenu e, in fase di uscita, richiama \texttt{liberazione()} per deallocare tutta la memoria dinamica.
+    \item \textbf{\hyperref[sec:inserimentospettacolo]{\texttt{inserimentospettacolo()}}:} acquisisce da tastiera i dati di un nuovo spettacolo, ne verifica l'univocità del codice e la validità formale, e richiede conferma finale prima della registrazione nell'array.
+    \item \textbf{\hyperref[sec:riallocazioneSp]{\texttt{riallocazioneSp()}}:} confronta il numero di spettacoli inseriti con la capacità massima allocata e ridimensiona dinamicamente l'array tramite \texttt{realloc} (in modo automatico o su dimensione specificata dall'utente).
+    \item \textbf{\hyperref[sec:registraprenotazione]{\texttt{registraprenotazione()}}:} verifica l'esistenza di spettacolo e cliente, calcola l'importo totale, genera un codice univoco e inserisce il nodo in \texttt{NodoPrenotazione} scalando i posti disponibili, oppure accoda la richiesta in \texttt{NodoAttesa} se la disponibilità è insufficiente.
+    \item \textbf{\hyperref[sec:converteprenotazione]{\texttt{converteprenotazione()}}:} ripristina i posti liberati dopo l'annullamento di una prenotazione e scorre la lista d'attesa convertendo automaticamente in prenotazioni attive le richieste compatibili con i posti disponibili.
+    \item \textbf{\hyperref[sec:scanstring]{\texttt{scanstring()}}:} converte una sottostringa numerica di lunghezza arbitraria nel corrispondente valore intero posizionale, supportando il confronto cronologico delle date.
+    \item \textbf{\hyperref[sec:caricadatabase]{\texttt{caricadatabase()}}:} legge gli archivi binari (\texttt{.dat}), adegua la capacità degli array dinamici, libera le liste preesistenti e carica in memoria i dati aggiornati ricostruendo anche la lista dei generi.
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Schema del flusso del programma}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     font=\footnotesize,
@@ -446,13 +531,13 @@ Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
     freccia/.style={-{Stealth[length=2.2mm]}, thick, draw=black!85}
 ]
 
-% 1. Avvio e inizializzazione
+
 \node[terminale, text width=9.2cm] (start) at (0, 0) {
     \textbf{Inizio (\texttt{main()}) -- Autenticazione (\texttt{avvio()})}\\
     Verifica password e allocazione array dinamici
 };
 
-% 2. Ciclo Menu Principale
+
 \node[processo, text width=6.6cm] (menu) at (0, -2.1) {
     \textbf{Ciclo Menu Principale (\texttt{menu()})}\\
     Lettura scelta utente (opzioni A--F)
@@ -460,39 +545,39 @@ Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
 
 \draw[freccia] (start.south) -- (menu.north);
 
-% 3. Diramazione verso i 5 Menu Secondari (A-E)
+
 \draw[thick] (menu.south) -- (0, -3.15);
 \node[right] at (0.1, -2.88) {Scelte A--E};
 \draw[thick] (-5.4, -3.15) -- (5.4, -3.15);
 
-\node[sottomenu, text width=2.15cm] (mA) at (-5.4, -4.35) {
+\node[sottomenu, text width=2.25cm] (mA) at (-5.4, -4.35) {
     \textbf{A. Spettacoli}\\
-    \texttt{menuspettacoli}\\
-    Ciclo interno
+    \scriptsize\texttt{menuspettacoli}\\
+    \footnotesize Ciclo interno
 };
 
-\node[sottomenu, text width=2.15cm] (mB) at (-2.7, -4.35) {
+\node[sottomenu, text width=2.25cm] (mB) at (-2.7, -4.35) {
     \textbf{B. Clienti}\\
-    \texttt{menuclienti}\\
-    Ciclo interno
+    \scriptsize\texttt{menuclienti}\\
+    \footnotesize Ciclo interno
 };
 
-\node[sottomenu, text width=2.15cm] (mC) at (0, -4.35) {
+\node[sottomenu, text width=2.25cm] (mC) at (0, -4.35) {
     \textbf{C. Prenotazioni}\\
-    \texttt{menuprenotazioni}\\
-    Ciclo interno
+    \scriptsize\texttt{menuprenotazioni}\\
+    \footnotesize Ciclo interno
 };
 
-\node[sottomenu, text width=2.15cm] (mD) at (2.7, -4.35) {
+\node[sottomenu, text width=2.25cm] (mD) at (2.7, -4.35) {
     \textbf{D. Statistiche}\\
-    \texttt{menustat}\\
-    Ciclo interno
+    \scriptsize\texttt{menustat}\\
+    \footnotesize Ciclo interno
 };
 
-\node[sottomenu, text width=2.15cm] (mE) at (5.4, -4.35) {
+\node[sottomenu, text width=2.25cm] (mE) at (5.4, -4.35) {
     \textbf{E. Gestione File}\\
-    \texttt{menufile}\\
-    Ciclo interno
+    \scriptsize\texttt{menufile}\\
+    \footnotesize Ciclo interno
 };
 
 \foreach \x/\nodo in {-5.4/mA, -2.7/mB, 0/mC, 2.7/mD, 5.4/mE} {
@@ -500,28 +585,23 @@ Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
     \draw[thick] (\nodo.south) -- (\x, -6.05);
 }
 
-% Linea di raccolta e ritorno dai 5 sottomenu (ben distanziata sotto i riquadri)
 \draw[thick] (5.4, -6.05) -- (-7.35, -6.05);
 \node[above] at (-2.7, -6.02) {Uscita dal sottomenu (ritorno al menu principale)};
 \draw[freccia] (-7.35, -6.05) -- (-7.35, -1.15) -- (0, -1.15);
 
-% 4. Ramo F (Uscita) lungo il corridoio destro
 \draw[thick] (menu.east) -- (7.35, -2.1);
 \node[above] at (5.35, -2.07) {Scelta F (Esci)};
 \draw[freccia] (7.35, -2.1) -- (7.35, -6.7) -- (0, -6.7) -- (0, -7.05);
 
-% 5. Decisione Conferma Uscita
 \node[decisione] (exit_dec) at (0, -7.8) {
     \textbf{Conferma}\\
     \textbf{uscita?}
 };
 
-% Opzione 3: Non uscire (rientra nel corridoio sinistro dentro i margini)
 \draw[thick] (exit_dec.west) -- (-7.35, -7.8);
 \node[above] at (-4.65, -7.77) {3: Non uscire (ritorna)};
 \draw[thick] (-7.35, -7.8) -- (-7.35, -6.05);
 
-% Opzione 2: Salva ed esci
 \node[processo, text width=4.0cm] (salva) at (4.6, -9.15) {
     \textbf{Salvataggio dati}\\
     \texttt{salvadatabase()}
@@ -529,7 +609,6 @@ Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
 \draw[freccia] (exit_dec.east) -| (salva.north)
     node[pos=0.28, above] {2: Salva};
 
-% Opzione 1: Esci direttamente + Liberazione memoria
 \node[processo, text width=8.6cm] (libera) at (0, -10.95) {
     \textbf{Liberazione della memoria (\texttt{liberazione()})}\\
     Deallocazione array dinamici e liste concatenate
@@ -549,10 +628,15 @@ Le funzioni principali implementate in \texttt{$Chen_130368.c$} sono:
 \label{fig:flusso_programma}
 \end{figure}
 
+Come mostrato in Figura~\ref{fig:flusso_programma}, l'esecuzione è strutturata su due livelli di cicli iterativi (\texttt{do-while}): il ciclo principale in \texttt{menu()} smista le scelte verso i cinque sottomenu (\texttt{A}--\texttt{E}), ciascuno dotato di un proprio ciclo interno, mentre la selezione dell'uscita (\texttt{F}) attiva la conferma con possibilità di rientrare nel menu, uscire direttamente oppure salvare gli archivi tramite \texttt{salvadatabase()} prima di rilasciare tutta la memoria con \texttt{liberazione()}.
+
 \section{Gestione della memoria}
+
+\needspace{6\baselineskip}
 \subsection{Allocazione dinamica degli array}
 All'avvio della funzione \texttt{menu()}, il programma richiede all'utente due interi strettamente positivi tramite \texttt{richiestaMaxspettacoli()} e \texttt{richiestaMaxclienti()}, che definiscono le capacità iniziali degli array per gli spettacoli e i clienti. Lo spazio viene quindi riservato sullo \emph{heap} mediante le funzioni dedicate \texttt{avviospettacoli()} e \texttt{avvioclienti()}, le quali incapsulano la chiamata a \texttt{malloc()} e verificano che il puntatore restituito non sia \texttt{NULL}. Prima e dopo ogni nuovo inserimento (\texttt{inserimentospettacolo()} e \texttt{inserimentoclienti()}), la funzione \texttt{controllospazio()} confronta il numero di elementi presenti con la capacità massima attuale e, se necessario, attiva \texttt{riallocazioneSp()} o \texttt{riallocazioneCl()} per espandere la memoria tramite \texttt{realloc()}. Gli stessi controlli di capienza e riallocazione vengono eseguiti anche in \texttt{caricadatabase()} prima di leggere i record dai file binari, evitando qualsiasi scrittura oltre i limiti allocati.
 
+\needspace{6\baselineskip}
 \subsection{Deallocazione}
 La strategia di rilascio della memoria distingue tra strutture contigue e strutture concatenate:
 \begin{listacomp}
@@ -560,44 +644,44 @@ La strategia di rilascio della memoria distingue tra strutture contigue e strutt
     \item \textbf{Liste concatenate:} oltre alla deallocazione completa effettuata alla chiusura del programma (tramite \texttt{liberaprenotazioni()}, \texttt{liberaattesa()} e \texttt{liberageneri()}, che scorrono ciascuna lista liberando ogni nodo attraversato), i singoli nodi possono essere rilasciati anche a \emph{runtime}. Ciò avviene quando si annulla una prenotazione (\texttt{Eliminaprenotazione()}), quando una richiesta in attesa viene convertita in prenotazione attiva (\texttt{converteprenotazione()}) oppure prima di ricaricare gli archivi da file (\texttt{caricadatabase()}).
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Ciclo di vita delle strutture dati}
 Gli array dinamici vengono creati all'inizio della sessione in \texttt{menu()}, subito dopo l'acquisizione delle dimensioni iniziali. Le liste concatenate delle prenotazioni, delle richieste d'attesa e dei generi vengono invece inizializzate a \texttt{NULL} (liste vuote): un nuovo nodo viene allocato (\texttt{creaprenotazione()} o \texttt{creaattesa()}) e inserito in coda (\texttt{inserimentocodaprenotazione()} o \texttt{inserimentocodaattesa()}) solo dopo che l'utente ha confermato i dati inseriti, aggiornando il puntatore di testa quando necessario. Un comportamento specifico riguarda la lista \texttt{Nodogenere}: a ogni inserimento valido di uno spettacolo, la funzione \texttt{valutagenere()} verifica se il genere è già presente nella lista; in caso affermativo incrementa il relativo contatore \texttt{numero}, altrimenti crea e accoda un nuovo nodo con contatore inizializzato a \texttt{1}.
 
 Durante il caricamento da file (\texttt{caricadatabase()}), una volta verificata l'apertura e la lettura dell'intestazione di \texttt{spettacoli.dat}, i contatori \texttt{num\_spettacoli} e \texttt{num\_clienti} vengono azzerati in modo da sovrascrivere gli array esistenti, mentre le liste concatenate precedenti vengono interamente deallocate e ricostruite nodo per nodo a partire dai dati letti dai file binari. Al termine dell'esecuzione, tutta la memoria dinamica residua viene liberata prima dell'uscita.
 
+\needspace{6\baselineskip}
 \subsection{Zone di memoria coinvolte}
 Nel corso dell'esecuzione, le variabili e le strutture dati del programma sono distribuite tra \emph{stack} e \emph{heap} secondo il loro ciclo di vita:
 \begin{listacomp}
     \item \textbf{Memoria \emph{Stack}:} ospita i record di attivazione delle funzioni, i parametri passati per valore o per indirizzo e tutte le variabili locali con dimensione nota a tempo di compilazione. Rientrano in questa area i contatori e le capacità (\texttt{num\_spettacoli}, \texttt{num\_clienti}, \texttt{Maxspettacoli}, \texttt{Maxclienti}), le variabili di controllo dei menu (\texttt{primascelta}, \texttt{secondascelta}), gli indici dei cicli, i puntatori ai file (\texttt{FILE *fp}), le strutture temporanee d'appoggio (come \texttt{Prenotazione dati} o \texttt{RichiestaAttesa datiattesa}), i buffer locali per la validazione delle stringhe (\texttt{tempdata[11]}, \texttt{tempemail[81]}, \texttt{genere[31]}) nonché le variabili puntatore stesse (\texttt{Spettacoli}, \texttt{Clienti}, \texttt{Prenotazioni}, \texttt{Attese}, \texttt{generi}). Tali dati vengono allocati automaticamente all'ingresso della funzione e rimossi al suo ritorno.
-    \item \textbf{Memoria \emph{Heap}:} ospita tutti i blocchi allocati dinamicamente a \emph{runtime} tramite \texttt{malloc ()} e \texttt{realloc ()}, 
-    la cui durata non è legata allo scope della singola funzione ma è gestita esplicitamente dal programmatore tramite puntatori e chiamate a \texttt{free ()}. 
-    Appartengono allo \emph{heap} i due array contigui di strutture \texttt{Spettacolo} e \texttt{Cliente}, tutti i nodi delle liste concatenate (\texttt{NodoPrenotazione}, \texttt{NodoAttesa} e \texttt{Nodogenere}) e gli array ausiliari dinamici (\texttt{incassi} e \texttt{indici}) allocati temporaneamente per le operazioni di ordinamento.
+    \item \textbf{Memoria \emph{Heap}:} ospita tutti i blocchi allocati dinamicamente a \emph{runtime} tramite \texttt{malloc()} e \texttt{realloc()}, la cui durata non è legata allo scope della singola funzione ma è gestita esplicitamente dal programmatore tramite puntatori e chiamate a \texttt{free()}. Appartengono allo \emph{heap} i due array contigui di strutture \texttt{Spettacolo} e \texttt{Cliente}, tutti i nodi delle liste concatenate (\texttt{NodoPrenotazione}, \texttt{NodoAttesa} e \texttt{Nodogenere}) e gli array ausiliari dinamici (\texttt{incassi} e \texttt{indici}) allocati temporaneamente per le operazioni di ordinamento.
 \end{listacomp}
 
 \section{Gestione delle Liste}
 
+\needspace{6\baselineskip}
 \subsection{Motivazione}
 Per memorizzare le prenotazioni attive e le richieste in lista d'attesa sono state adottate liste concatenate semplici (\texttt{NodoPrenotazione} e \texttt{NodoAttesa}), in cui ciascun elemento è composto da una struttura dati informativa (\texttt{dati}) e da un puntatore (\texttt{next}) all'elemento successivo.
 
 Questa scelta offre due vantaggi principali rispetto agli array: consente di inserire nuovi elementi dinamicamente senza dover stimare a priori la dimensione massima della struttura, e permette di rimuovere un nodo in qualsiasi posizione modificando esclusivamente i puntatori adiacenti, preservando l'ordine cronologico senza dover traslare gli elementi successivi in memoria. Di contro, poiché l'indirizzo di ogni nodo è conservato unicamente nel nodo che lo precede, non è possibile l'accesso diretto tramite indice: ogni operazione di ricerca richiede lo scorrimento sequenziale a partire dalla testa della lista, e l'eventuale perdita del puntatore di testa comporterebbe l'impossibilità di raggiungere e deallocare l'intera struttura.
 
+\needspace{6\baselineskip}
 \subsection{Schema grafico}
 La Figura~\ref{fig:schema_lista} rappresenta la struttura logica in memoria di una lista concatenata utilizzata nel programma: il puntatore di testa mantiene il riferimento al primo nodo, mentre ciascun nodo collega la propria sezione dati al nodo successivo fino al terminatore \texttt{NULL}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     font=\footnotesize,
     freccia/.style={-{Stealth[length=2.2mm]}, thick, draw=black!85}
 ]
 
-% Puntatore di testa
 \draw[thick, fill=gray!14, rounded corners=2pt] (-6.3, -0.45) rectangle (-4.3, 0.45);
 \node[align=center] at (-5.3, 0) {\textbf{Testa}\\ \texttt{Prenotazioni}};
 
 \draw[freccia] (-4.3, 0) -- (-3.3, 0);
 
-% Nodo 1
 \draw[thick, fill=gray!6] (-3.3, -0.45) rectangle (-1.7, 0.45);
 \draw[thick, fill=gray!12] (-1.7, -0.45) rectangle (-0.8, 0.45);
 \node at (-2.5, 0) {\texttt{dati}};
@@ -606,7 +690,6 @@ La Figura~\ref{fig:schema_lista} rappresenta la struttura logica in memoria di u
 
 \draw[freccia] (-0.8, 0) -- (0.3, 0);
 
-% Nodo 2
 \draw[thick, fill=gray!6] (0.3, -0.45) rectangle (1.9, 0.45);
 \draw[thick, fill=gray!12] (1.9, -0.45) rectangle (2.8, 0.45);
 \node at (1.1, 0) {\texttt{dati}};
@@ -615,7 +698,6 @@ La Figura~\ref{fig:schema_lista} rappresenta la struttura logica in memoria di u
 
 \draw[freccia] (2.8, 0) -- (3.9, 0);
 
-% NULL
 \draw[thick, fill=gray!14, rounded corners=2pt] (3.9, -0.35) rectangle (5.1, 0.35);
 \node at (4.5, 0) {\texttt{NULL}};
 
@@ -624,51 +706,48 @@ La Figura~\ref{fig:schema_lista} rappresenta la struttura logica in memoria di u
 \label{fig:schema_lista}
 \end{figure}
 
+\needspace{6\baselineskip}
 \subsection{Algoritmo di inserimento in coda}
 L'inserimento in coda viene utilizzato sia per registrare le nuove prenotazioni in ordine cronologico sia per garantire la politica FIFO (\emph{First-In, First-Out}) nella lista d'attesa. Come mostrato in Figura~\ref{fig:inserimento_coda}, un puntatore ausiliario \texttt{p} scorre la lista fino all'ultimo nodo (\texttt{p->next == NULL}) e aggancia il nuovo elemento aggiornando i puntatori.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     font=\footnotesize,
     freccia/.style={-{Stealth[length=2.2mm]}, thick, draw=black!85}
 ]
 
-% Testa
 \draw[thick, fill=gray!14, rounded corners=2pt] (-6.3, -0.4) rectangle (-4.6, 0.4);
 \node at (-5.45, 0) {\textbf{Testa}};
 \draw[freccia] (-4.6, 0) -- (-3.6, 0);
 
-% Nodo 1
 \draw[thick, fill=gray!6] (-3.6, -0.4) rectangle (-2.2, 0.4);
 \draw[thick, fill=gray!12] (-2.2, -0.4) rectangle (-1.4, 0.4);
 \node at (-2.9, 0) {\texttt{dati}};
 \node at (-1.8, 0) {\texttt{next}};
 \draw[freccia] (-1.4, 0) -- (-0.3, 0);
 
-% Nodo 2 (ultimo nodo corrente)
+
 \draw[thick, fill=gray!6] (-0.3, -0.4) rectangle (1.1, 0.4);
 \draw[thick, fill=gray!12] (1.1, -0.4) rectangle (1.9, 0.4);
 \node at (0.4, 0) {\texttt{dati}};
 \node at (1.5, 0) {\texttt{next}};
 
-% Puntatore p
+
 \node[above] at (0.8, 1.0) {\texttt{p} (\texttt{p->next == NULL})};
 \draw[freccia] (0.8, 1.0) -- (0.8, 0.45);
 
-% Vecchio collegamento a NULL
 \draw[freccia, dashed] (1.9, 0) -- (3.1, 0);
 \draw[thick, dashed, rounded corners=2pt] (3.1, -0.35) rectangle (4.3, 0.35);
 \node at (3.7, 0) {\texttt{NULL}};
 
-% Nuovo nodo in basso
+
 \draw[thick, fill=gray!16] (2.1, -2.2) rectangle (3.5, -1.4);
 \draw[thick, fill=gray!22] (3.5, -2.2) rectangle (4.3, -1.4);
 \node at (2.8, -1.8) {\texttt{dati}};
 \node at (3.9, -1.8) {\texttt{next}};
 \node[below] at (3.2, -2.3) {Nuovo nodo};
 
-% Collegamenti nuovi
 \draw[freccia] (1.5, -0.4) |- (2.1, -1.8);
 \node[left] at (1.45, -1.25) {\textbf{1.} \texttt{p->next = nuovo}};
 
@@ -682,6 +761,7 @@ L'inserimento in coda viene utilizzato sia per registrare le nuove prenotazioni 
 \label{fig:inserimento_coda}
 \end{figure}
 
+\begin{samepage}
 Il Listato seguente riporta l'implementazione della funzione \texttt{inserimentocodaprenotazione()} (analoga a \texttt{inserimentocodaattesa()} e \texttt{inserimentocodagenere()}):
 
 \begin{lstlisting}[caption={Inserimento in coda nella lista delle prenotazioni}]
@@ -712,23 +792,23 @@ La funzione opera secondo i seguenti passaggi:
     \item \textbf{Gestione della lista vuota:} se il puntatore di testa \texttt{Prenotazioni} vale \texttt{NULL}, il nuovo nodo diventa direttamente la nuova testa e viene restituito al chiamante.
     \item \textbf{Scorrimento e aggancio in coda:} se la lista contiene già elementi, un puntatore ausiliario \texttt{p} avanza finché \texttt{p->next != NULL}; raggiunta la fine, imposta \texttt{p->next = prenotazione} e restituisce la testa invariata.
 \end{listacomp}
+\end{samepage}
 
+\needspace{6\baselineskip}
 \subsection{Algoritmo di eliminazione di un nodo}
 La rimozione di una prenotazione avviene ricercando il nodo corrispondente al \texttt{codice\_prenotazione} inserito dall'utente. Nel caso generale di eliminazione di un nodo intermedio o finale (Figura~\ref{fig:eliminazione_nodo}), si impiegano due puntatori: \texttt{p} per individuare il nodo da rimuovere e \texttt{prec} per mantenere il riferimento al nodo precedente, così da ricollegare la lista prima di rilasciare la memoria.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     font=\footnotesize,
     freccia/.style={-{Stealth[length=2.2mm]}, thick, draw=black!85}
 ]
 
-% Testa
 \draw[thick, fill=gray!14, rounded corners=2pt] (-6.5, -0.4) rectangle (-4.9, 0.4);
 \node at (-5.7, 0) {\textbf{Testa}};
 \draw[freccia] (-4.9, 0) -- (-4.0, 0);
 
-% Nodo precedente (prec)
 \draw[thick, fill=gray!6] (-4.0, -0.4) rectangle (-2.6, 0.4);
 \draw[thick, fill=gray!12] (-2.6, -0.4) rectangle (-1.8, 0.4);
 \node at (-3.3, 0) {\texttt{dati}};
@@ -736,10 +816,8 @@ La rimozione di una prenotazione avviene ricercando il nodo corrispondente al \t
 \node[above] at (-2.9, 1.0) {\texttt{prec}};
 \draw[freccia] (-2.9, 1.0) -- (-2.9, 0.45);
 
-% Vecchio collegamento verso nodo da eliminare
 \draw[freccia, dashed] (-1.8, 0) -- (-0.7, 0);
 
-% Nodo da eliminare (p)
 \draw[thick, fill=gray!20] (-0.7, -0.4) rectangle (0.7, 0.4);
 \draw[thick, fill=gray!26] (0.7, -0.4) rectangle (1.5, 0.4);
 \node at (0.0, 0) {\texttt{dati}};
@@ -747,16 +825,13 @@ La rimozione di una prenotazione avviene ricercando il nodo corrispondente al \t
 \node[above] at (0.4, 1.0) {\texttt{p} (da eliminare)};
 \draw[freccia] (0.4, 1.0) -- (0.4, 0.45);
 
-% Collegamento al nodo successivo
 \draw[freccia] (1.5, 0) -- (2.6, 0);
 
-% Nodo successivo
 \draw[thick, fill=gray!6] (2.6, -0.4) rectangle (4.0, 0.4);
 \draw[thick, fill=gray!12] (4.0, -0.4) rectangle (4.8, 0.4);
 \node at (3.3, 0) {\texttt{dati}};
 \node at (4.4, 0) {\texttt{next}};
 
-% Freccia di bypass inferiore
 \draw[freccia] (-2.2, -0.4) -- (-2.2, -1.15) -- (3.7, -1.15) -- (3.7, -0.45);
 \node[below] at (0.75, -1.2) {\textbf{1.} \texttt{prec->next = p->next} \qquad \textbf{2.} \texttt{free(p)}};
 
@@ -765,6 +840,7 @@ La rimozione di una prenotazione avviene ricercando il nodo corrispondente al \t
 \label{fig:eliminazione_nodo}
 \end{figure}
 
+\begin{samepage}
 Il codice seguente mostra l'implementazione della funzione \texttt{Eliminaprenotazione()}:
 
 \begin{lstlisting}[caption={Eliminazione di un nodo dalla lista delle prenotazioni}]
@@ -820,7 +896,9 @@ La funzione gestisce tutti i possibili casi di cancellazione:
     \item \textbf{Eliminazione in posizione intermedia o in coda:} i puntatori \texttt{prec} e \texttt{p} avanzano in coppia fino al nodo cercato; una volta trovato, \texttt{prec->next = p->next} esclude il nodo dalla catena e \texttt{free(p)} ne rilascia la memoria.
     \item \textbf{Attivazione del subentro:} i dati della prenotazione appena cancellata (\texttt{datitemp}) vengono passati a \texttt{converteprenotazione()} per riassegnare i posti liberati.
 \end{listacomp}
+\end{samepage}
 
+\needspace{6\baselineskip}
 \subsection{Meccanismo di promozione dalla lista d'attesa}
 Ogni volta che una prenotazione viene annullata, la funzione \texttt{converteprenotazione()} gestisce automaticamente il subentro dei clienti in lista d'attesa secondo l'ordine di arrivo (politica FIFO). Per prima cosa, la funzione individua lo spettacolo interessato tramite \texttt{controllacodiceSp()} e incrementa \texttt{posti\_disponibili} sommandovi i biglietti liberati dalla cancellazione.
 
@@ -828,6 +906,7 @@ Successivamente, scorre la lista \texttt{NodoAttesa} dalla testa fino alla coda 
 
 \section{Gestione dei file}
 
+\needspace{6\baselineskip}
 \subsection{Formato dei file binari}
 Per garantire la persistenza dei dati tra una sessione e l'altra in modo compatto e veloce, il programma utilizza file binari (\texttt{.dat}) gestiti tramite le funzioni standard \texttt{fwrite()} e \texttt{fread()}. L'archivio è suddiviso in cinque file distinti:
 \begin{listacomp}
@@ -836,6 +915,7 @@ Per garantire la persistenza dei dati tra una sessione e l'altra in modo compatt
     \item \textbf{\texttt{prenotazioni.dat} e \texttt{attesa.dat}:} memorizzano una sequenza lineare di strutture \texttt{Prenotazione} e \texttt{RichiestaAttesa} scritte consecutivamente senza un contatore iniziale, poiché la loro dimensione viene determinata dinamicamente in fase di lettura fino al raggiungimento della fine del file (\texttt{EOF}).
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Come vengono salvate e ricostruite le liste}
 Poiché i puntatori \texttt{next} contenuti nei nodi delle liste concatenate rappresentano indirizzi di memoria validi esclusivamente durante l'esecuzione corrente, essi non possono essere salvati su disco:
 \begin{listacomp}
@@ -844,6 +924,7 @@ Poiché i puntatori \texttt{next} contenuti nei nodi delle liste concatenate rap
     \item \textbf{Ricostruzione della lista dei generi:} la lista statistica \texttt{Nodogenere} non viene salvata su un file dedicato, ma viene rigenerata automaticamente al termine del caricamento scorrendo l'array \texttt{Spettacoli} appena letto e richiamando \texttt{valutagenere()} per ciascuno spettacolo.
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Formato dei file di testo}
 Oltre agli archivi binari ad uso interno, il sistema consente di esportare i dati in formato testuale (\texttt{.txt}) leggibile dall'utente tramite due funzioni dedicate:
 \begin{listacomp}
@@ -851,6 +932,7 @@ Oltre agli archivi binari ad uso interno, il sistema consente di esportare i dat
     \item \textbf{\texttt{report\_prenotazioni.txt} (\texttt{esportaprenotazione()}):} produce un riepilogo dettagliato di tutte le prenotazioni attive. Per ciascun nodo della lista \texttt{Prenotazioni}, la funzione incrocia il campo \texttt{codice\_cliente} con l'array \texttt{Clienti} tramite \texttt{controllacodiceCl()} per includere anche nome e cognome dell'intestatario, aggiungendo in fondo al file una riga di riepilogo con il numero totale di prenotazioni e l'incasso complessivo.
 \end{listacomp}
 
+\needspace{6\baselineskip}
 \subsection{Strategia di salvataggio/caricamento}
 La gestione della persistenza è stata progettata separando nettamente le operazioni di salvataggio, caricamento ed esportazione, così da evitare scritture involontarie e mantenere sincronizzate tutte le strutture dati:
 \begin{listacomp}
@@ -860,13 +942,15 @@ La gestione della persistenza è stata progettata separando nettamente le operaz
     \item \textbf{Salvataggio integrato in chiusura:} oltre al salvataggio manuale dal sottomenu dedicato, il ciclo principale \texttt{menu()} offre all'utente la possibilità di eseguire automaticamente \texttt{salvadatabase()} al momento dell'uscita dal programma prima della deallocazione finale della memoria.
 \end{listacomp}
 
-\chapter{Implementazioni}
+
+\chapter{Implementazioni}\label{cap:implementazioni}
 
 \section{Funzioni Principali}
 
 Di seguito vengono analizzate le funzioni principali del programma, presentate secondo il loro ordine logico di esecuzione dall'avvio fino al caricamento e salvataggio dei dati, evidenziando le motivazioni architetturali alla base della scelta dei parametri.
 
-\subsection[avvio()]{\texttt{void avvio()}}
+\needspace{8\baselineskip}
+\subsection[avvio()]{\texttt{void avvio()}}\label{sec:avvio}
 
 \noindent\textbf{Descrizione:}
 Gestisce la fase di autenticazione all'avvio del programma, garantendo che soltanto gli operatori autorizzati possano accedere alle funzionalità del sistema. La funzione tenta di aprire il file binario \texttt{password.dat} contenente un intero codificato; se il file non esiste o non è apribile, imposta la password predefinita a \texttt{123456}. Successivamente richiede l'inserimento della credenziale: in caso di errore l'utente può scegliere se riprovare o uscire immediatamente tramite \texttt{exit(0)}. Una volta superato il controllo, il sistema offre la possibilità di aggiornare la password salvandola nuovamente in formato codificato su \texttt{password.dat} per gli accessi futuri, oppure di proseguire. Al termine della funzione, il controllo ritorna naturalmente a \texttt{main()}, che avvia \texttt{menu()}.
@@ -881,6 +965,7 @@ Gestisce la fase di autenticazione all'avvio del programma, garantendo che solta
     \item \textit{Nessun valore} (\texttt{void}): termina l'esecuzione con \texttt{exit(0)} o \texttt{exit(1)} se l'autenticazione fallisce o si verifica un errore di lettura del file.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Autenticazione iniziale e codifica password in avvio()}]
 FILE *fp = fopen("password.dat", "rb");
@@ -893,7 +978,7 @@ else
     flag = fread(&password, sizeof(int), 1, fp);
     if (flag != 1)
     {
-        printf("problemi sulla gestione della password\n");
+        printf("problemi sulla gestione della password, eliminare password.dat dalla cartella\n");
         exit(1);
     }
     password = password - 123456;
@@ -909,8 +994,10 @@ flag = fwrite(&nuovapassword, sizeof(int), 1, fp);
     \item \textbf{Gestione del primo avvio:} l'assenza di \texttt{password.dat} (\texttt{fp == NULL}) non blocca il programma, ma attiva automaticamente la password di default \texttt{123456}.
     \item \textbf{Offuscamento su file binario:} prima della scrittura su file viene sommato l'offset costante \texttt{123456}, sottratto poi in lettura per evitare che la password sia visibile in chiaro aprendo il file.
 \end{listacomp}
+\end{samepage}
 
-\subsection[menu()]{\texttt{void menu()}}
+\needspace{8\baselineskip}
+\subsection[menu()]{\texttt{void menu()}}\label{sec:menu}
 
 \noindent\textbf{Descrizione:}
 Rappresenta il nucleo di coordinamento dell'intero programma e consente di mantenere la funzione \texttt{main()} minimale. All'ingresso acquisisce dall'utente le capacità iniziali per gli array di spettacoli e clienti, alloca dinamicamente lo spazio sullo \emph{heap} e inizializza a \texttt{NULL} le liste concatenate. Avvia quindi un ciclo iterativo \texttt{do-while} che smista le scelte verso i cinque sottomenu tematici (\texttt{A}--\texttt{E}). Quando l'utente seleziona l'uscita (\texttt{F}), la funzione richiede conferma offrendo anche il salvataggio automatico su file binari; prima di terminare, invoca \texttt{liberazione()} per deallocare ogni struttura dinamica.
@@ -925,6 +1012,7 @@ Rappresenta il nucleo di coordinamento dell'intero programma e consente di mante
     \item \textit{Nessun valore} (\texttt{void}).
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Inizializzazione, ciclo principale e rilascio memoria in menu()}]
 int Maxspettacoli = richiestaMaxspettacoli();
@@ -938,7 +1026,7 @@ do
 {
     /* ... stampa menu A-F e lettura primascelta ... */
     if (primascelta == 'a' || primascelta == 'A')
-        menuspettacoli(Spettacoli, &generi, ns, &Maxspettacoli);
+        menuspettacoli(&Spettacoli, &generi, ns, &Maxspettacoli);
     /* ... diramazione sottomenu B, C, D, E e conferma uscita F ... */
 } while (primascelta != 'f' && primascelta != 'F');
 if (liberazione(Spettacoli, Clienti, Prenotazioni, Attese, generi) != 1)
@@ -948,18 +1036,20 @@ if (liberazione(Spettacoli, Clienti, Prenotazioni, Attese, generi) != 1)
 \end{lstlisting}
 
 \begin{listacomp}
-    \item \textbf{Inizializzazione centralizzata:} tutte le strutture dati vengono create nello scope di \texttt{menu()} e passate alle funzioni secondarie per valore o per indirizzo a seconda che debbano essere solo consultate o modificate.
+    \item \textbf{Inizializzazione centralizzata:} tutte le strutture dati vengono create nello scope di \texttt{menu()} e passate alle funzioni secondarie per valore o per indirizzo (\texttt{\&Spettacoli}, \texttt{\&Clienti}) affinché eventuali riallocazioni aggiornino i puntatori principali.
     \item \textbf{Chiusura sicura:} l'uscita dal ciclo \texttt{do-while} garantisce il passaggio obbligato attraverso \texttt{liberazione()}, prevenendo \emph{memory leak} alla terminazione.
 \end{listacomp}
+\end{samepage}
 
-\subsection[inserimentospettacolo()]{\texttt{int inserimentospettacolo(Spettacolo *Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli)}}
+\needspace{8\baselineskip}
+\subsection[inserimentospettacolo()]{\texttt{int inserimentospettacolo(Spettacolo **Spettacoli, Nodogenere **generi, int *ns, int *Maxspettacoli)}}\label{sec:inserimentospettacolo}
 
 \noindent\textbf{Descrizione:}
 Acquisisce da tastiera i dati di un nuovo spettacolo da aggiungere al cartellone. Prima di procedere verifica tramite \texttt{controllospazio()} che l'array disponga ancora di capienza sufficiente, attivando eventualmente \texttt{riallocazioneSp()}. Durante l'inserimento valida l'univocità del codice spettacolo, legge titolo e genere tramite \texttt{fgets()} rimuovendo il carattere di fine riga, controlla la validità della data nel formato \texttt{gg/mm/aaaa} e verifica che i posti totali e il prezzo del biglietto siano strettamente positivi. Infine mostra un riepilogo dei dati inseriti e chiede conferma all'utente.
 
 \noindent\textbf{Parametri:}
 \begin{listacomp}
-    \item \texttt{Spettacolo *Spettacoli}: puntatore singolo all'array dinamico; consente di popolare direttamente i campi dell'elemento \texttt{Spettacoli[i]} nello \emph{heap} senza effettuare copie di strutture.
+    \item \texttt{Spettacolo **Spettacoli}: \textbf{doppio puntatore} all'array dinamico; consente sia di popolare direttamente i campi dell'elemento \texttt{(*Spettacoli)[i]} nello \emph{heap}, sia di aggiornare l'indirizzo base dell'array nel chiamante qualora si renda necessario invocare \texttt{riallocazioneSp()}.
     \item \texttt{Nodogenere **generi}: doppio puntatore alla testa della lista statistica dei generi; necessario per consentire la modifica del puntatore di testa iniziale quando viene creato il primo nodo su lista vuota.
     \item \texttt{int *ns}: puntatore singolo al contatore degli spettacoli; passato per indirizzo per leggere l'indice di inserimento corrente e mantenere allineato il conteggio con il modulo chiamante.
     \item \texttt{int *Maxspettacoli}: puntatore singolo alla capacità massima; passato per indirizzo in modo da poter aggiornare la soglia di capienza qualora venga invocata \texttt{riallocazioneSp()}.
@@ -968,9 +1058,11 @@ Acquisisce da tastiera i dati di un nuovo spettacolo da aggiungere al cartellone
 \noindent\textbf{Ritorna:}
 \begin{listacomp}
     \item \texttt{1}: se l'utente conferma l'inserimento dei dati validati.
-    \item \texttt{0}: se l'utente annulla la conferma (richiedendo un nuovo inserimento) oppure se la riallocazione dello spazio fallisce.
+    \item \texttt{0}: se l'utente annulla la conferma e desidera ripetere l'inserimento.
+    \item \texttt{-1}: se la riallocazione dello spazio viene annullata o fallisce.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Validazione univocità codice e conferma inserimento in inserimentospettacolo()}]
 do
@@ -979,18 +1071,18 @@ do
     printf("Inserisci codice spettacolo corrispondente : ");
     scanf_sicuro(&tempcodice);
     flagcodice = 1;
-    if (controllacodiceSp(tempcodice, Spettacoli, num_spettacoli) != -1)
+    if (controllacodiceSp(tempcodice, *Spettacoli, num_spettacoli) != -1)
     {
         printf("codice gia' esistente e deve essere univoco, riprova.\n");
         flagcodice = 0;
     }
     else
     {
-        Spettacoli[i].codice_spettacolo = tempcodice;
+        (*Spettacoli)[i].codice_spettacolo = tempcodice;
     }
 } while (flagcodice != 1);
 /* ... acquisizione titolo, genere, data, posti e prezzo ... */
-Spettacoli[i].posti_disponibili = Spettacoli[i].posti_totali;
+(*Spettacoli)[i].posti_disponibili = (*Spettacoli)[i].posti_totali;
 printf("Per dare conferma di inserimento inserisci 1, altrimenti 0\n");
 scanf_sicuro(&flag);
 return flag;
@@ -1000,8 +1092,10 @@ return flag;
     \item \textbf{Garanzia di unicità:} il ciclo di controllo impedisce l'inserimento di codici duplicati interrogando \texttt{controllacodiceSp()} sull'intero array già popolato.
     \item \textbf{Inizializzazione coerente:} i posti disponibili vengono automaticamente allineati ai posti totali prima della conferma finale.
 \end{listacomp}
+\end{samepage}
 
-\subsection[riallocazioneSp()]{\texttt{int riallocazioneSp(Spettacolo **Spettacoli, int num\_spettacoli, int *Maxspettacoli)}}
+\needspace{8\baselineskip}
+\subsection[riallocazioneSp()]{\texttt{int riallocazioneSp(Spettacolo **Spettacoli, int num\_spettacoli, int *Maxspettacoli)}}\label{sec:riallocazioneSp}
 
 \noindent\textbf{Descrizione:}
 Gestisce l'espansione dinamica dell'array \texttt{Spettacoli} quando la capacità iniziale risulta insufficiente (durante l'inserimento manuale o il caricamento da file). L'utente può scegliere se raddoppiare automaticamente la capacità finché non risulti sufficiente, indicare manualmente una nuova dimensione maggiore o uguale a \texttt{num\_spettacoli}, oppure annullare l'operazione. Il ridimensionamento avviene tramite \texttt{realloc()} appoggiandosi a un puntatore temporaneo per evitare la perdita dei dati già in memoria in caso di errore.
@@ -1009,7 +1103,7 @@ Gestisce l'espansione dinamica dell'array \texttt{Spettacoli} quando la capacit�
 \noindent\textbf{Parametri:}
 \begin{listacomp}
     \item \texttt{Spettacolo **Spettacoli}: \textbf{doppio puntatore} all'array degli spettacoli; questa scelta è indispensabile poiché \texttt{realloc()}, in mancanza di spazio contiguo nello \emph{heap}, può spostare l'intero blocco in un nuovo indirizzo di memoria. Passare l'indirizzo del puntatore permette di aggiornare direttamente la variabile originale nel chiamante evitando puntatori pendenti (\emph{dangling pointer}).
-    \item \texttt{int num\_spettacoli}: passato \textbf{per valore}, poiché la funzione necessita soltanto di leggere il numero attuale di elementi per verificare che la nuova capacità sia sufficiente, senza doverlo modificare.
+    \item \texttt{int num\_spettacoli}: passato \textbf{per valore}, poiché la funzione necessita soltanto di leggere il numero minimo di elementi da contenere per verificare che la nuova capacità sia sufficiente, senza doverlo modificare.
     \item \texttt{int *Maxspettacoli}: puntatore singolo alla capacità massima; passato per indirizzo affinché il nuovo limite dimensionale (raddoppiato o inserito manualmente) resti memorizzato nella variabile del chiamante.
 \end{listacomp}
 
@@ -1020,6 +1114,7 @@ Gestisce l'espansione dinamica dell'array \texttt{Spettacoli} quando la capacit�
     \item \texttt{-1}: fallimento della chiamata a \texttt{realloc()} (\texttt{temp == NULL}).
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Ridimensionamento sicuro tramite puntatore temporaneo in riallocazioneSp()}]
 if (flagra == 1)
@@ -1044,8 +1139,10 @@ if (flagra == 1)
     \item \textbf{Protezione da perdita di riferimenti:} assegnare il risultato di \texttt{realloc()} a \texttt{temp} prima di sovrascrivere \texttt{*Spettacoli} evita di perdere l'indirizzo del blocco precedente qualora l'allocazione fallisse.
     \item \textbf{Aggiornamento trasparente:} l'assegnazione \texttt{*Spettacoli = temp} propaga istantaneamente il nuovo indirizzo base dell'array al chiamante.
 \end{listacomp}
+\end{samepage}
 
-\subsection[registraprenotazione()]{\texttt{NodoPrenotazione *registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa **Attese, int num\_spettacoli, int num\_clienti)}}
+\needspace{8\baselineskip}
+\subsection[registraprenotazione()]{\texttt{NodoPrenotazione *registraprenotazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Prenotazioni, NodoAttesa **Attese, int num\_spettacoli, int num\_clienti)}}\label{sec:registraprenotazione}
 
 \noindent\textbf{Descrizione:}
 Gestisce l'intero flusso di registrazione di una nuova prenotazione. Verifica l'esistenza dello spettacolo e del cliente tramite i rispettivi codici, controlla che il numero di biglietti richiesti sia compreso tra \texttt{1} e \texttt{10}, valida la data e calcola automaticamente l'importo totale. Se i posti disponibili dello spettacolo non sono sufficienti, propone l'inserimento nella lista d'attesa (\texttt{Attese}); in caso contrario, verifica che il cliente non sia già in attesa per lo stesso spettacolo, genera un codice univoco incrementale tramite \texttt{generacodice()}, scala i posti disponibili nell'array \texttt{Spettacoli} e accoda il nuovo nodo in \texttt{Prenotazioni}.
@@ -1064,6 +1161,7 @@ Gestisce l'intero flusso di registrazione di una nuova prenotazione. Verifica l'
     \item \texttt{NodoPrenotazione *}: il puntatore aggiornato alla testa della lista delle prenotazioni.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Smistamento tra lista d'attesa e prenotazione attiva in registraprenotazione()}]
 if (Spettacoli[indicesp].posti_disponibili < dati.numero_posti)
@@ -1072,9 +1170,11 @@ if (Spettacoli[indicesp].posti_disponibili < dati.numero_posti)
     scanf_sicuro(&flag);
     if (flag == 1)
     {
-        RichiestaAttesa datiattesa = {
-            dati.codice_spettacolo, dati.codice_cliente, dati.numero_posti};
+        RichiestaAttesa datiattesa;
+        datiattesa.codice_cliente = dati.codice_cliente;
+        datiattesa.codice_spettacolo = dati.codice_spettacolo;
         strcpy(datiattesa.data_richiesta, dati.data_prenotazione);
+        datiattesa.numero_posti = dati.numero_posti;
         *Attese = inserimentocodaattesa(datiattesa, *Attese);
     }
 }
@@ -1090,8 +1190,10 @@ else if (flag == 1 && presenza == 0)
     \item \textbf{Gestione automatica del tutto esaurito:} quando \texttt{posti\_disponibili} è inferiore alla richiesta, il flusso devia verso \texttt{inserimentocodaattesa()} preservando l'ordine cronologico FIFO.
     \item \textbf{Coerenza dei dati:} in caso di prenotazione confermata, l'aggiornamento di \texttt{posti\_disponibili} e l'accodamento in \texttt{Prenotazioni} avvengono contestualmente.
 \end{listacomp}
+\end{samepage}
 
-\subsection[converteprenotazione()]{\texttt{NodoPrenotazione *converteprenotazione(Spettacolo *Spettacoli, NodoAttesa **Attese, NodoPrenotazione *Prenotazioni, Prenotazione Nodo, int num\_spettacoli)}}
+\needspace{8\baselineskip}
+\subsection[converteprenotazione()]{\texttt{NodoPrenotazione *converteprenotazione(Spettacolo *Spettacoli, NodoAttesa **Attese, NodoPrenotazione *Prenotazioni, Prenotazione Nodo, int num\_spettacoli)}}\label{sec:converteprenotazione}
 
 \noindent\textbf{Descrizione:}
 Viene richiamata da \texttt{Eliminaprenotazione()} subito dopo la rimozione di una prenotazione annullata. Per prima cosa individua lo spettacolo interessato e ripristina i posti disponibili sommandovi i biglietti liberati. Scorre poi l'intera lista d'attesa dalla testa fino alla coda: per ogni richiesta riferita allo stesso spettacolo il cui numero di posti rientra nella nuova disponibilità, crea una nuova struttura \texttt{Prenotazione}, le assegna un codice univoco, la accoda alla lista delle prenotazioni attive, scala i posti dallo spettacolo e rimuove il nodo promosso dalla lista d'attesa liberandone la memoria.
@@ -1110,6 +1212,7 @@ Viene richiamata da \texttt{Eliminaprenotazione()} subito dopo la rimozione di u
     \item \texttt{NodoPrenotazione *}: il puntatore aggiornato alla testa della lista delle prenotazioni, comprensiva delle eventuali richieste convertite.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Ripristino posti e promozione FIFO dalla lista d'attesa in converteprenotazione()}]
 Spettacoli[indicesp].posti_disponibili += Nodo.numero_posti;
@@ -1147,8 +1250,10 @@ while (q != NULL)
     \item \textbf{Aggiornamento sicuro dei puntatori in eliminazione:} la distinzione tra \texttt{prec == NULL} (rimozione in testa a \texttt{*Attese}) e nodo intermedio permette di scollegare e liberare il nodo promosso senza interrompere lo scorrimento tramite \texttt{q}.
     \item \textbf{Promozione multipla:} il ciclo prosegue fino alla fine della coda, consentendo di soddisfare anche più richieste piccole qualora venga annullata una prenotazione numerosa.
 \end{listacomp}
+\end{samepage}
 
-\subsection[scanstring()]{\texttt{int scanstring(char data[], int lung)}}
+\needspace{8\baselineskip}
+\subsection[scanstring()]{\texttt{int scanstring(char data[], int lung)}}\label{sec:scanstring}
 
 \noindent\textbf{Descrizione:}
 Converte una sottostringa numerica di lunghezza arbitraria \texttt{lung} nel corrispondente valore intero. A differenza di \texttt{controlladata()}, che effettua la validazione sintattica e di calendario sull'intera stringa \texttt{gg/mm/aaaa}, \texttt{scanstring()} assume che l'input passato sia già una sequenza valida di cifre decimali (come le sottostringhe estratte in \texttt{trasformadata()} per giorno, mese e anno al fine di ordinare cronologicamente gli spettacoli disponibili). Sebbene la libreria standard del C metta a disposizione la funzione \texttt{sscanf()} per eseguire questa conversione in modo diretto, l'algoritmo è stato implementato manualmente prima di conoscere tale funzione di libreria ed è stato mantenuto nel progetto per coerenza con il lavoro svolto.
@@ -1164,6 +1269,7 @@ Converte una sottostringa numerica di lunghezza arbitraria \texttt{lung} nel cor
     \item \texttt{int}: il valore intero ottenuto dalla conversione posizionale delle cifre.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Conversione posizionale da stringa numerica a intero in scanstring()}]
 int scanstring(char data[], int lung)
@@ -1193,8 +1299,10 @@ int scanstring(char data[], int lung)
     \item \textbf{Calcolo posizionale esplicito:} per ciascuna cifra in posizione \texttt{j}, il ciclo interno calcola la potenza $10^{\texttt{lung}-j-1}$ e la moltiplica per il valore numerico \texttt{i} corrispondente al carattere individuato.
     \item \textbf{Indipendenza dal terminatore:} l'uso del parametro \texttt{lung} consente di elaborare porzioni di buffer non terminate esplicitamente da \texttt{\textbackslash 0}.
 \end{listacomp}
+\end{samepage}
 
-\subsection[caricadatabase()]{\texttt{int caricadatabase(int *num\_spettacoli, Spettacolo **Spettacoli, int *num\_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti)}}
+\needspace{8\baselineskip}
+\subsection[caricadatabase()]{\texttt{int caricadatabase(int *num\_spettacoli, Spettacolo **Spettacoli, int *num\_clienti, Cliente **Clienti, NodoPrenotazione **Prenotazioni, NodoAttesa **Attese, Nodogenere **generi, int *Maxspettacoli, int *Maxclienti)}}\label{sec:caricadatabase}
 
 \noindent\textbf{Descrizione:}
 Ripristina l'intero stato dell'applicazione leggendo i quattro file binari \texttt{spettacoli.dat}, \texttt{clienti.dat}, \texttt{prenotazioni.dat} e \texttt{attesa.dat}. Dopo aver verificato l'apertura del primo file e letto il numero di record salvati, controlla che gli array dinamici dispongano di spazio sufficiente (riallocandoli se necessario) e libera le liste concatenate preesistenti in memoria prima di caricare i nuovi dati. Ricostruisce infine in ordine lineare le liste delle prenotazioni e delle attese e rigenera la lista statistica dei generi tramite \texttt{valutagenere()}.
@@ -1212,6 +1320,7 @@ Ripristina l'intero stato dell'applicazione leggendo i quattro file binari \text
     \item \texttt{-1}: errore nell'apertura di un file, nella lettura dei record o nella riallocazione della memoria.
 \end{listacomp}
 
+\begin{samepage}
 \noindent\textbf{Snippet di codice:}
 \begin{lstlisting}[caption={Pulizia sicura e ricostruzione della lista prenotazioni in caricadatabase()}]
 liberaprenotazioni(*Prenotazioni);
@@ -1243,9 +1352,12 @@ while (fread(&tempprenotazione, sizeof(Prenotazione), 1, fp) == 1)
     \item \textbf{Prevenzione dei \emph{memory leak}:} le liste concatenate già presenti in memoria vengono deallocate e azzerate solo dopo aver accertato che i file di archivio siano leggibili.
     \item \textbf{Ricostruzione in tempo lineare:} mantenendo il puntatore di coda \texttt{p} durante il ciclo di \texttt{fread()}, ogni nuovo nodo viene agganciato direttamente in fondo senza dover ripercorrere la lista dall'inizio.
 \end{listacomp}
+\end{samepage}
 
 \chapter{TESTING}
+
 \section{Casi di Test}
+
 \subsection{TEST T01}
 \begin{listacomp}
     \item \textbf{ID test:} T01
@@ -1275,13 +1387,14 @@ Inserisci la tua scelta : 2
 Avvio con successo, benvenuto al sistema di manager per teatro!
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test01.png}
+    \IfFileExists{Test01.png}{\includegraphics[width=0.82\textwidth]{Test01.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test01.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T01.}
     \label{fig:test01}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T02}
 \begin{listacomp}
     \item \textbf{ID test:} T02
@@ -1340,9 +1453,9 @@ Data valida e inserito correttamente
 Inserisci posti totali dello spettacolo : 
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test02.png}
+    \IfFileExists{Test02.png}{\includegraphics[width=0.82\textwidth]{Test02.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test02.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T02.}
     \label{fig:test02}
 \end{figure}
@@ -1368,13 +1481,14 @@ Kill the program being debugged? (y or n) [answered Y; input not from terminal]
 The program 'C:\Users\Utente\Desktop\Primo_progetto_parziale\sistema.exe' has exited with code 0 (0x00000000).
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test03.png}
+    \IfFileExists{Test03.png}{\includegraphics[width=0.82\textwidth]{Test03.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test03.png]}\vspace{0.8cm}}}}
     \caption{Schermata di debug relativa al Test T03.}
     \label{fig:test03}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T05}
 \begin{listacomp}
     \item \textbf{ID test:} T05
@@ -1430,27 +1544,28 @@ Le funzionalita' per statistiche e report sono :
 Inserisci la tua scelta : 3
 Gli top 5 spettacoli con maggiore incasso sono :
 Posizione  Titolo               Genere               Incasso             
-0          01                   Opera                            120.00
-3          04                   Film                              30.00
-1          02                   Teatro                            10.00
-2          03                   Film                               0.00
-4          05                   Articolo                           0.00
+0          01                   Opera                              120.00
+3          04                   Film                                30.00
+1          02                   Teatro                              10.00
+2          03                   Film                                 0.00
+4          05                   Articolo                             0.00
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Test05_1.png}
+        \IfFileExists{Test05_1.png}{\includegraphics[width=\textwidth]{Test05_1.png}}{\fbox{\parbox{0.9\textwidth}{\centering\vspace{0.8cm}\texttt{[Test05\_1.png]}\vspace{0.8cm}}}}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Test05_2.png}
+        \IfFileExists{Test05_2.png}{\includegraphics[width=\textwidth]{Test05_2.png}}{\fbox{\parbox{0.9\textwidth}{\centering\vspace{0.8cm}\texttt{[Test05\_2.png]}\vspace{0.8cm}}}}
     \end{minipage}
     \caption{Schermate di esecuzione del Test T05.}
     \label{fig:test05}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T11}
 \begin{listacomp}
     \item \textbf{ID test:} T11
@@ -1487,13 +1602,14 @@ codice gia' esistente e deve essere univoco, riprova.
 Inserisci codice spettacolo corrispondente : 
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test11.png}
+    \IfFileExists{Test11.png}{\includegraphics[width=0.82\textwidth]{Test11.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test11.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T11.}
     \label{fig:test11}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T12}
 \begin{listacomp}
     \item \textbf{ID test:} T12
@@ -1519,20 +1635,21 @@ Codice               Titolo               Genere               data             
 3                    12                   12                   12/12/2004                          19/19                                   2.00
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test12.png}
+    \IfFileExists{Test12.png}{\includegraphics[width=0.82\textwidth]{Test12.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test12.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T12.}
     \label{fig:test12}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T13}
 \begin{listacomp}
     \item \textbf{ID test:} T13
     \item \textbf{Versione:} 1.1
     \item \textbf{Funzionalità testata:} ricerca spettacolo non esistente (\texttt{cercacodicespettacolo()}).
     \item \textbf{Input fornito:} codice di uno spettacolo non presente in archivio.
-    \item \textbf{Output atteso:} avviso che nessun spettacolo corrisponde al codice inserito.
+    \item \textbf{Output atteso:} avviso che nessuno spettacolo corrisponde al codice inserito.
     \item \textbf{Esito:} Superato.
 \end{listacomp}
 
@@ -1549,13 +1666,14 @@ Insersci il codice dello spettacolo da cercare : 2
 il codice inserito non corrisponde ad alcun spettacolo presenti.
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test13.png}
+    \IfFileExists{Test13.png}{\includegraphics[width=0.82\textwidth]{Test13.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test13.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T13.}
     \label{fig:test13}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T14}
 \begin{listacomp}
     \item \textbf{ID test:} T14
@@ -1584,9 +1702,9 @@ codice prenotazione  codice spettacolo    codice cliente       numero posti     
 Le funzionalita' per gestione dei prenotazioni sono : 
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test14.png}
+    \IfFileExists{Test14.png}{\includegraphics[width=0.82\textwidth]{Test14.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test14.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T14.}
     \label{fig:test14}
 \end{figure}
@@ -1616,13 +1734,14 @@ Se desideri aggiungere nella lista d'attesa inserisci 1, altrimenti 0 : 1
 dati salvati nella lista di attesa.
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test15.png}
+    \IfFileExists{Test15.png}{\includegraphics[width=0.82\textwidth]{Test15.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test15.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T15.}
     \label{fig:test15}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T16}
 \begin{listacomp}
     \item \textbf{ID test:} T16
@@ -1647,9 +1766,9 @@ Insersci codice di prenotazione per annullazione : 1
 Promozione attesa del spettacolo con codice 1 del cliente con codice 2 ad 6 posti
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test16.png}
+    \IfFileExists{Test16.png}{\includegraphics[width=0.82\textwidth]{Test16.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test16.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T16.}
     \label{fig:test16}
 \end{figure}
@@ -1681,13 +1800,14 @@ Dati nella lista di prenotazioni salvati correttamente nel file prenotazioni.dat
 Dati nella lista di attesa salvati correttamente nel file attesa.dat
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test06.png}
+    \IfFileExists{Test06.png}{\includegraphics[width=0.82\textwidth]{Test06.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test06.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T06.}
     \label{fig:test06}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T07}
 \begin{listacomp}
     \item \textbf{ID test:} T07
@@ -1705,20 +1825,21 @@ Segmentation fault per riga : flag = fread(Spettacoli, sizeof(Spettacolo), *num_
 Unknown fault per riga : *generi = valutagenere(Spettacoli[i]->genere, *generi);
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Test07_1.png}
+        \IfFileExists{Test07_1.png}{\includegraphics[width=\textwidth]{Test07_1.png}}{\fbox{\parbox{0.9\textwidth}{\centering\vspace{0.8cm}\texttt{[Test07\_1.png]}\vspace{0.8cm}}}}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Test07_2.png}
+        \IfFileExists{Test07_2.png}{\includegraphics[width=\textwidth]{Test07_2.png}}{\fbox{\parbox{0.9\textwidth}{\centering\vspace{0.8cm}\texttt{[Test07\_2.png]}\vspace{0.8cm}}}}
     \end{minipage}
     \caption{Schermate di errore relative al Test T07.}
     \label{fig:test07}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T08}
 \begin{listacomp}
     \item \textbf{ID test:} T08
@@ -1734,13 +1855,14 @@ Unknown fault per riga : *generi = valutagenere(Spettacoli[i]->genere, *generi);
 Richiesta di riallocazione per spazio ancora sufficienti.
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test08.png}
+    \IfFileExists{Test08.png}{\includegraphics[width=0.82\textwidth]{Test08.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test08.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T08.}
     \label{fig:test08}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T09}
 \begin{listacomp}
     \item \textbf{ID test:} T09
@@ -1756,13 +1878,14 @@ Richiesta di riallocazione per spazio ancora sufficienti.
 Errore operazione sul file
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test09.png}
+    \IfFileExists{Test09.png}{\includegraphics[width=0.82\textwidth]{Test09.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test09.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T09.}
     \label{fig:test09}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T10}
 \begin{listacomp}
     \item \textbf{ID test:} T10
@@ -1787,13 +1910,14 @@ File prenotazioni.dat caricato correttamente
 File attesa.dat caricato correttamente
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test10.png}
+    \IfFileExists{Test10.png}{\includegraphics[width=0.82\textwidth]{Test10.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test10.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T10.}
     \label{fig:test10}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T17}
 \begin{listacomp}
     \item \textbf{ID test:} T17
@@ -1840,13 +1964,14 @@ codice prenotazione  codice spettacolo    codice cliente       numero posti     
 3                    1                    2                    6                    12.00                12/12/2004      
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test17.png}
+    \IfFileExists{Test17.png}{\includegraphics[width=0.82\textwidth]{Test17.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test17.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T17.}
     \label{fig:test17}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T18}
 \begin{listacomp}
     \item \textbf{ID test:} T18
@@ -1865,13 +1990,14 @@ Errore apertura file spettacoli.dat
 Si e' verificato un errore per caricare dati dal file
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test18.png}
+    \IfFileExists{Test18.png}{\includegraphics[width=0.82\textwidth]{Test18.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test18.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T18.}
     \label{fig:test18}
 \end{figure}
 
+\needspace{12\baselineskip}
 \subsection{TEST T19}
 \begin{listacomp}
     \item \textbf{ID test:} T19
@@ -1893,9 +2019,9 @@ Inserisci la tua scelta : 3
 Dati dei spettacoli scritti correttamente in catalogo.txt
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{Test19.png}
+    \IfFileExists{Test19.png}{\includegraphics[width=0.82\textwidth]{Test19.png}}{\fbox{\parbox{0.8\textwidth}{\centering\vspace{0.8cm}\texttt{[Schermata: Test19.png]}\vspace{0.8cm}}}}
     \caption{Schermata di esecuzione del Test T19.}
     \label{fig:test19}
 \end{figure}
@@ -1904,6 +2030,7 @@ Dati dei spettacoli scritti correttamente in catalogo.txt
 
 Il presente manuale illustra le procedure operative per l'utilizzo del sistema gestionale per il teatro, guidando l'utente dall'autenticazione iniziale fino alla gestione degli archivi e alla generazione dei report.
 
+\needspace{12\baselineskip}
 \section{Accesso al sistema e inizializzazione}
 All'avvio dell'applicazione viene eseguita la procedura di autenticazione per consentire l'accesso esclusivamente al personale autorizzato:
 \begin{listacomp}
@@ -1918,6 +2045,7 @@ All'avvio dell'applicazione viene eseguita la procedura di autenticazione per co
     \item \textbf{Configurazione delle capacità iniziali:} subito dopo aver selezionato l'opzione \texttt{2}, il sistema richiede di inserire due numeri interi strettamente positivi per definire la capacità iniziale degli archivi in memoria dedicati agli spettacoli e ai clienti. Tale limite può comunque essere ampliato dinamicamente durante l'utilizzo qualora si superi la capienza impostata.
 \end{listacomp}
 
+\needspace{14\baselineskip}
 \section{Struttura del menu principale e delle opzioni}
 Terminata la fase iniziale, l'utente accede al menu principale, organizzato in sei categorie selezionabili digitando la lettera corrispondente (maiuscola o minuscola):
 \begin{listacomp}
@@ -1929,6 +2057,7 @@ Terminata la fase iniziale, l'utente accede al menu principale, organizzato in s
     \item \textbf{\texttt{F} -- Esci:} avvia la procedura di chiusura controllata, avvisando che i dati non salvati andranno perduti e chiedendo se uscire direttamente (\texttt{1}), uscire salvando automaticamente i dati su file binari (\texttt{2}) oppure annullare e tornare al menu principale (\texttt{3}).
 \end{listacomp}
 
+\needspace{12\baselineskip}
 \section{Come aggiungere uno spettacolo}
 Per inserire un nuovo spettacolo in cartellone, selezionare l'opzione \texttt{A} dal menu principale e successivamente l'opzione \texttt{1}:
 \begin{listacomp}
@@ -1943,6 +2072,7 @@ Per inserire un nuovo spettacolo in cartellone, selezionare l'opzione \texttt{A}
     \item \textbf{Conferma finale:} il programma mostra una tabella riepilogativa con i dati appena digitati; inserire \texttt{1} per confermare e salvare lo spettacolo in memoria, oppure \texttt{0} per ripetere l'inserimento.
 \end{listacomp}
 
+\needspace{12\baselineskip}
 \section{Come registrare una prenotazione}
 Prima di effettuare una prenotazione è necessario che lo spettacolo e il cliente siano già presenti nei rispettivi archivi. Dal menu principale, selezionare \texttt{C} e poi \texttt{1}:
 \begin{listacomp}
@@ -1955,6 +2085,7 @@ Prima di effettuare una prenotazione è necessario che lo spettacolo e il client
     \end{listacomp}
 \end{listacomp}
 
+\needspace{10\baselineskip}
 \section{Come annullare una prenotazione}
 Per cancellare una prenotazione attiva e liberare i relativi biglietti, accedere al menu prenotazioni (\texttt{C}) e selezionare l'opzione \texttt{2}:
 \begin{listacomp}
@@ -1962,6 +2093,7 @@ Per cancellare una prenotazione attiva e liberare i relativi biglietti, accedere
     \item \textbf{Aggiornamento dei posti e promozione dalla lista d'attesa:} se il codice corrisponde a una prenotazione esistente, questa viene eliminata e i relativi posti vengono riaccreditati allo spettacolo. Contestualmente, il sistema scorre automaticamente la lista d'attesa in ordine di arrivo (FIFO): se trova richieste per lo stesso spettacolo compatibili con i nuovi posti disponibili, le converte in prenotazioni confermate assegnando loro un nuovo codice univoco.
 \end{listacomp}
 
+\needspace{10\baselineskip}
 \section{Come generare statistiche e report}
 Per consultare gli indicatori sull'andamento del teatro, selezionare l'opzione \texttt{D} dal menu principale e scegliere una delle tre visualizzazioni disponibili:
 \begin{listacomp}
@@ -1970,6 +2102,7 @@ Per consultare gli indicatori sull'andamento del teatro, selezionare l'opzione \
     \item \textbf{\texttt{3. Top 5 spettacoli per incasso}:} visualizza una classifica tabellare dei primi 5 spettacoli ordinati in modo decrescente in base all'incasso generato.
 \end{listacomp}
 
+\needspace{10\baselineskip}
 \section{Come salvare e caricare i file}
 Poiché i dati gestiti durante la sessione risiedono nella memoria centrale volatile, è fondamentale salvarli su disco prima di chiudere il programma. Dal menu principale, selezionare \texttt{E}:
 \begin{listacomp}
@@ -1978,11 +2111,14 @@ Poiché i dati gestiti durante la sessione risiedono nella memoria centrale vola
     \item \textbf{Esportazione in formato testo (\texttt{3} e \texttt{4}):} per consultare o stampare i dati al di fuori del programma, l'opzione \texttt{3} genera il file \texttt{catalogo.txt} con l'elenco formattato di tutti gli spettacoli, mentre l'opzione \texttt{4} crea il file \texttt{report\_prenotazioni.txt} contenente il dettaglio di tutte le prenotazioni attive abbinate ai nominativi dei clienti e al riepilogo dell'incasso complessivo.
 \end{listacomp}
 
+
 \chapter{Conclusione}
 
+\needspace{10\baselineskip}
 \section{Obiettivi raggiunti}
 Lo sviluppo di questo progetto ha permesso di consolidare in modo approfondito gli argomenti affrontati durante il corso. A differenza dei brevi esercizi svolti a lezione, la realizzazione di un sistema gestionale completo fa emergere numerose problematiche pratiche e casi limite che si manifestano soltanto integrando tra loro strutture dati composte (\texttt{struct}), allocazione dinamica della memoria, gestione dei puntatori sulle liste concatenate e operazioni di lettura e scrittura su file.
 
+\needspace{14\baselineskip}
 \section{Difficoltà incontrate}
 Durante la progettazione e l'implementazione del codice sono emerse diverse criticità tecniche, risolte progressivamente attraverso scelte mirate:
 \begin{listacomp}
@@ -1991,6 +2127,7 @@ Durante la progettazione e l'implementazione del codice sono emerse diverse crit
     \item \textbf{Sostituzione delle variabili globali con puntatori e doppi puntatori:} la necessità di aggiornare in più funzioni i contatori degli elementi presenti (come \texttt{num\_spettacoli}) e le capacità massime modificate durante la \texttt{realloc()} (come \texttt{Maxclienti}) aveva inizialmente portato a dichiarare tali contatori come variabili globali nelle prime versioni del programma. Un problema analogo si è presentato sulle liste concatenate: durante l'annullamento di una prenotazione occorre aggiornare contemporaneamente sia la lista delle prenotazioni sia la lista d'attesa, ma l'istruzione \texttt{return} consente di restituire un solo puntatore, facendo perdere le modifiche apportate alla seconda lista. Seguendo il suggerimento del docente di adottare i doppi puntatori (\texttt{**}) per le liste, è stato revisionato anche il resto del codice eliminando le variabili globali e passando i contatori per indirizzo. Sebbene ciò abbia reso le firme delle funzioni più articolate per l'elevato numero di parametri, questa scelta ha permesso di individuare un bug logico legato a \texttt{Maxclienti} che prima sfuggiva sia al compilatore sia all'esecuzione proprio a causa della visibilità globale della variabile.
 \end{listacomp}
 
+\needspace{14\baselineskip}
 \section{Possibili miglioramenti futuri}
 Nonostante il sistema soddisfi tutti i requisiti richiesti, si individuano alcuni possibili margini di miglioramento:
 \begin{listacomp}
@@ -1999,9 +2136,10 @@ Nonostante il sistema soddisfi tutti i requisiti richiesti, si individuano alcun
     \item \textbf{Salvataggio e caricamento separati per singolo file:} l'implementazione attuale gestisce i quattro file binari in modo unitario. Sebbene sia ipotizzabile suddividere la persistenza in quattro funzioni indipendenti per operare su un singolo archivio alla volta, si è preferito mantenere la gestione sincronizzata poiché i dati sono strettamente interdipendenti: una prenotazione richiede infatti che i codici di spettacolo e cliente esistano negli array in memoria, mentre il caricamento isolato della lista d'attesa potrebbe lasciare richieste non promosse in presenza di posti liberi se non interviene un annullamento a sbloccarle.
 \end{listacomp}
 
+\needspace{12\baselineskip}
 \section{Considerazioni personali sull'esperienza}
 Lo sviluppo del progetto ha evidenziato quanto sia importante attenersi rigorosamente ai vincoli progettuali fissati: tali specifiche rispondono a obiettivi didattici precisi, anche quando alcune funzionalità potrebbero essere implementate più rapidamente con soluzioni alternative (ad esempio aggiungendo un campo dedicato all'incasso direttamente nella struttura \texttt{Spettacolo} per semplificare l'ordinamento). È inoltre emerso come la parte realmente centrale dello sviluppo risieda nella progettazione logica e nella scelta delle strutture dati: una volta delineata con chiarezza l'architettura, la stesura del codice diventa un'attività prevalentemente meccanica.
 
-Sul fronte del \emph{debugging}, l'aspetto più complesso si è rivelato l'individuazione della causa degli errori: come riscontrato durante i test, un semplice refuso di una lettera tra il prototipo e l'implementazione di una funzione impedisce la compilazione senza che l'editor segnali immediatamente il punto esatto all'interno di oltre 2.000 righe di codice. In questo contesto l'utilizzo di un repository su GitHub si è dimostrato fondamentale, consentendo di confrontare le modifiche rispetto alle versioni precedenti e di sviluppare nuove funzionalità su \emph{branch} separati prima di integrarle nella versione principale. Infine, per quanto riguarda la stesura della relazione tecnica, la sezione di progettazione è risultata particolarmente estesa poiché richiede di richiamare in dettaglio numerosi concetti teorici già trattati nelle dispense del corso.
+Sul fronte del \emph{debugging}, l'aspetto più complesso si è rivelato l'individuazione della causa degli errori: come riscontrato durante i test, un semplice refuso di una lettera tra il prototipo e l'implementazione di una funzione impedisce la compilazione senza che l'editor segnali immediatamente il punto esatto all'interno di oltre 2.000 righe di codice. In questo contesto l'utilizzo di un repository su GitHub (\href{https://github.com/CHNA11/Primo-progetto-parziale}{\texttt{https://github.com/CHNA11/Primo-progetto-parziale}}) si è dimostrato fondamentale, consentendo di confrontare le modifiche rispetto alle versioni precedenti e di sviluppare nuove funzionalità su \emph{branch} separati prima di integrarle nella versione principale. Infine, per quanto riguarda la stesura della relazione tecnica, la sezione di progettazione è risultata particolarmente estesa poiché richiede di richiamare in dettaglio numerosi concetti teorici già trattati nelle dispense del corso.
 
 \end{document}
