@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h> //Inlcusione per stampa di è
 #include <stdlib.h> //introduco perché almeno mi serve per allocazione dinamica
 #include <string.h> //introdotto per operazione sulle stringhe
 
@@ -219,6 +220,7 @@ int liberazione(Spettacolo *Spettacoli, Cliente *Clienti, NodoPrenotazione *Pren
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8); // applicazione funzione per stampare correttamente è
     avvio(); // richiama funzione di avvio per chiedere password in entrata
     menu();  // entra in menu di primo livello
     return 0;
